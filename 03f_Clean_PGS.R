@@ -300,27 +300,6 @@ mean(GADD_Pairs_W1_Q2$WSISUM, na.rm = T)
 mean(GADD_Pairs_W1_Q3$WSISUM, na.rm = T)
 mean(GADD_Pairs_W1_Q4$WSISUM, na.rm = T)
 
-mean(GADD_Pairs_W2_Q1$CANYRS, na.rm = T)
-mean(GADD_Pairs_W2_Q2$CANYRS, na.rm = T)
-mean(GADD_Pairs_W2_Q3$CANYRS, na.rm = T)
-mean(GADD_Pairs_W2_Q4$CANYRS, na.rm = T)
-
-mean(GADD_Pairs_W1_Q1$WASVCB, na.rm = T)
-mean(GADD_Pairs_W1_Q2$WASVCB, na.rm = T)
-mean(GADD_Pairs_W1_Q3$WASVCB, na.rm = T)
-mean(GADD_Pairs_W1_Q4$WASVCB, na.rm = T)
-
-mean(GADD_Pairs_W1_Q1$WASBLK, na.rm = T)
-mean(GADD_Pairs_W1_Q2$WASBLK, na.rm = T)
-mean(GADD_Pairs_W1_Q3$WASBLK, na.rm = T)
-mean(GADD_Pairs_W1_Q4$WASBLK, na.rm = T)
-
-mean(GADD_Pairs_W1_Q1$WASCOM, na.rm = T)
-mean(GADD_Pairs_W1_Q2$WASCOM, na.rm = T)
-mean(GADD_Pairs_W1_Q3$WASCOM, na.rm = T)
-mean(GADD_Pairs_W1_Q4$WASCOM, na.rm = T)
-
-
 
 
 GADD_Pairs_W12_Quantiles <- GADD_Mplus %>%
@@ -344,26 +323,6 @@ mean(GADD_Pairs_W12_Q1$WSISUM, na.rm = T)
 mean(GADD_Pairs_W12_Q2$WSISUM, na.rm = T)
 mean(GADD_Pairs_W12_Q3$WSISUM, na.rm = T)
 mean(GADD_Pairs_W12_Q4$WSISUM, na.rm = T)
-
-mean(GADD_Pairs_W12_Q1$WASVCB, na.rm = T)
-mean(GADD_Pairs_W12_Q2$WASVCB, na.rm = T)
-mean(GADD_Pairs_W12_Q3$WASVCB, na.rm = T)
-mean(GADD_Pairs_W12_Q4$WASVCB, na.rm = T)
-
-mean(GADD_Pairs_W12_Q1$WASBLK, na.rm = T)
-mean(GADD_Pairs_W12_Q2$WASBLK, na.rm = T)
-mean(GADD_Pairs_W12_Q3$WASBLK, na.rm = T)
-mean(GADD_Pairs_W12_Q4$WASBLK, na.rm = T)
-
-mean(GADD_Pairs_W12_Q1$WASCOM, na.rm = T)
-mean(GADD_Pairs_W12_Q2$WASCOM, na.rm = T)
-mean(GADD_Pairs_W12_Q3$WASCOM, na.rm = T)
-mean(GADD_Pairs_W12_Q4$WASCOM, na.rm = T)
-
-mean(GADD_Pairs_W12_Q1$SRPWCR, na.rm = T)
-mean(GADD_Pairs_W12_Q2$SRPWCR, na.rm = T)
-mean(GADD_Pairs_W12_Q3$SRPWCR, na.rm = T)
-mean(GADD_Pairs_W12_Q4$SRPWCR, na.rm = T)
 
 
 GADD_Mplus_PCs <- GADD_Mplus %>%

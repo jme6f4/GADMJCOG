@@ -140,6 +140,6 @@ scatterHist(GADD_PGS_Disc_Validate$SCORE1e035, GADD_PGS_Disc_Validate$WASCOM)
 scatterHist(GADD_PGS_Disc_Validate$SCORE1e040, GADD_PGS_Disc_Validate$WASCOM)
 scatterHist(GADD_PGS_Disc_Validate$SCORE1e045, GADD_PGS_Disc_Validate$WASCOM)
 
-scatterHist(GADD_PGS_Disc_Validate$SCORE1e08, GADD_PGS_Disc_Validate$WASBLK)
+scatterHist(GADD_PGS_Disc_Validate$SCORE1e08, GADD_PGS_Disc_Validate$WASCOM)
 scatterHist(GADD_PGS_Disc_Validate$SCORE1e08, GADD_PGS_Disc_Validate$CANONS)
 scatterHist(GADD_PGS_Disc_Validate$WASCOM, GADD_PGS_Disc_Validate$CANONS)
