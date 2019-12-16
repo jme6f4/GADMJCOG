@@ -1,0 +1,1809 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   1:11 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_TRLATS_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			TRLATS
+    		! covariates
+    			DEMAGE
+    			DEMMAL  			
+    		! within predictor
+    			CANONS
+    			ALCONS
+    			COGPGS
+    		! between predictor
+    			CANONSBW
+    			ALCONSBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND TRLATSDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    			ALCONSBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW 			
+    		;
+    	WITHIN  		
+    			CANONS
+    			ALCONS
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  		ALCONSBW = cluster_mean (ALCONS);
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER ALCONS (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+  		CENTER ALCONSBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	TRLATS on CANONS;
+  	TRLATS on  DEMMAL DEMAGE COGPGS ALCONS;
+  	COGPGS*;
+  	ALCONS*;
+  	TRLATS*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+  	CANONS WITH COGPGS*;
+
+  	CANONS WITH ALCONS*;
+  	
+  	ALCONS WITH DEMMAL*;
+  	ALCONS WITH DEMAGE*;
+  	ALCONS WITH COGPGS*;
+
+  %BETWEEN%
+  	TRLATS on CANONSBW COGPGSBW ALCONSBW
+  			    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	ALCONSBW;
+  	TRLATS*;
+  	CANONSBW WITH COGPGSBW*;
+  	CANONSBW WITH ALCONSBW*;
+  	ALCONSBW WITH COGPGSBW*;
+
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  114
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_TRLATS_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         779
+
+Number of dependent variables                                    1
+Number of independent variables                                 13
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   TRLATS
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      ALCONS      COGPGS      CANONSBW
+   ALCONSBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS      ALCONS      COGPGS
+
+  Between variables
+   CANONSBW    ALCONSBW    COGPGSBW    PC1BW       PC2BW       PC3BW
+   PC4BW       PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+   ALCONSBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GROUPMEAN)
+   CANONS      ALCONS      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            24
+     Number of clusters                        398
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.965
+ ALCONSBW       0.959         0.991
+ COGPGSBW       0.965         0.991         1.000
+ TRLATS         0.881         0.899         0.908         0.908
+ DEMAGE         0.964         0.990         0.999         0.908         0.999
+ DEMMAL         0.964         0.990         0.999         0.908         0.999
+ CANONS         0.816         0.810         0.816         0.747         0.815
+ ALCONS         0.888         0.915         0.915         0.827         0.914
+ COGPGS         0.729         0.751         0.759         0.694         0.759
+ PC1BW          0.965         0.991         1.000         0.908         0.999
+ PC2BW          0.965         0.991         1.000         0.908         0.999
+ PC3BW          0.965         0.991         1.000         0.908         0.999
+ PC4BW          0.965         0.991         1.000         0.908         0.999
+ PC5BW          0.965         0.991         1.000         0.908         0.999
+
+
+           Covariance Coverage
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.999
+ CANONS         0.815         0.816
+ ALCONS         0.914         0.773         0.915
+ COGPGS         0.759         0.643         0.707         0.759
+ PC1BW          0.999         0.816         0.915         0.759         1.000
+ PC2BW          0.999         0.816         0.915         0.759         1.000
+ PC3BW          0.999         0.816         0.915         0.759         1.000
+ PC4BW          0.999         0.816         0.915         0.759         1.000
+ PC5BW          0.999         0.816         0.915         0.759         1.000
+
+
+           Covariance Coverage
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          1.000         1.000
+ PC4BW          1.000         1.000         1.000
+ PC5BW          1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.024        -0.005         0.000        51.053         0.000
+
+
+           Means
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.132         0.004         0.000         0.000
+
+
+           Means
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           Covariances
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       3.753
+ ALCONSBW       1.691         3.565
+ COGPGSBW       0.021         0.007         0.109
+ TRLATS         0.447         0.038         0.034       134.962
+ DEMAGE         0.888         1.162         0.026        -0.257         8.321
+ DEMMAL        -0.081        -0.014         0.011        -0.366        -0.165
+ CANONS        -0.062         0.126         0.006        -1.033         1.109
+ ALCONS         0.009        -0.047        -0.005        -1.380         1.480
+ COGPGS         0.000         0.000         0.000        -0.046        -0.007
+ PC1BW          0.011         0.008        -0.003         0.009         0.005
+ PC2BW         -0.001        -0.003        -0.001        -0.018        -0.003
+ PC3BW         -0.008        -0.006         0.000         0.008        -0.002
+ PC4BW          0.003         0.001         0.001        -0.004         0.003
+ PC5BW         -0.005         0.002         0.000        -0.005         0.003
+
+
+           Covariances
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.238
+ CANONS        -0.129         2.431
+ ALCONS        -0.111         1.553         3.511
+ COGPGS         0.003         0.005         0.001         0.021
+ PC1BW         -0.001        -0.001         0.000         0.000         0.001
+ PC2BW         -0.002         0.001         0.001         0.000         0.000
+ PC3BW          0.000         0.002         0.000         0.000         0.000
+ PC4BW          0.001         0.000         0.000         0.000         0.000
+ PC5BW          0.000        -0.001         0.000         0.000         0.000
+
+
+           Covariances
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.001
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+           Correlations
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000
+ ALCONSBW       0.462         1.000
+ COGPGSBW       0.033         0.011         1.000
+ TRLATS         0.020         0.002         0.009         1.000
+ DEMAGE         0.159         0.213         0.027        -0.008         1.000
+ DEMMAL        -0.086        -0.015         0.067        -0.065        -0.117
+ CANONS        -0.020         0.043         0.011        -0.057         0.247
+ ALCONS         0.003        -0.013        -0.009        -0.063         0.274
+ COGPGS        -0.001        -0.002        -0.001        -0.028        -0.016
+ PC1BW          0.150         0.116        -0.249         0.022         0.044
+ PC2BW         -0.009        -0.049        -0.050        -0.043        -0.032
+ PC3BW         -0.113        -0.083         0.013         0.019        -0.024
+ PC4BW          0.038         0.016         0.102        -0.011         0.026
+ PC5BW         -0.065         0.033        -0.035        -0.011         0.031
+
+
+           Correlations
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         1.000
+ CANONS        -0.170         1.000
+ ALCONS        -0.121         0.532         1.000
+ COGPGS         0.044         0.024         0.005         1.000
+ PC1BW         -0.042        -0.017         0.002         0.001         1.000
+ PC2BW         -0.086         0.021         0.010         0.000        -0.002
+ PC3BW          0.026         0.031         0.000         0.001         0.006
+ PC4BW          0.067        -0.007        -0.001        -0.001        -0.006
+ PC5BW          0.023        -0.016         0.000         0.000        -0.013
+
+
+           Correlations
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          0.010         1.000
+ PC4BW         -0.015         0.011         1.000
+ PC5BW          0.005         0.001         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -3189.025
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANONSBW             -0.094       0.956      -5.407    0.52%      -1.407     -0.407     -0.407
+             384.000       3.823       4.292      11.593    0.26%       0.593      1.093
+     ALCONSBW             -0.079       0.299      -6.518    0.26%      -1.518     -0.518     -0.518
+             392.000       3.819       0.418       5.982    0.26%       0.482      1.482
+     COGPGSBW              0.000       0.005      -1.029    0.25%      -0.290     -0.082     -0.007
+             398.000       0.114       0.395       1.215    0.25%       0.074      0.288
+     TRLATS               51.023      -0.023       2.000    0.14%      42.000     49.000     51.000
+             707.000     134.919       0.367      84.000    0.14%      53.000     60.000
+     DEMAGE                0.000       0.977      -5.362    0.13%      -2.382     -1.052     -0.427
+             778.000       8.322       1.898      15.808    0.13%       0.318      2.218
+     DEMMAL                0.000      -0.453      -0.611   38.95%      -0.611      0.389      0.389
+             778.000       0.238      -1.794       0.389   61.05%       0.389      0.389
+     CANONS                0.000       0.338      -5.667    0.16%      -1.000      0.000      0.000
+             636.000       2.277       3.555       9.333    0.16%       0.000      1.000
+     ALCONS                0.000      -0.060      -6.500    0.14%      -1.500      0.000      0.000
+             713.000       3.468       1.035       6.500    0.14%       0.000      1.500
+     COGPGS                0.000      -0.018      -0.505    0.17%      -0.072      0.000      0.000
+             591.000       0.021       2.007       0.604    0.17%       0.000      0.073
+     PC1BW                 0.000       2.626      -0.020    0.25%      -0.018     -0.016     -0.012
+             398.000       0.001       5.546       0.136    0.25%      -0.009     -0.004
+     PC2BW                -0.001       0.964      -0.036    0.25%      -0.031     -0.027     -0.017
+             398.000       0.001      -0.147       0.131    0.25%      -0.003      0.036
+     PC3BW                -0.001      12.587      -0.119    0.25%      -0.006     -0.003     -0.001
+             398.000       0.001     227.694       0.457    0.25%       0.000      0.004
+     PC4BW                 0.000       5.593      -0.094    0.25%      -0.009     -0.006     -0.005
+             398.000       0.001      37.170       0.285    0.25%      -0.004      0.000
+     PC5BW                 0.001     -16.006      -0.544    0.25%      -0.002      0.000      0.001
+             398.000       0.001     298.330       0.111    0.25%       0.002      0.004
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.451D-10.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 34, %BETWEEN%: TRLATS ON PC4BW
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       42
+
+Loglikelihood
+
+          H0 Value                       -9110.612
+          H0 Scaling Correction Factor      1.2157
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   18305.223
+          Bayesian (BIC)                 18500.859
+          Sample-Size Adjusted BIC       18367.489
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLATS     ON
+    CANONS            -0.275      0.384     -0.717      0.473
+    DEMMAL            -1.858      0.975     -1.905      0.057
+    DEMAGE            -0.011      0.164     -0.069      0.945
+    COGPGS            -1.908      3.024     -0.631      0.528
+    ALCONS            -0.325      0.291     -1.117      0.264
+
+ CANONS   WITH
+    DEMMAL            -0.108      0.028     -3.815      0.000
+    DEMAGE             0.993      0.193      5.138      0.000
+    COGPGS             0.007      0.012      0.594      0.553
+    ALCONS             1.486      0.199      7.456      0.000
+
+ ALCONS   WITH
+    DEMMAL            -0.081      0.030     -2.710      0.007
+    DEMAGE             1.409      0.202      6.973      0.000
+    COGPGS             0.003      0.018      0.181      0.856
+
+ Means
+    DEMAGE             0.000      0.115      0.004      0.997
+    DEMMAL             0.000      0.019     -0.003      0.998
+    CANONS             0.120      0.021      5.705      0.000
+    ALCONS             0.000      0.011     -0.013      0.990
+    COGPGS             0.000      0.001      0.272      0.785
+
+ Variances
+    DEMAGE             8.322      0.588     14.145      0.000
+    DEMMAL             0.238      0.004     57.512      0.000
+    CANONS             2.374      0.305      7.783      0.000
+    ALCONS             3.481      0.305     11.416      0.000
+    COGPGS             0.021      0.002      9.248      0.000
+
+ Residual Variances
+    TRLATS           117.541      9.460     12.426      0.000
+
+Between Level
+
+ TRLATS     ON
+    CANONSBW           0.071      0.276      0.257      0.797
+    COGPGSBW           0.477      1.428      0.334      0.738
+    ALCONSBW          -0.027      0.291     -0.094      0.925
+    PC1BW              6.943     12.133      0.572      0.567
+    PC2BW            -14.130     13.512     -1.046      0.296
+    PC3BW              7.691      3.864      1.990      0.047
+    PC4BW             -1.962      7.209     -0.272      0.785
+    PC5BW             -2.733      4.121     -0.663      0.507
+
+ CANONSBW WITH
+    COGPGSBW           0.015      0.032      0.479      0.632
+    ALCONSBW           1.720      0.294      5.847      0.000
+
+ ALCONSBW WITH
+    COGPGSBW           0.006      0.035      0.184      0.854
+
+ Means
+    CANONSBW          -0.079      0.100     -0.787      0.431
+    ALCONSBW          -0.083      0.099     -0.843      0.399
+    COGPGSBW           0.000      0.017     -0.023      0.982
+
+ Intercepts
+    TRLATS            51.088      0.461    110.936      0.000
+
+ Variances
+    CANONSBW           3.821      0.488      7.826      0.000
+    ALCONSBW           3.817      0.299     12.747      0.000
+    COGPGSBW           0.114      0.009     12.890      0.000
+
+ Residual Variances
+    TRLATS            15.737      7.320      2.150      0.032
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLATS     ON
+    CANONS            -0.039      0.055     -0.708      0.479
+    DEMMAL            -0.083      0.043     -1.938      0.053
+    DEMAGE            -0.003      0.043     -0.069      0.945
+    COGPGS            -0.025      0.040     -0.626      0.531
+    ALCONS            -0.056      0.050     -1.117      0.264
+
+ CANONS   WITH
+    DEMMAL            -0.144      0.034     -4.211      0.000
+    DEMAGE             0.223      0.036      6.239      0.000
+    COGPGS             0.031      0.052      0.595      0.552
+    ALCONS             0.517      0.042     12.221      0.000
+
+ ALCONS   WITH
+    DEMMAL            -0.089      0.033     -2.698      0.007
+    DEMAGE             0.262      0.030      8.757      0.000
+    COGPGS             0.012      0.068      0.181      0.856
+
+ Means
+    DEMAGE             0.000      0.040      0.004      0.997
+    DEMMAL             0.000      0.038     -0.003      0.998
+    CANONS             0.078      0.012      6.568      0.000
+    ALCONS             0.000      0.006     -0.013      0.990
+    COGPGS             0.002      0.007      0.272      0.786
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+    ALCONS             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLATS             0.987      0.010    102.090      0.000
+
+Between Level
+
+ TRLATS     ON
+    CANONSBW           0.035      0.134      0.257      0.797
+    COGPGSBW           0.040      0.121      0.331      0.741
+    ALCONSBW          -0.013      0.141     -0.094      0.925
+    PC1BW              0.063      0.111      0.568      0.570
+    PC2BW             -0.127      0.126     -1.005      0.315
+    PC3BW              0.050      0.028      1.782      0.075
+    PC4BW             -0.015      0.056     -0.272      0.785
+    PC5BW             -0.020      0.030     -0.667      0.505
+
+ CANONSBW WITH
+    COGPGSBW           0.023      0.049      0.476      0.634
+    ALCONSBW           0.450      0.051      8.754      0.000
+
+ ALCONSBW WITH
+    COGPGSBW           0.010      0.053      0.184      0.854
+
+ Means
+    CANONSBW          -0.040      0.052     -0.771      0.441
+    ALCONSBW          -0.043      0.051     -0.838      0.402
+    COGPGSBW          -0.001      0.050     -0.023      0.982
+
+ Intercepts
+    TRLATS            12.712      2.842      4.473      0.000
+
+ Variances
+    CANONSBW           1.000      0.000    999.000    999.000
+    ALCONSBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLATS             0.974      0.038     25.461      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLATS             0.013      0.010      1.329      0.184
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLATS             0.026      0.038      0.670      0.503
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.451E-10
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLATS   ON
+    CANONS          -1.265      -1.028      -0.907      -0.275       0.357       0.478       0.714
+    DEMMAL          -4.369      -3.769      -3.462      -1.858      -0.254       0.054       0.654
+    DEMAGE          -0.433      -0.332      -0.281      -0.011       0.258       0.310       0.410
+    COGPGS          -9.695      -7.834      -6.881      -1.908       3.066       4.019       5.880
+    ALCONS          -1.074      -0.895      -0.803      -0.325       0.153       0.245       0.424
+
+ CANONS   WITH
+    DEMMAL          -0.181      -0.164      -0.155      -0.108      -0.062      -0.053      -0.035
+    DEMAGE           0.495       0.614       0.675       0.993       1.310       1.371       1.490
+    COGPGS          -0.023      -0.016      -0.012       0.007       0.026       0.030       0.037
+    ALCONS           0.973       1.096       1.159       1.486       1.814       1.877       2.000
+
+ ALCONS   WITH
+    DEMMAL          -0.158      -0.139      -0.130      -0.081      -0.032      -0.022      -0.004
+    DEMAGE           0.888       1.013       1.076       1.409       1.741       1.805       1.929
+    COGPGS          -0.044      -0.032      -0.027       0.003       0.033       0.039       0.050
+
+ Means
+    DEMAGE          -0.295      -0.224      -0.188       0.000       0.189       0.225       0.296
+    DEMMAL          -0.048      -0.037      -0.031       0.000       0.031       0.037       0.048
+    CANONS           0.066       0.079       0.086       0.120       0.155       0.161       0.174
+    ALCONS          -0.029      -0.022      -0.019       0.000       0.018       0.022       0.029
+    COGPGS          -0.002      -0.002      -0.001       0.000       0.002       0.002       0.003
+
+ Variances
+    DEMAGE           6.806       7.169       7.354       8.322       9.289       9.475       9.837
+    DEMMAL           0.227       0.230       0.231       0.238       0.245       0.246       0.248
+    CANONS           1.588       1.776       1.872       2.374       2.876       2.972       3.160
+    ALCONS           2.695       2.883       2.979       3.481       3.982       4.078       4.266
+    COGPGS           0.015       0.016       0.017       0.021       0.024       0.025       0.027
+
+ Residual Variances
+    TRLATS          93.175      99.000     101.980     117.541     133.102     136.082     141.908
+
+Between Level
+
+ TRLATS   ON
+    CANONSBW        -0.641      -0.471      -0.384       0.071       0.526       0.613       0.783
+    COGPGSBW        -3.201      -2.321      -1.872       0.477       2.826       3.276       4.155
+    ALCONSBW        -0.777      -0.598      -0.506      -0.027       0.452       0.543       0.723
+    PC1BW          -24.309     -16.838     -13.016       6.943      26.902      30.724      38.196
+    PC2BW          -48.933     -40.613     -36.357     -14.130       8.096      12.353      20.673
+    PC3BW           -2.262       0.117       1.334       7.691      14.047      15.264      17.644
+    PC4BW          -20.531     -16.092     -13.821      -1.962       9.897      12.168      16.607
+    PC5BW          -13.349     -10.811      -9.513      -2.733       4.047       5.345       7.883
+
+ CANONSBW WITH
+    COGPGSBW        -0.067      -0.047      -0.037       0.015       0.068       0.078       0.098
+    ALCONSBW         0.962       1.143       1.236       1.720       2.204       2.296       2.477
+
+ ALCONSBW WITH
+    COGPGSBW        -0.084      -0.063      -0.051       0.006       0.064       0.075       0.097
+
+ Means
+    CANONSBW        -0.337      -0.275      -0.244      -0.079       0.086       0.118       0.179
+    ALCONSBW        -0.337      -0.277      -0.246      -0.083       0.079       0.110       0.171
+    COGPGSBW        -0.044      -0.034      -0.028       0.000       0.027       0.033       0.043
+
+ Intercepts
+    TRLATS          49.902      50.186      50.331      51.088      51.846      51.991      52.275
+
+ Variances
+    CANONSBW         2.564       2.864       3.018       3.821       4.624       4.778       5.079
+    ALCONSBW         3.046       3.230       3.325       3.817       4.310       4.404       4.589
+    COGPGSBW         0.091       0.097       0.100       0.114       0.129       0.132       0.137
+
+ Residual Variances
+    TRLATS          -3.118       1.390       3.695      15.737      27.778      30.084      34.592
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLATS   ON
+    CANONS          -0.180      -0.147      -0.129      -0.039       0.051       0.069       0.103
+    DEMMAL          -0.193      -0.167      -0.153      -0.083      -0.013       0.001       0.027
+    DEMAGE          -0.115      -0.088      -0.074      -0.003       0.068       0.082       0.109
+    COGPGS          -0.129      -0.104      -0.091      -0.025       0.041       0.054       0.079
+    ALCONS          -0.184      -0.153      -0.137      -0.056       0.026       0.042       0.073
+
+ CANONS   WITH
+    DEMMAL          -0.232      -0.211      -0.200      -0.144      -0.088      -0.077      -0.056
+    DEMAGE           0.131       0.153       0.164       0.223       0.282       0.294       0.316
+    COGPGS          -0.103      -0.071      -0.055       0.031       0.117       0.133       0.165
+    ALCONS           0.408       0.434       0.448       0.517       0.587       0.600       0.626
+
+ ALCONS   WITH
+    DEMMAL          -0.174      -0.153      -0.143      -0.089      -0.035      -0.024      -0.004
+    DEMAGE           0.185       0.203       0.213       0.262       0.311       0.320       0.339
+    COGPGS          -0.163      -0.121      -0.100       0.012       0.124       0.145       0.187
+
+ Means
+    DEMAGE          -0.102      -0.078      -0.065       0.000       0.066       0.078       0.103
+    DEMMAL          -0.099      -0.075      -0.063       0.000       0.063       0.075       0.099
+    CANONS           0.047       0.055       0.058       0.078       0.098       0.101       0.109
+    ALCONS          -0.016      -0.012      -0.010       0.000       0.010       0.012       0.015
+    COGPGS          -0.016      -0.012      -0.009       0.002       0.013       0.015       0.020
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLATS           0.962       0.968       0.971       0.987       1.003       1.006       1.012
+
+Between Level
+
+ TRLATS   ON
+    CANONSBW        -0.311      -0.229      -0.186       0.035       0.256       0.298       0.381
+    COGPGSBW        -0.272      -0.198      -0.159       0.040       0.240       0.278       0.352
+    ALCONSBW        -0.378      -0.291      -0.246      -0.013       0.220       0.264       0.351
+    PC1BW           -0.223      -0.155      -0.120       0.063       0.246       0.281       0.350
+    PC2BW           -0.452      -0.374      -0.335      -0.127       0.081       0.121       0.198
+    PC3BW           -0.022      -0.005       0.004       0.050       0.097       0.106       0.123
+    PC4BW           -0.159      -0.125      -0.107      -0.015       0.077       0.094       0.129
+    PC5BW           -0.097      -0.078      -0.069      -0.020       0.029       0.039       0.057
+
+ CANONSBW WITH
+    COGPGSBW        -0.102      -0.072      -0.057       0.023       0.103       0.119       0.149
+    ALCONSBW         0.318       0.349       0.366       0.450       0.535       0.551       0.583
+
+ ALCONSBW WITH
+    COGPGSBW        -0.127      -0.095      -0.078       0.010       0.097       0.114       0.147
+
+ Means
+    CANONSBW        -0.175      -0.143      -0.126      -0.040       0.046       0.062       0.094
+    ALCONSBW        -0.174      -0.142      -0.126      -0.043       0.041       0.057       0.088
+    COGPGSBW        -0.130      -0.099      -0.084      -0.001       0.081       0.097       0.128
+
+ Intercepts
+    TRLATS           5.392       7.142       8.037      12.712      17.387      18.283      20.033
+
+ Variances
+    CANONSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCONSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLATS           0.876       0.899       0.911       0.974       1.037       1.049       1.073
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW           0             0             0             0
+ ALCONSBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+ ALCONS             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ ALCONSBW           0             0
+ COGPGSBW           0             0             0
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANONS             0             0
+ ALCONS             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             1
+
+
+           ALPHA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  2             3             4             5             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             7             8             9            10             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW           0             0             0             0
+ ALCONSBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+ ALCONS             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ ALCONSBW           0             0
+ COGPGSBW           0             0             0
+ TRLATS             0             0             0            11
+ DEMAGE             0             0             0             0            12
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0            14
+ ALCONS             0             0             0             0            17
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL            13
+ CANONS            15            16
+ ALCONS            18            19            20
+ COGPGS             0            21            22            23
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW           0             0             0             0
+ ALCONSBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+ ALCONS             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ ALCONSBW           0             0
+ COGPGSBW           0             0             0
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANONS             0             0
+ ALCONS             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                 24            25            26            27             0
+
+
+           ALPHA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS            28            29            30             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ ALCONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLATS             0             0             0             0            31
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW           0             0             0             0
+ ALCONSBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ TRLATS            32            33            34            35
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+ ALCONS             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW          36
+ ALCONSBW          37            38
+ COGPGSBW          39            40            41
+ TRLATS             0             0             0            42
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ ALCONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANONS             0             0
+ ALCONS             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         1.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ ALCONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANONS         0.000         0.000
+ ALCONS         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ ALCONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000        67.459
+ DEMAGE         0.000         0.000         0.000         0.000         4.161
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.119
+ CANONS         0.000         1.138
+ ALCONS         0.000         0.000         1.734
+ COGPGS         0.000         0.000         0.000         0.010
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         1.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ ALCONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANONS         0.000         0.000
+ ALCONS         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000        51.023         0.000
+
+
+           ALPHA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000
+ ALCONSBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANONSBW      ALCONSBW      COGPGSBW      TRLATS        DEMAGE
+              ________      ________      ________      ________      ________
+ CANONSBW       1.874
+ ALCONSBW       0.000         1.781
+ COGPGSBW       0.000         0.000         0.055
+ TRLATS         0.000         0.000         0.000        67.459
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ ALCONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANONS        ALCONS        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANONS         0.000         0.000
+ ALCONS         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.001
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_TRLATS
+              ________
+ 1             51.085
+
+
+           Covariances
+              B_TRLATS
+              ________
+ B_TRLATS       3.700
+
+
+           Correlations
+              B_TRLATS
+              ________
+ B_TRLATS       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  13:11:19
+        Ending Time:  13:11:20
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,1809 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   1:09 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANFLF_COGCOM_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			COGCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  			
+    		! within predictor
+    			CANFLF
+    			ALCFLF
+    			COGPGS
+    		! between predictor
+    			CANFLFBW
+    			ALCFLFBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND COGCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANFLFBW
+    			ALCFLFBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW 			
+    		;
+    	WITHIN  		
+    			CANFLF
+    			ALCFLF
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANFLFBW = cluster_mean (CANFLF);
+  		ALCFLFBW = cluster_mean (ALCFLF);
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANFLF (GROUPMEAN);
+  		CENTER ALCFLF (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANFLFBW (GRANDMEAN);
+  		CENTER ALCFLFBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	COGCOM on CANFLF;
+  	COGCOM on  DEMMAL DEMAGE COGPGS ALCFLF;
+  	COGPGS*;
+  	ALCFLF*;
+  	COGCOM*;
+  	CANFLF WITH DEMMAL*;
+  	CANFLF WITH DEMAGE*;
+  	CANFLF WITH COGPGS*;
+
+  	CANFLF WITH ALCFLF*;
+  	
+  	ALCFLF WITH DEMMAL*;
+  	ALCFLF WITH DEMAGE*;
+  	ALCFLF WITH COGPGS*;
+
+  %BETWEEN%
+  	COGCOM on CANFLFBW COGPGSBW ALCFLFBW
+  			    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	ALCFLFBW;
+  	COGCOM*;
+  	CANFLFBW WITH COGPGSBW*;
+  	CANFLFBW WITH ALCFLFBW*;
+  	ALCFLFBW WITH COGPGSBW*;
+
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  109
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANFLF_COGCOM_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         693
+
+Number of dependent variables                                    1
+Number of independent variables                                 13
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   COGCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANFLF      ALCFLF      COGPGS      CANFLFBW
+   ALCFLFBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANFLF      ALCFLF      COGPGS
+
+  Between variables
+   CANFLFBW    ALCFLFBW    COGPGSBW    PC1BW       PC2BW       PC3BW
+   PC4BW       PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANFLFBW
+   ALCFLFBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GROUPMEAN)
+   CANFLF      ALCFLF      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        377
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       1.000
+ ALCFLFBW       1.000         1.000
+ COGPGSBW       1.000         1.000         1.000
+ COGCOM         0.463         0.463         0.463         0.463
+ DEMAGE         0.999         0.999         0.999         0.463         0.999
+ DEMMAL         0.999         0.999         0.999         0.463         0.999
+ CANFLF         1.000         1.000         1.000         0.463         0.999
+ ALCFLF         1.000         1.000         1.000         0.463         0.999
+ COGPGS         0.773         0.773         0.773         0.354         0.773
+ PC1BW          1.000         1.000         1.000         0.463         0.999
+ PC2BW          1.000         1.000         1.000         0.463         0.999
+ PC3BW          1.000         1.000         1.000         0.463         0.999
+ PC4BW          1.000         1.000         1.000         0.463         0.999
+ PC5BW          1.000         1.000         1.000         0.463         0.999
+
+
+           Covariance Coverage
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.999
+ CANFLF         0.999         1.000
+ ALCFLF         0.999         1.000         1.000
+ COGPGS         0.773         0.773         0.773         0.773
+ PC1BW          0.999         1.000         1.000         0.773         1.000
+ PC2BW          0.999         1.000         1.000         0.773         1.000
+ PC3BW          0.999         1.000         1.000         0.773         1.000
+ PC4BW          0.999         1.000         1.000         0.773         1.000
+ PC5BW          0.999         1.000         1.000         0.773         1.000
+
+
+           Covariance Coverage
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          1.000         1.000
+ PC4BW          1.000         1.000         1.000
+ PC5BW          1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.082         0.000
+
+
+           Means
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000        -0.001         0.000
+
+
+           Means
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           Covariances
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW     219.946
+ ALCFLFBW      45.093        92.130
+ COGPGSBW       0.118         0.060         0.111
+ COGCOM         0.656         0.784         0.027         0.350
+ DEMAGE        -1.730         2.528        -0.001        -0.053         7.604
+ DEMMAL         1.509         0.374         0.008         0.025        -0.217
+ CANFLF         0.000         0.000         0.000         0.311        -9.411
+ ALCFLF         0.000         0.000         0.000        -0.029        -2.095
+ COGPGS         0.007         0.008         0.000        -0.003        -0.019
+ PC1BW         -0.015        -0.072        -0.003        -0.006         0.007
+ PC2BW         -0.120        -0.033         0.000        -0.004        -0.002
+ PC3BW         -0.036        -0.028         0.000         0.000         0.000
+ PC4BW          0.010         0.020         0.001         0.000         0.004
+ PC5BW          0.060        -0.027         0.000         0.001         0.004
+
+
+           Covariances
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.238
+ CANFLF         1.544       202.858
+ ALCFLF         0.422        47.690        92.996
+ COGPGS         0.003         0.082         0.041         0.021
+ PC1BW         -0.001         0.000         0.000         0.000         0.001
+ PC2BW         -0.002         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.001         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.001
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+           Correlations
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       1.000
+ ALCFLFBW       0.317         1.000
+ COGPGSBW       0.024         0.019         1.000
+ COGCOM         0.075         0.138         0.137         1.000
+ DEMAGE        -0.042         0.095        -0.001        -0.032         1.000
+ DEMMAL         0.208         0.080         0.046         0.085        -0.161
+ CANFLF         0.000         0.000         0.000         0.037        -0.240
+ ALCFLF         0.000         0.000         0.000        -0.005        -0.079
+ COGPGS         0.003         0.006         0.000        -0.041        -0.049
+ PC1BW         -0.027        -0.203        -0.248        -0.296         0.067
+ PC2BW         -0.217        -0.093        -0.029        -0.200        -0.023
+ PC3BW         -0.073        -0.087         0.003        -0.009         0.001
+ PC4BW          0.019         0.057         0.109         0.020         0.040
+ PC5BW          0.107        -0.076        -0.036         0.033         0.039
+
+
+           Correlations
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         1.000
+ CANFLF         0.222         1.000
+ ALCFLF         0.090         0.347         1.000
+ COGPGS         0.048         0.040         0.030         1.000
+ PC1BW         -0.029         0.000         0.000        -0.001         1.000
+ PC2BW         -0.107         0.000         0.000         0.001        -0.022
+ PC3BW          0.015         0.000         0.000         0.001         0.007
+ PC4BW          0.069         0.000         0.000        -0.001         0.000
+ PC5BW          0.027         0.000         0.000         0.000        -0.023
+
+
+           Correlations
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          0.020         1.000
+ PC4BW         -0.014        -0.093         1.000
+ PC5BW          0.009         0.004         0.006         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -6347.830
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANFLFBW              1.395      -1.466     -49.959    0.53%     -12.459     10.041     10.041
+             377.000     203.367       1.204      10.041   69.23%      10.041     10.041
+     ALCFLFBW              0.326      -2.095     -40.084    1.06%      -5.084      4.916      4.916
+             377.000      94.404       3.597       4.916   78.78%       4.916      4.916
+     COGPGSBW              0.003       0.025      -1.021    0.27%      -0.282     -0.087     -0.013
+             377.000       0.114       0.399       1.223    0.27%       0.065      0.296
+     COGCOM                0.039      -0.041      -1.708    0.31%      -0.443     -0.141      0.057
+             321.000       0.350      -0.094       1.781    0.31%       0.236      0.543
+     DEMAGE                0.000       1.005      -5.399    0.14%      -2.329     -1.009     -0.434
+             692.000       7.605       2.054      15.771    0.14%       0.281      2.141
+     DEMMAL                0.000      -0.444      -0.608   39.16%      -0.608      0.392      0.392
+             692.000       0.238      -1.803       0.392   60.84%       0.392      0.392
+     CANFLF                0.000      -0.085     -40.000    0.43%       0.000      0.000      0.000
+             693.000     202.858       1.072      44.625    0.14%       0.000      0.000
+     ALCFLF                0.000      -0.259     -40.000    0.14%       0.000      0.000      0.000
+             693.000      92.996       3.499      36.167    0.14%       0.000      0.000
+     COGPGS                0.000       0.058      -0.505    0.19%      -0.067      0.000      0.000
+             536.000       0.021       2.217       0.604    0.19%       0.000      0.065
+     PC1BW                 0.000       2.558      -0.021    0.27%      -0.019     -0.016     -0.013
+             377.000       0.001       5.149       0.136    0.27%      -0.009     -0.004
+     PC2BW                -0.002       0.942      -0.038    0.27%      -0.033     -0.028     -0.018
+             377.000       0.001      -0.169       0.129    0.27%      -0.004      0.034
+     PC3BW                -0.001      12.197      -0.119    0.27%      -0.005     -0.002      0.000
+             377.000       0.001     214.693       0.453    0.27%       0.001      0.005
+     PC4BW                -0.001       5.437      -0.094    0.27%      -0.010     -0.007     -0.005
+             377.000       0.001      35.071       0.284    0.27%      -0.004     -0.001
+     PC5BW                 0.001     -15.584      -0.544    0.27%      -0.001      0.001      0.001
+             377.000       0.001     282.595       0.111    0.27%       0.002      0.005
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.458D-19.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 4, %WITHIN%: [ ALCFLF ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       42
+
+Loglikelihood
+
+          H0 Value                      -10481.895
+          H0 Scaling Correction Factor      1.3121
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   21047.791
+          Bayesian (BIC)                 21238.514
+          Sample-Size Adjusted BIC       21105.157
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANFLF             0.001      0.002      0.616      0.538
+    DEMMAL             0.032      0.070      0.458      0.647
+    DEMAGE            -0.004      0.012     -0.344      0.731
+    COGPGS            -0.188      0.207     -0.909      0.363
+    ALCFLF            -0.001      0.002     -0.389      0.697
+
+ CANFLF   WITH
+    DEMMAL             1.305      0.268      4.877      0.000
+    DEMAGE            -8.196      1.559     -5.256      0.000
+    COGPGS             0.045      0.146      0.311      0.756
+    ALCFLF            47.004     10.691      4.397      0.000
+
+ ALCFLF   WITH
+    DEMMAL             0.369      0.192      1.927      0.054
+    DEMAGE            -1.741      1.049     -1.660      0.097
+    COGPGS             0.029      0.090      0.317      0.752
+
+ Means
+    DEMAGE             0.000      0.113      0.000      1.000
+    DEMMAL             0.000      0.020      0.000      1.000
+    CANFLF             0.000      0.000      0.000      1.000
+    ALCFLF             0.000      0.000      0.000      1.000
+    COGPGS            -0.001      0.001     -0.467      0.640
+
+ Variances
+    DEMAGE             7.605      0.582     13.056      0.000
+    DEMMAL             0.238      0.004     54.898      0.000
+    CANFLF           200.182     17.700     11.310      0.000
+    ALCFLF            92.824     11.369      8.164      0.000
+    COGPGS             0.021      0.002      8.485      0.000
+
+ Residual Variances
+    COGCOM             0.211      0.023      9.086      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANFLFBW           0.000      0.002      0.091      0.928
+    COGPGSBW           0.138      0.119      1.153      0.249
+    ALCFLFBW           0.004      0.004      1.111      0.267
+    PC1BW             -4.171      1.117     -3.735      0.000
+    PC2BW             -3.189      1.188     -2.683      0.007
+    PC3BW             -0.121     10.859     -0.011      0.991
+    PC4BW              0.012      4.630      0.003      0.998
+    PC5BW              0.616      0.348      1.769      0.077
+
+ CANFLFBW WITH
+    COGPGSBW           0.083      0.209      0.396      0.692
+    ALCFLFBW          40.371      8.848      4.563      0.000
+
+ ALCFLFBW WITH
+    COGPGSBW           0.100      0.145      0.690      0.490
+
+ Means
+    CANFLFBW           1.395      0.734      1.899      0.058
+    ALCFLFBW           0.326      0.500      0.652      0.514
+    COGPGSBW           0.003      0.017      0.162      0.871
+
+ Intercepts
+    COGCOM             0.090      0.043      2.074      0.038
+
+ Variances
+    CANFLFBW         203.367     18.749     10.847      0.000
+    ALCFLFBW          94.404     11.503      8.207      0.000
+    COGPGSBW           0.114      0.009     12.536      0.000
+
+ Residual Variances
+    COGCOM             0.090      0.027      3.363      0.001
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANFLF             0.040      0.064      0.620      0.535
+    DEMMAL             0.034      0.074      0.458      0.647
+    DEMAGE            -0.025      0.074     -0.345      0.730
+    COGPGS            -0.058      0.064     -0.914      0.361
+    ALCFLF            -0.018      0.046     -0.392      0.695
+
+ CANFLF   WITH
+    DEMMAL             0.189      0.037      5.144      0.000
+    DEMAGE            -0.210      0.035     -5.986      0.000
+    COGPGS             0.022      0.072      0.312      0.755
+    ALCFLF             0.345      0.066      5.257      0.000
+
+ ALCFLF   WITH
+    DEMMAL             0.079      0.040      1.954      0.051
+    DEMAGE            -0.066      0.039     -1.695      0.090
+    COGPGS             0.021      0.065      0.316      0.752
+
+ Means
+    DEMAGE             0.000      0.041      0.000      1.000
+    DEMMAL             0.000      0.041      0.000      1.000
+    CANFLF             0.000      0.000      0.000      1.000
+    ALCFLF             0.000      0.000      0.000      1.000
+    COGPGS            -0.004      0.008     -0.470      0.638
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANFLF             1.000      0.000    999.000    999.000
+    ALCFLF             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    COGCOM             0.993      0.012     84.540      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANFLFBW           0.008      0.088      0.091      0.928
+    COGPGSBW           0.128      0.114      1.125      0.260
+    ALCFLFBW           0.120      0.109      1.094      0.274
+    PC1BW             -0.430      0.103     -4.177      0.000
+    PC2BW             -0.319      0.118     -2.705      0.007
+    PC3BW             -0.009      0.807     -0.011      0.991
+    PC4BW              0.001      0.409      0.003      0.998
+    PC5BW              0.051      0.031      1.659      0.097
+
+ CANFLFBW WITH
+    COGPGSBW           0.017      0.043      0.397      0.691
+    ALCFLFBW           0.291      0.059      4.935      0.000
+
+ ALCFLFBW WITH
+    COGPGSBW           0.031      0.044      0.693      0.488
+
+ Means
+    CANFLFBW           0.098      0.055      1.770      0.077
+    ALCFLFBW           0.034      0.053      0.630      0.529
+    COGPGSBW           0.008      0.051      0.162      0.871
+
+ Intercepts
+    COGCOM             0.248      0.118      2.110      0.035
+
+ Variances
+    CANFLFBW           1.000      0.000    999.000    999.000
+    ALCFLFBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    COGCOM             0.685      0.102      6.718      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.007      0.012      0.623      0.533
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.315      0.102      3.094      0.002
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.458E-19
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANFLF          -0.004      -0.003      -0.002       0.001       0.005       0.005       0.007
+    DEMMAL          -0.147      -0.104      -0.083       0.032       0.146       0.168       0.211
+    DEMAGE          -0.036      -0.028      -0.025      -0.004       0.016       0.020       0.028
+    COGPGS          -0.720      -0.593      -0.528      -0.188       0.152       0.217       0.344
+    ALCFLF          -0.007      -0.005      -0.005      -0.001       0.003       0.003       0.005
+
+ CANFLF   WITH
+    DEMMAL           0.616       0.781       0.865       1.305       1.745       1.829       1.994
+    DEMAGE         -12.213     -11.252     -10.761      -8.196      -5.631      -5.140      -4.180
+    COGPGS          -0.330      -0.241      -0.195       0.045       0.285       0.331       0.421
+    ALCFLF          19.467      26.051      29.418      47.004      64.590      67.958      74.541
+
+ ALCFLF   WITH
+    DEMMAL          -0.124      -0.006       0.054       0.369       0.685       0.745       0.863
+    DEMAGE          -4.444      -3.798      -3.467      -1.741      -0.015       0.315       0.961
+    COGPGS          -0.204      -0.148      -0.120       0.029       0.177       0.205       0.261
+
+ Means
+    DEMAGE          -0.291      -0.222      -0.186       0.000       0.186       0.222       0.291
+    DEMMAL          -0.052      -0.039      -0.033       0.000       0.033       0.039       0.052
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    ALCFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.004      -0.003      -0.003      -0.001       0.001       0.002       0.003
+
+ Variances
+    DEMAGE           6.105       6.463       6.647       7.605       8.563       8.747       9.105
+    DEMMAL           0.227       0.230       0.231       0.238       0.245       0.247       0.249
+    CANFLF         154.590     165.490     171.065     200.182     229.298     234.874     245.773
+    ALCFLF          63.538      70.540      74.121      92.824     111.526     115.108     122.109
+    COGPGS           0.014       0.016       0.017       0.021       0.025       0.025       0.027
+
+ Residual Variances
+    COGCOM           0.151       0.165       0.173       0.211       0.249       0.256       0.270
+
+Between Level
+
+ COGCOM   ON
+    CANFLFBW        -0.006      -0.004      -0.003       0.000       0.004       0.005       0.006
+    COGPGSBW        -0.170      -0.096      -0.059       0.138       0.334       0.372       0.445
+    ALCFLFBW        -0.006      -0.003      -0.002       0.004       0.011       0.012       0.015
+    PC1BW           -7.048      -6.360      -6.008      -4.171      -2.334      -1.982      -1.294
+    PC2BW           -6.250      -5.518      -5.144      -3.189      -1.234      -0.860      -0.128
+    PC3BW          -28.093     -21.406     -17.985      -0.121      17.742      21.163      27.850
+    PC4BW          -11.913      -9.062      -7.604       0.012       7.628       9.086      11.937
+    PC5BW           -0.281      -0.066       0.043       0.616       1.189       1.298       1.513
+
+ CANFLFBW WITH
+    COGPGSBW        -0.455      -0.327      -0.261       0.083       0.426       0.492       0.621
+    ALCFLFBW        17.580      23.029      25.816      40.371      54.926      57.713      63.162
+
+ ALCFLFBW WITH
+    COGPGSBW        -0.274      -0.184      -0.139       0.100       0.339       0.385       0.474
+
+ Means
+    CANFLFBW        -0.497      -0.045       0.187       1.395       2.603       2.834       3.287
+    ALCFLFBW        -0.963      -0.654      -0.497       0.326       1.150       1.307       1.615
+    COGPGSBW        -0.042      -0.031      -0.026       0.003       0.031       0.037       0.048
+
+ Intercepts
+    COGCOM          -0.022       0.005       0.019       0.090       0.161       0.175       0.201
+
+ Variances
+    CANFLFBW       155.074     166.619     172.525     203.367     234.208     240.114     251.659
+    ALCFLFBW        64.776      71.859      75.482      94.404     113.326     116.949     124.033
+    COGPGSBW         0.091       0.096       0.099       0.114       0.129       0.132       0.138
+
+ Residual Variances
+    COGCOM           0.021       0.037       0.046       0.090       0.134       0.142       0.158
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANFLF          -0.125      -0.086      -0.065       0.040       0.145       0.165       0.204
+    DEMMAL          -0.156      -0.111      -0.088       0.034       0.155       0.178       0.224
+    DEMAGE          -0.215      -0.170      -0.147      -0.025       0.096       0.119       0.164
+    COGPGS          -0.223      -0.184      -0.164      -0.058       0.047       0.067       0.106
+    ALCFLF          -0.137      -0.109      -0.094      -0.018       0.058       0.072       0.101
+
+ CANFLF   WITH
+    DEMMAL           0.094       0.117       0.129       0.189       0.249       0.261       0.284
+    DEMAGE          -0.300      -0.279      -0.268      -0.210      -0.152      -0.141      -0.120
+    COGPGS          -0.162      -0.118      -0.095       0.022       0.140       0.163       0.207
+    ALCFLF           0.176       0.216       0.237       0.345       0.453       0.473       0.514
+
+ ALCFLF   WITH
+    DEMMAL          -0.025       0.000       0.012       0.079       0.145       0.157       0.182
+    DEMAGE          -0.165      -0.141      -0.129      -0.066      -0.002       0.010       0.034
+    COGPGS          -0.148      -0.107      -0.087       0.021       0.128       0.149       0.189
+
+ Means
+    DEMAGE          -0.106      -0.080      -0.068       0.000       0.068       0.080       0.106
+    DEMMAL          -0.106      -0.080      -0.067       0.000       0.067       0.080       0.106
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    ALCFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.025      -0.020      -0.018      -0.004       0.010       0.012       0.018
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    COGCOM           0.962       0.970       0.973       0.993       1.012       1.016       1.023
+
+Between Level
+
+ COGCOM   ON
+    CANFLFBW        -0.218      -0.164      -0.136       0.008       0.152       0.180       0.234
+    COGPGSBW        -0.166      -0.095      -0.059       0.128       0.316       0.352       0.423
+    ALCFLFBW        -0.162      -0.095      -0.060       0.120       0.299       0.334       0.401
+    PC1BW           -0.694      -0.631      -0.599      -0.430      -0.260      -0.228      -0.165
+    PC2BW           -0.623      -0.550      -0.513      -0.319      -0.125      -0.088      -0.015
+    PC3BW           -2.087      -1.591      -1.336      -0.009       1.318       1.573       2.069
+    PC4BW           -1.051      -0.800      -0.671       0.001       0.673       0.802       1.054
+    PC5BW           -0.028      -0.009       0.000       0.051       0.102       0.112       0.131
+
+ CANFLFBW WITH
+    COGPGSBW        -0.094      -0.068      -0.054       0.017       0.088       0.102       0.129
+    ALCFLFBW         0.139       0.176       0.194       0.291       0.388       0.407       0.443
+
+ ALCFLFBW WITH
+    COGPGSBW        -0.083      -0.056      -0.042       0.031       0.103       0.117       0.144
+
+ Means
+    CANFLFBW        -0.045      -0.010       0.007       0.098       0.189       0.206       0.240
+    ALCFLFBW        -0.104      -0.071      -0.054       0.034       0.121       0.138       0.171
+    COGPGSBW        -0.124      -0.093      -0.076       0.008       0.093       0.109       0.141
+
+ Intercepts
+    COGCOM          -0.055       0.018       0.055       0.248       0.441       0.478       0.551
+
+ Variances
+    CANFLFBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCFLFBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    COGCOM           0.422       0.485       0.517       0.685       0.852       0.884       0.947
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW           0             0             0             0
+ ALCFLFBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ COGCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+ ALCFLF             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0
+ ALCFLFBW           0             0
+ COGPGSBW           0             0             0
+ COGCOM             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANFLF             0             0
+ ALCFLF             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             1
+
+
+           ALPHA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  2             3             4             5             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             7             8             9            10             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW           0             0             0             0
+ ALCFLFBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ COGCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+ ALCFLF             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0
+ ALCFLFBW           0             0
+ COGPGSBW           0             0             0
+ COGCOM             0             0             0            11
+ DEMAGE             0             0             0             0            12
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0            14
+ ALCFLF             0             0             0             0            17
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL            13
+ CANFLF            15            16
+ ALCFLF            18            19            20
+ COGPGS             0            21            22            23
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW           0             0             0             0
+ ALCFLFBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ COGCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+ ALCFLF             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0
+ ALCFLFBW           0             0
+ COGPGSBW           0             0             0
+ COGCOM             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANFLF             0             0
+ ALCFLF             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                 24            25            26            27             0
+
+
+           ALPHA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM            28            29            30             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW           0             0             0             0             0
+ ALCFLFBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ COGCOM             0             0             0             0            31
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW           0             0             0             0
+ ALCFLFBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ COGCOM            32            33            34            35
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+ ALCFLF             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW          36
+ ALCFLFBW          37            38
+ COGPGSBW          39            40            41
+ COGCOM             0             0             0            42
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ ALCFLF             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANFLF             0             0
+ ALCFLF             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       1.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         1.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000
+ ALCFLFBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANFLF         0.000         0.000
+ ALCFLF         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000
+ ALCFLFBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.175
+ DEMAGE         0.000         0.000         0.000         0.000         3.803
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.119
+ CANFLF         0.000       101.429
+ ALCFLF         0.000         0.000        46.498
+ COGPGS         0.000         0.000         0.000         0.010
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       1.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         1.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000
+ ALCFLFBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANFLF         0.000         0.000
+ ALCFLF         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.039         0.000
+
+
+           ALPHA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANFLFBW       0.000         0.000         0.000         0.000
+ ALCFLFBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ COGCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANFLFBW      ALCFLFBW      COGPGSBW      COGCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANFLFBW     109.973
+ ALCFLFBW       0.000        46.065
+ COGPGSBW       0.000         0.000         0.055
+ COGCOM         0.000         0.000         0.000         0.175
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ ALCFLF         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANFLF        ALCFLF        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANFLF         0.000         0.000
+ ALCFLF         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.001
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_COGCOM
+              ________
+ 1              0.086
+
+
+           Covariances
+              B_COGCOM
+              ________
+ B_COGCOM       0.068
+
+
+           Correlations
+              B_COGCOM
+              ________
+ B_COGCOM       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  13:09:13
+        Ending Time:  13:09:14
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,1810 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   1:07 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_WASCOM_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  	
+    		! within predictor
+    			CANEVR
+    			ALCEVR
+    			COGPGS
+    		! between predictor
+    			CANEVRBW
+    			ALCEVRBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANEVRBW
+    			ALCEVRBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW		
+    		;
+    	WITHIN  		
+    			CANEVR
+    			ALCEVR
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANEVRBW = cluster_mean (CANEVR);
+  		ALCEVRBW = cluster_mean (ALCEVR);
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANEVR (GROUPMEAN);
+  		CENTER ALCEVR (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANEVRBW (GRANDMEAN);
+  		CENTER ALCEVRBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WASCOM on CANEVR;
+  	WASCOM on  DEMMAL DEMAGE COGPGS ALCEVR;
+  	COGPGS*;
+  	ALCEVR*;
+  	WASCOM*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+  	CANEVR WITH COGPGS*;
+
+  	CANEVR WITH ALCEVR*;
+  	
+  	ALCEVR WITH DEMMAL*;
+  	ALCEVR WITH DEMAGE*;
+  	ALCEVR WITH COGPGS*;
+
+
+  %BETWEEN%
+  	WASCOM on CANEVRBW COGPGSBW ALCEVRBW
+  			    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	ALCEVRBW;
+  	WASCOM*;
+  	CANEVRBW WITH COGPGSBW*;
+  	CANEVRBW WITH ALCEVRBW*;
+  	ALCEVRBW WITH COGPGSBW*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  160
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANEVR_WASCOM_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         965
+
+Number of dependent variables                                    1
+Number of independent variables                                 13
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR      ALCEVR      COGPGS      CANEVRBW
+   ALCEVRBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANEVR      ALCEVR      COGPGS
+
+  Between variables
+   CANEVRBW    ALCEVRBW    COGPGSBW    PC1BW       PC2BW       PC3BW
+   PC4BW       PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANEVRBW
+   ALCEVRBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GROUPMEAN)
+   CANEVR      ALCEVR      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             6
+     Number of clusters                        490
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.999
+ ALCEVRBW       0.999         0.999
+ COGPGSBW       0.999         0.999         1.000
+ WASCOM         0.999         0.999         1.000         1.000
+ DEMAGE         0.998         0.998         0.999         0.999         0.999
+ DEMMAL         0.999         0.999         1.000         1.000         0.999
+ CANEVR         0.997         0.997         0.997         0.997         0.996
+ ALCEVR         0.997         0.997         0.997         0.997         0.996
+ COGPGS         0.696         0.696         0.697         0.697         0.697
+ PC1BW          0.999         0.999         1.000         1.000         0.999
+ PC2BW          0.999         0.999         1.000         1.000         0.999
+ PC3BW          0.999         0.999         1.000         1.000         0.999
+ PC4BW          0.999         0.999         1.000         1.000         0.999
+ PC5BW          0.999         0.999         1.000         1.000         0.999
+
+
+           Covariance Coverage
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         1.000
+ CANEVR         0.997         0.997
+ ALCEVR         0.997         0.997         0.997
+ COGPGS         0.697         0.695         0.695         0.697
+ PC1BW          1.000         0.997         0.997         0.697         1.000
+ PC2BW          1.000         0.997         0.997         0.697         1.000
+ PC3BW          1.000         0.997         0.997         0.697         1.000
+ PC4BW          1.000         0.997         0.997         0.697         1.000
+ PC5BW          1.000         0.997         0.997         0.697         1.000
+
+
+           Covariance Coverage
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          1.000         1.000
+ PC4BW          1.000         1.000         1.000
+ PC5BW          1.000         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           Means
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000        -0.002         0.000
+
+
+           Means
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           Covariances
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.044
+ ALCEVRBW       0.014         0.024
+ COGPGSBW       0.001         0.005         0.113
+ WASCOM        -0.002         0.011         0.055         0.883
+ DEMAGE        -0.005         0.037         0.049        -0.139         6.398
+ DEMMAL         0.009         0.000         0.003         0.032        -0.181
+ CANEVR         0.000         0.000         0.000        -0.002        -0.096
+ ALCEVR         0.000         0.000         0.000         0.003        -0.018
+ COGPGS         0.000         0.000         0.000         0.006        -0.022
+ PC1BW          0.000         0.000        -0.003        -0.008         0.001
+ PC2BW         -0.001        -0.001         0.000        -0.012         0.005
+ PC3BW          0.000         0.000         0.000        -0.001        -0.001
+ PC4BW          0.000         0.000         0.001         0.001         0.004
+ PC5BW          0.001         0.000        -0.001         0.000         0.000
+
+
+           Covariances
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.234
+ CANEVR         0.015         0.049
+ ALCEVR         0.005         0.017         0.025
+ COGPGS         0.003         0.000         0.002         0.018
+ PC1BW         -0.001         0.000         0.000         0.000         0.001
+ PC2BW         -0.001         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.001         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.001
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+           Correlations
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000
+ ALCEVRBW       0.446         1.000
+ COGPGSBW       0.021         0.099         1.000
+ WASCOM        -0.011         0.078         0.175         1.000
+ DEMAGE        -0.009         0.096         0.058        -0.059         1.000
+ DEMMAL         0.084         0.005         0.019         0.071        -0.148
+ CANEVR         0.000         0.000         0.001        -0.009        -0.171
+ ALCEVR         0.000         0.000         0.000         0.021        -0.044
+ COGPGS        -0.007         0.020         0.003         0.047        -0.064
+ PC1BW         -0.061        -0.052        -0.258        -0.240         0.014
+ PC2BW         -0.106        -0.107        -0.028        -0.358         0.057
+ PC3BW         -0.017        -0.038        -0.005        -0.040        -0.012
+ PC4BW          0.058         0.076         0.092         0.022         0.044
+ PC5BW          0.119        -0.042        -0.051        -0.010         0.001
+
+
+           Correlations
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         1.000
+ CANEVR         0.138         1.000
+ ALCEVR         0.072         0.479         1.000
+ COGPGS         0.045        -0.004         0.083         1.000
+ PC1BW         -0.048         0.000         0.000        -0.003         1.000
+ PC2BW         -0.061         0.000         0.000        -0.002        -0.024
+ PC3BW          0.017         0.000         0.000         0.000         0.019
+ PC4BW          0.045         0.000         0.000         0.000        -0.010
+ PC5BW          0.022         0.000         0.000        -0.001         0.031
+
+
+           Correlations
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          1.000
+ PC3BW          0.031         1.000
+ PC4BW          0.004        -0.139         1.000
+ PC5BW         -0.005         0.012        -0.014         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS 6930.482
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANEVRBW              0.011      -2.087      -0.896    1.02%       0.104      0.104      0.104
+             489.000       0.042       3.633       0.104   81.39%       0.104      0.104
+     ALCEVRBW              0.003      -3.225      -0.949    0.41%       0.051      0.051      0.051
+             489.000       0.023      10.163       0.051   90.59%       0.051      0.051
+     COGPGSBW             -0.003       0.237      -1.031    0.20%      -0.294     -0.092     -0.016
+             490.000       0.119       0.592       1.225    0.20%       0.052      0.280
+     WASCOM                0.000      -0.040      -2.668    0.10%      -0.801     -0.241      0.004
+             965.000       0.883      -0.226       2.816    0.10%       0.257      0.847
+     DEMAGE                0.000       1.437      -4.026    0.10%      -1.976     -1.076     -0.551
+             964.000       6.399       2.956      15.944    0.10%      -0.026      1.574
+     DEMMAL                0.000      -0.516      -0.625   37.51%      -0.625      0.375      0.375
+             965.000       0.234      -1.734       0.375   62.49%       0.375      0.375
+     CANEVR                0.000      -0.310      -0.750    0.21%       0.000      0.000      0.000
+             962.000       0.049       2.704       0.750    0.10%       0.000      0.000
+     ALCEVR                0.000      -0.257      -0.667    0.62%       0.000      0.000      0.000
+             962.000       0.025       7.935       0.750    0.10%       0.000      0.000
+     COGPGS                0.000      -0.006      -0.505    0.15%      -0.046      0.000      0.000
+             673.000       0.018       2.763       0.604    0.15%       0.000      0.048
+     PC1BW                 0.000       2.449      -0.021    0.20%      -0.019     -0.016     -0.013
+             490.000       0.001       4.597       0.135    0.20%      -0.009     -0.004
+     PC2BW                -0.001       0.930      -0.038    0.20%      -0.032     -0.026     -0.017
+             490.000       0.001      -0.197       0.130    0.20%      -0.003      0.035
+     PC3BW                 0.000      13.417      -0.118    0.20%      -0.005     -0.002      0.000
+             490.000       0.001     267.178       0.454    0.20%       0.001      0.005
+     PC4BW                -0.001       5.694      -0.094    0.20%      -0.009     -0.006     -0.005
+             490.000       0.001      39.868       0.284    0.20%      -0.003     -0.001
+     PC5BW                 0.001     -17.522      -0.544    0.20%      -0.002      0.000      0.001
+             490.000       0.001     361.273       0.110    0.20%       0.001      0.004
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.156D-15.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 20, %WITHIN%: ALCEVR
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       42
+
+Loglikelihood
+
+          H0 Value                       -2861.835
+          H0 Scaling Correction Factor      1.6127
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    5807.671
+          Bayesian (BIC)                  6012.300
+          Sample-Size Adjusted BIC        5878.909
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASCOM     ON
+    CANEVR            -0.138      0.111     -1.241      0.214
+    DEMMAL             0.053      0.056      0.936      0.349
+    DEMAGE            -0.012      0.012     -1.040      0.298
+    COGPGS             0.256      0.176      1.456      0.145
+    ALCEVR             0.184      0.169      1.091      0.275
+
+ CANEVR   WITH
+    DEMMAL             0.012      0.004      3.441      0.001
+    DEMAGE            -0.087      0.019     -4.571      0.000
+    COGPGS            -0.001      0.002     -0.259      0.796
+    ALCEVR             0.017      0.003      5.738      0.000
+
+ ALCEVR   WITH
+    DEMMAL             0.005      0.003      1.945      0.052
+    DEMAGE            -0.013      0.010     -1.294      0.196
+    COGPGS             0.001      0.001      1.264      0.206
+
+ Means
+    DEMAGE             0.000      0.083      0.000      1.000
+    DEMMAL             0.000      0.017      0.000      1.000
+    CANEVR             0.000      0.000      1.596      0.111
+    ALCEVR             0.000      0.000      1.208      0.227
+    COGPGS             0.000      0.001     -0.430      0.667
+
+ Variances
+    DEMAGE             6.399      0.459     13.942      0.000
+    DEMMAL             0.234      0.004     56.688      0.000
+    CANEVR             0.049      0.005     10.475      0.000
+    ALCEVR             0.025      0.004      6.927      0.000
+    COGPGS             0.018      0.002      8.971      0.000
+
+ Residual Variances
+    WASCOM             0.442      0.028     15.908      0.000
+
+Between Level
+
+ WASCOM     ON
+    CANEVRBW          -0.437      0.157     -2.790      0.005
+    COGPGSBW           0.307      0.099      3.106      0.002
+    ALCEVRBW           0.451      0.236      1.915      0.055
+    PC1BW             -5.442      0.851     -6.398      0.000
+    PC2BW             -9.092      0.860    -10.577      0.000
+    PC3BW             -0.646      0.560     -1.153      0.249
+    PC4BW              0.230      0.985      0.234      0.815
+    PC5BW              0.484      0.635      0.761      0.447
+
+ CANEVRBW WITH
+    COGPGSBW           0.001      0.003      0.265      0.791
+    ALCEVRBW           0.014      0.003      4.764      0.000
+
+ ALCEVRBW WITH
+    COGPGSBW           0.005      0.002      2.193      0.028
+
+ Means
+    CANEVRBW           0.011      0.009      1.135      0.257
+    ALCEVRBW           0.003      0.007      0.491      0.624
+    COGPGSBW          -0.003      0.016     -0.206      0.837
+
+ Intercepts
+    WASCOM             0.003      0.032      0.084      0.933
+
+ Variances
+    CANEVRBW           0.042      0.005      9.317      0.000
+    ALCEVRBW           0.023      0.004      6.340      0.000
+    COGPGSBW           0.119      0.009     13.750      0.000
+
+ Residual Variances
+    WASCOM             0.252      0.031      8.115      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASCOM     ON
+    CANEVR            -0.046      0.037     -1.243      0.214
+    DEMMAL             0.038      0.041      0.935      0.350
+    DEMAGE            -0.047      0.046     -1.029      0.303
+    COGPGS             0.052      0.036      1.444      0.149
+    ALCEVR             0.043      0.040      1.085      0.278
+
+ CANEVR   WITH
+    DEMMAL             0.116      0.032      3.586      0.000
+    DEMAGE            -0.155      0.031     -5.020      0.000
+    COGPGS            -0.017      0.066     -0.258      0.796
+    ALCEVR             0.478      0.050      9.546      0.000
+
+ ALCEVR   WITH
+    DEMMAL             0.065      0.032      2.004      0.045
+    DEMAGE            -0.032      0.025     -1.310      0.190
+    COGPGS             0.070      0.053      1.307      0.191
+
+ Means
+    DEMAGE             0.000      0.033      0.000      1.000
+    DEMMAL             0.000      0.034      0.000      1.000
+    CANEVR             0.001      0.000      1.608      0.108
+    ALCEVR             0.000      0.000      1.221      0.222
+    COGPGS            -0.003      0.007     -0.432      0.666
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+    ALCEVR             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASCOM             0.992      0.006    152.735      0.000
+
+Between Level
+
+ WASCOM     ON
+    CANEVRBW          -0.139      0.050     -2.775      0.006
+    COGPGSBW           0.164      0.054      3.053      0.002
+    ALCEVRBW           0.106      0.056      1.892      0.058
+    PC1BW             -0.320      0.049     -6.551      0.000
+    PC2BW             -0.501      0.042    -11.850      0.000
+    PC3BW             -0.024      0.021     -1.154      0.249
+    PC4BW              0.010      0.044      0.234      0.815
+    PC5BW              0.020      0.026      0.758      0.448
+
+ CANEVRBW WITH
+    COGPGSBW           0.011      0.041      0.266      0.791
+    ALCEVRBW           0.436      0.066      6.607      0.000
+
+ ALCEVRBW WITH
+    COGPGSBW           0.092      0.041      2.277      0.023
+
+ Means
+    CANEVRBW           0.051      0.048      1.077      0.282
+    ALCEVRBW           0.022      0.047      0.474      0.636
+    COGPGSBW          -0.009      0.045     -0.206      0.837
+
+ Intercepts
+    WASCOM             0.004      0.049      0.084      0.933
+
+ Variances
+    CANEVRBW           1.000      0.000    999.000    999.000
+    ALCEVRBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASCOM             0.603      0.048     12.500      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASCOM             0.008      0.006      1.249      0.212
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASCOM             0.397      0.048      8.235      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.156E-15
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASCOM   ON
+    CANEVR          -0.426      -0.357      -0.322      -0.138       0.045       0.080       0.149
+    DEMMAL          -0.092      -0.058      -0.040       0.053       0.146       0.163       0.198
+    DEMAGE          -0.043      -0.036      -0.032      -0.012       0.007       0.011       0.018
+    COGPGS          -0.197      -0.089      -0.033       0.256       0.546       0.602       0.710
+    ALCEVR          -0.250      -0.146      -0.093       0.184       0.461       0.515       0.618
+
+ CANEVR   WITH
+    DEMMAL           0.003       0.005       0.006       0.012       0.018       0.019       0.022
+    DEMAGE          -0.136      -0.124      -0.118      -0.087      -0.056      -0.050      -0.038
+    COGPGS          -0.006      -0.004      -0.004      -0.001       0.003       0.003       0.005
+    ALCEVR           0.009       0.011       0.012       0.017       0.021       0.022       0.024
+
+ ALCEVR   WITH
+    DEMMAL          -0.002       0.000       0.001       0.005       0.009       0.010       0.011
+    DEMAGE          -0.038      -0.032      -0.029      -0.013       0.003       0.007       0.013
+    COGPGS          -0.002      -0.001       0.000       0.001       0.003       0.004       0.004
+
+ Means
+    DEMAGE          -0.214      -0.163      -0.136       0.000       0.136       0.162       0.213
+    DEMMAL          -0.043      -0.032      -0.027       0.000       0.027       0.032       0.043
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    ALCEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.003      -0.002      -0.002       0.000       0.001       0.002       0.002
+
+ Variances
+    DEMAGE           5.217       5.499       5.644       6.399       7.154       7.298       7.581
+    DEMMAL           0.224       0.226       0.228       0.234       0.241       0.243       0.245
+    CANEVR           0.037       0.040       0.041       0.049       0.057       0.058       0.061
+    ALCEVR           0.015       0.018       0.019       0.025       0.031       0.032       0.034
+    COGPGS           0.013       0.014       0.015       0.018       0.022       0.022       0.023
+
+ Residual Variances
+    WASCOM           0.370       0.388       0.396       0.442       0.488       0.496       0.514
+
+Between Level
+
+ WASCOM   ON
+    CANEVRBW        -0.841      -0.745      -0.695      -0.437      -0.179      -0.130      -0.034
+    COGPGSBW         0.052       0.113       0.145       0.307       0.470       0.501       0.562
+    ALCEVRBW        -0.156      -0.011       0.064       0.451       0.839       0.913       1.058
+    PC1BW           -7.633      -7.109      -6.841      -5.442      -4.043      -3.775      -3.251
+    PC2BW          -11.307     -10.777     -10.506      -9.092      -7.678      -7.408      -6.878
+    PC3BW           -2.090      -1.745      -1.568      -0.646       0.275       0.452       0.797
+    PC4BW           -2.307      -1.700      -1.390       0.230       1.851       2.161       2.768
+    PC5BW           -1.153      -0.762      -0.561       0.484       1.529       1.729       2.120
+
+ CANEVRBW WITH
+    COGPGSBW        -0.007      -0.005      -0.004       0.001       0.006       0.006       0.008
+    ALCEVRBW         0.006       0.008       0.009       0.014       0.018       0.019       0.021
+
+ ALCEVRBW WITH
+    COGPGSBW        -0.001       0.001       0.001       0.005       0.009       0.009       0.011
+
+ Means
+    CANEVRBW        -0.013      -0.008      -0.005       0.011       0.026       0.029       0.034
+    ALCEVRBW        -0.014      -0.010      -0.008       0.003       0.015       0.017       0.021
+    COGPGSBW        -0.043      -0.034      -0.029      -0.003       0.022       0.027       0.037
+
+ Intercepts
+    WASCOM          -0.079      -0.059      -0.049       0.003       0.055       0.065       0.084
+
+ Variances
+    CANEVRBW         0.030       0.033       0.035       0.042       0.049       0.051       0.054
+    ALCEVRBW         0.014       0.016       0.017       0.023       0.029       0.030       0.033
+    COGPGSBW         0.097       0.102       0.105       0.119       0.134       0.136       0.142
+
+ Residual Variances
+    WASCOM           0.172       0.191       0.201       0.252       0.303       0.313       0.332
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASCOM   ON
+    CANEVR          -0.141      -0.118      -0.107      -0.046       0.015       0.027       0.049
+    DEMMAL          -0.067      -0.042      -0.029       0.038       0.106       0.119       0.144
+    DEMAGE          -0.165      -0.137      -0.122      -0.047       0.028       0.043       0.071
+    COGPGS          -0.041      -0.019      -0.007       0.052       0.111       0.122       0.144
+    ALCEVR          -0.060      -0.035      -0.022       0.043       0.109       0.122       0.146
+
+ CANEVR   WITH
+    DEMMAL           0.033       0.052       0.063       0.116       0.169       0.179       0.199
+    DEMAGE          -0.235      -0.216      -0.206      -0.155      -0.104      -0.095      -0.076
+    COGPGS          -0.187      -0.147      -0.126      -0.017       0.092       0.113       0.153
+    ALCEVR           0.349       0.380       0.396       0.478       0.561       0.576       0.607
+
+ ALCEVR   WITH
+    DEMMAL          -0.019       0.001       0.012       0.065       0.118       0.128       0.148
+    DEMAGE          -0.096      -0.081      -0.073      -0.032       0.008       0.016       0.031
+    COGPGS          -0.068      -0.035      -0.018       0.070       0.157       0.174       0.207
+
+ Means
+    DEMAGE          -0.084      -0.064      -0.054       0.000       0.054       0.064       0.084
+    DEMMAL          -0.088      -0.067      -0.056       0.000       0.056       0.067       0.088
+    CANEVR           0.000       0.000       0.000       0.001       0.001       0.001       0.002
+    ALCEVR           0.000       0.000       0.000       0.000       0.001       0.001       0.001
+    COGPGS          -0.022      -0.018      -0.016      -0.003       0.009       0.011       0.016
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASCOM           0.975       0.979       0.981       0.992       1.003       1.005       1.009
+
+Between Level
+
+ WASCOM   ON
+    CANEVRBW        -0.267      -0.237      -0.221      -0.139      -0.056      -0.041      -0.010
+    COGPGSBW         0.026       0.059       0.076       0.164       0.253       0.270       0.303
+    ALCEVRBW        -0.038      -0.004       0.014       0.106       0.199       0.217       0.251
+    PC1BW           -0.446      -0.416      -0.401      -0.320      -0.240      -0.225      -0.194
+    PC2BW           -0.610      -0.584      -0.571      -0.501      -0.432      -0.419      -0.392
+    PC3BW           -0.077      -0.064      -0.058      -0.024       0.010       0.017       0.029
+    PC4BW           -0.104      -0.077      -0.063       0.010       0.083       0.097       0.125
+    PC5BW           -0.048      -0.031      -0.023       0.020       0.063       0.071       0.087
+
+ CANEVRBW WITH
+    COGPGSBW        -0.095      -0.069      -0.057       0.011       0.078       0.091       0.116
+    ALCEVRBW         0.266       0.306       0.327       0.436       0.544       0.565       0.605
+
+ ALCEVRBW WITH
+    COGPGSBW        -0.012       0.013       0.026       0.092       0.159       0.172       0.197
+
+ Means
+    CANEVRBW        -0.071      -0.042      -0.027       0.051       0.130       0.145       0.174
+    ALCEVRBW        -0.098      -0.069      -0.055       0.022       0.099       0.114       0.143
+    COGPGSBW        -0.126      -0.098      -0.084      -0.009       0.065       0.079       0.107
+
+ Intercepts
+    WASCOM          -0.122      -0.092      -0.076       0.004       0.085       0.100       0.130
+
+ Variances
+    CANEVRBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    ALCEVRBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASCOM           0.479       0.508       0.524       0.603       0.682       0.697       0.727
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW           0             0             0             0
+ ALCEVRBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+ ALCEVR             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ ALCEVRBW           0             0
+ COGPGSBW           0             0             0
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANEVR             0             0
+ ALCEVR             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             1
+
+
+           ALPHA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  2             3             4             5             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             7             8             9            10             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW           0             0             0             0
+ ALCEVRBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+ ALCEVR             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ ALCEVRBW           0             0
+ COGPGSBW           0             0             0
+ WASCOM             0             0             0            11
+ DEMAGE             0             0             0             0            12
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0            14
+ ALCEVR             0             0             0             0            17
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL            13
+ CANEVR            15            16
+ ALCEVR            18            19            20
+ COGPGS             0            21            22            23
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           LAMBDA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW           0             0             0             0
+ ALCEVRBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+ ALCEVR             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           THETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ ALCEVRBW           0             0
+ COGPGSBW           0             0             0
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANEVR             0             0
+ ALCEVR             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+           ALPHA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1                 24            25            26            27             0
+
+
+           ALPHA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1                  0             0             0             0
+
+
+           BETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM            28            29            30             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ ALCEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASCOM             0             0             0             0            31
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW           0             0             0             0
+ ALCEVRBW           0             0             0             0
+ COGPGSBW           0             0             0             0
+ WASCOM            32            33            34            35
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+ ALCEVR             0             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0
+ PC4BW              0             0             0             0
+ PC5BW              0             0             0             0
+
+
+           PSI
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW          36
+ ALCEVRBW          37            38
+ COGPGSBW          39            40            41
+ WASCOM             0             0             0            42
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ ALCEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL             0
+ CANEVR             0             0
+ ALCEVR             0             0             0
+ COGPGS             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW              0
+ PC3BW              0             0
+ PC4BW              0             0             0
+ PC5BW              0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         1.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ ALCEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANEVR         0.000         0.000
+ ALCEVR         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ ALCEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.442
+ DEMAGE         0.000         0.000         0.000         0.000         3.199
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.117
+ CANEVR         0.000         0.025
+ ALCEVR         0.000         0.000         0.012
+ COGPGS         0.000         0.000         0.000         0.009
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         1.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         1.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         1.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         1.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         1.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         1.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         1.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         1.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         1.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          1.000         0.000         0.000         0.000
+ PC3BW          0.000         1.000         0.000         0.000
+ PC4BW          0.000         0.000         1.000         0.000
+ PC5BW          0.000         0.000         0.000         1.000
+
+
+           THETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ ALCEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANEVR         0.000         0.000
+ ALCEVR         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000
+ ALCEVRBW       0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANEVRBW      ALCEVRBW      COGPGSBW      WASCOM        DEMAGE
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.022
+ ALCEVRBW       0.000         0.012
+ COGPGSBW       0.000         0.000         0.057
+ WASCOM         0.000         0.000         0.000         0.442
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ ALCEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DEMMAL        CANEVR        ALCEVR        COGPGS        PC1BW
+              ________      ________      ________      ________      ________
+ DEMMAL         0.000
+ CANEVR         0.000         0.000
+ ALCEVR         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC2BW         PC3BW         PC4BW         PC5BW
+              ________      ________      ________      ________
+ PC2BW          0.001
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000         0.001
+ PC5BW          0.000         0.000         0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WASCOM
+              ________
+ 1              0.000
+
+
+           Covariances
+              B_WASCOM
+              ________
+ B_WASCOM       0.319
+
+
+           Correlations
+              B_WASCOM
+              ________
+ B_WASCOM       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  13:07:52
+        Ending Time:  13:07:53
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen
