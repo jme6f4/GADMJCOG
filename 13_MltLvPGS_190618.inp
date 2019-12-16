@@ -1,0 +1,166 @@
+!        1         2         3         4         5         6         7         8
+!2345678901234567890123456789012345678901234567890123456789012345678901234567890
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Script:	CAN[[mjNames#mj]]_[[cogNames#cog]]_[[waveNames#wave]]_DATE.inp
+! Pject:	GADMJCOG
+! Task:  	Sib Comparison [WI/BW family]
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !
+! DATA
+!	Library:	GADMJCOG
+!	Input:		GD[DATE].csv
+!	Type:     	continuous, raw
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !
+! MODEL
+!	Analyses:	 Mutilevel Model
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !
+! HISTORY
+!	V1: JARROD ELLINGSON    2018 09 11
+!	V2: JARROD ELLINGSON    2018 10 02 [include alcohol, DEMAGE]
+!	V3: JARROD ELLINGSON    2018 11 06 [other covariates]
+!	V4: JARROD ELLINGSON    2018 12 10 [limit to three phenotypes]
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !
+! COMMENTS
+! 	INSERT
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+[[init]]
+iterators =	wave mj cog;
+wave = 1:4;
+mj = 1:5;
+cog = 1:11;
+waveNames#wave = 
+		1 2 12 22
+		;
+mjNames#mj = 
+		EVR ONS FLF F6M YRS
+		;
+cogNames#cog =
+		SRPWCR 
+		WASBLK  WASDGT  
+		TRLATS  TRLBTS
+		CVLASF  CVLASC  CVLALF  CVLALC
+		COGCOM  CVLCOM  
+		;
+filename = "CAN[[mjNames#mj]]_[[cogNames#cog]]_[[waveNames#wave]]_190618.inp";
+outputDirectory = Work/Models/13_MltLvPGS;
+[[/init]]
+
+TITLE: CAN[[mjNames#mj]]_[[cogNames#cog]]_[[waveNames#wave]];
+
+DATA:
+	FILE = GD190618.csv;
+
+VARIABLE:
+	NAMES =
+			ID_Fam   Wave     ID_MPL   
+			DEMMAL   DEMAGE   DEMHSP   DEMRAC   
+			SRPWCR  
+			WASVCB   WASBLK   WASDGT   WSISUM   
+			TRLATS   TRLBTS   
+			CVLASF   CVLASC   CVLALF   CVLALC   
+			WASCOM   COGCOM   CVLCOM   
+			CANEVR   CANONS   CANFLF   
+			CANFTY   CANF6M   CANAC6   
+			CANYRS   
+			ALCEVR   ALCONS   ALCFLF  
+			ALCFTY   ALCF6M   ALCAC6  
+			ALCYRS   
+			SRPWCRDt WASVCBDt WASBLKDt 
+			WASDGTDt WSISUMDt TRLATSDt 
+			TRLBTSDt CVLASFDt CVLASCDt 
+			CVLALFDt CVLALCDt WASCOMDt 
+			COGCOMDt CVLCOMDt 
+			COGPGS   
+			PC1 PC2 PC3 PC4 PC5 PC6     
+		;
+	USEVARIABLES =
+		! outcome
+	  		[[cogNames#cog]]
+  		! covariates
+	  		DEMAGE
+  			DEMMAL  		
+  		! within predictor
+  			CAN[[mjNames#mj]]
+  			COGPGS
+  		! between predictor
+  			CAN[[mjNames#mj]]BW
+  			COGPGSBW
+  			PC1BW
+  			PC2BW
+  			PC3BW
+  			PC4BW
+  			PC5BW	
+  		;
+  	USEOBSERVATION = 
+  			(Wave EQ [[waveNames#wave]] AND [[cogNames#cog]]Dt EQ 1)
+  		;
+  	CLUSTER = 
+  			ID_Fam
+  		;
+  	MISSING = .;
+  	BETWEEN =   		
+  			CAN[[mjNames#mj]]BW
+  			COGPGSBW
+  			PC1BW
+  			PC2BW
+  			PC3BW
+  			PC4BW
+  			PC5BW			
+  		;
+  	WITHIN  		
+  			CAN[[mjNames#mj]]
+  			COGPGS
+  			DEMAGE
+  			DEMMAL
+  		;  		
+
+DEFINE: 
+	! CREATE BW FAM PREDICTOR
+		CAN[[mjNames#mj]]BW = cluster_mean (CAN[[mjNames#mj]]);	
+		COGPGSBW = cluster_mean (COGPGS);
+		PC1BW = cluster_mean (PC1);
+		PC2BW = cluster_mean (PC2);
+		PC3BW = cluster_mean (PC3);
+		PC4BW = cluster_mean (PC4);
+		PC5BW = cluster_mean (PC5);
+	! CENTER WI FAM VARIABLES
+		CENTER CAN[[mjNames#mj]] (GROUPMEAN);
+		CENTER COGPGS (GROUPMEAN);
+		CENTER DEMMAL (GRANDMEAN);
+		CENTER DEMAGE (GRANDMEAN);
+	! CENTER BW FAM VARIABLES
+		CENTER CAN[[mjNames#mj]]BW (GRANDMEAN);
+		CENTER COGPGSBW (GRANDMEAN);
+		CENTER PC1BW (GRANDMEAN);
+		CENTER PC2BW (GRANDMEAN);
+		CENTER PC3BW (GRANDMEAN);
+		CENTER PC4BW (GRANDMEAN);
+		CENTER PC5BW (GRANDMEAN);
+    
+ANALYSIS:
+        ITERATIONS = 1000000;
+        TYPE = TWOLEVEL RANDOM;
+        ALGORITHM = INTEGRATION;
+        
+OUTPUT:
+	SAMPSTAT STDYX TECH1 CINT;
+
+MODEL:
+%WITHIN%
+	[[cogNames#cog]] on CAN[[mjNames#mj]];
+	[[cogNames#cog]] on  DEMMAL DEMAGE COGPGS;	
+	COGPGS*; 
+	[[cogNames#cog]]*;
+	CAN[[mjNames#mj]] WITH DEMMAL*;
+	CAN[[mjNames#mj]] WITH DEMAGE*;
+	CAN[[mjNames#mj]] WITH COGPGS*;
+
+%BETWEEN%
+	[[cogNames#cog]] on CAN[[mjNames#mj]]BW COGPGSBW
+		 	    PC1BW PC2BW PC3BW PC4BW PC5BW;
+	COGPGSBW*;
+	[[cogNames#cog]]*;
+	CAN[[mjNames#mj]]BW WITH COGPGSBW*;
+
+PLOT: 
+	TYPE = plot3;
