@@ -1,0 +1,753 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:25 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_WSISUM_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WSISUM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANEVR
+    		! between predictor
+    			CANEVRBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WSISUMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANEVRBW
+    		;
+    	WITHIN  		
+    			CANEVR
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANEVRBW = cluster_mean (CANEVR);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANEVR (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANEVRBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WSISUM on CANEVR;
+  	WSISUM on  DEMMAL DEMAGE;	
+  	WSISUM*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+  	
+  %BETWEEN%
+  	WSISUM on CANEVRBW;
+  	WSISUM*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANEVR_WSISUM_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1124
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WSISUM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR      CANEVRBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANEVR
+
+  Between variables
+   CANEVRBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANEVRBW
+
+  Centering (GROUPMEAN)
+   CANEVR
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        582
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANEVR         0.997         0.996         0.997         0.997
+ CANEVRBW       1.000         0.999         1.000         0.997         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             93.620         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM       236.910
+ DEMAGE        -1.091         6.284
+ DEMMAL         0.695        -0.181         0.231
+ CANEVR        -0.010        -0.092         0.015         0.049
+ CANEVRBW      -0.054         0.000         0.008         0.000         0.043
+
+
+           Correlations
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         1.000
+ DEMAGE        -0.028         1.000
+ DEMMAL         0.094        -0.150         1.000
+ CANEVR        -0.003        -0.165         0.140         1.000
+ CANEVRBW      -0.017         0.000         0.080         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -7755.261
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WSISUM               93.620      -0.254      45.000    0.09%      81.000     91.000     95.000
+            1124.000     236.910      -0.195     135.000    0.09%      98.000    107.000
+     DEMAGE                0.000       1.427      -4.036    0.09%      -1.936     -1.076     -0.536
+            1123.000       6.285       2.883      15.934    0.09%      -0.016      1.554
+     DEMMAL                0.000      -0.566      -0.636   36.39%      -0.636      0.364      0.364
+            1124.000       0.231      -1.680       0.364   63.61%       0.364      0.364
+     CANEVR                0.000      -0.314      -0.750    0.27%       0.000      0.000      0.000
+            1121.000       0.049       2.678       0.750    0.09%       0.000      0.000
+     CANEVRBW              0.011      -2.106      -0.897    1.03%       0.103      0.103      0.103
+             582.000       0.042       3.728       0.103   81.62%       0.103      0.103
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.401D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 12, %WITHIN%: CANEVR
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -7856.938
+          H0 Scaling Correction Factor      1.2173
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   15743.876
+          Bayesian (BIC)                 15819.245
+          Sample-Size Adjusted BIC       15771.601
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WSISUM     ON
+    CANEVR            -0.829      1.452     -0.571      0.568
+    DEMMAL             1.895      0.903      2.098      0.036
+    DEMAGE            -0.029      0.177     -0.165      0.869
+
+ CANEVR   WITH
+    DEMMAL             0.013      0.003      3.845      0.000
+    DEMAGE            -0.082      0.017     -4.785      0.000
+
+ Means
+    DEMAGE             0.000      0.076     -0.001      0.999
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANEVR             0.000      0.000      1.532      0.126
+
+ Variances
+    DEMAGE             6.284      0.411     15.298      0.000
+    DEMMAL             0.231      0.004     55.962      0.000
+    CANEVR             0.049      0.004     11.359      0.000
+
+ Residual Variances
+    WSISUM           117.166      7.327     15.992      0.000
+
+Between Level
+
+ WSISUM     ON
+    CANEVRBW          -1.262      2.845     -0.444      0.657
+
+ Intercepts
+    WSISUM            93.699      0.564    166.125      0.000
+
+ Residual Variances
+    WSISUM           117.263     10.631     11.031      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WSISUM     ON
+    CANEVR            -0.017      0.030     -0.571      0.568
+    DEMMAL             0.084      0.040      2.112      0.035
+    DEMAGE            -0.007      0.041     -0.165      0.869
+
+ CANEVR   WITH
+    DEMMAL             0.119      0.030      4.020      0.000
+    DEMAGE            -0.148      0.028     -5.215      0.000
+
+ Means
+    DEMAGE             0.000      0.030     -0.001      0.999
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANEVR             0.000      0.000      1.540      0.124
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WSISUM             0.993      0.007    151.686      0.000
+
+Between Level
+
+ WSISUM     ON
+    CANEVRBW          -0.024      0.054     -0.444      0.657
+
+ Intercepts
+    WSISUM             8.650      0.402     21.499      0.000
+
+ Residual Variances
+    WSISUM             0.999      0.003    391.617      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WSISUM             0.007      0.007      1.070      0.285
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WSISUM             0.001      0.003      0.222      0.824
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.401E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WSISUM   ON
+    CANEVR          -4.571      -3.676      -3.219      -0.829       1.560       2.017       2.912
+    DEMMAL          -0.432       0.124       0.409       1.895       3.381       3.666       4.222
+    DEMAGE          -0.484      -0.375      -0.320      -0.029       0.261       0.317       0.426
+
+ CANEVR   WITH
+    DEMMAL           0.004       0.006       0.007       0.013       0.018       0.019       0.021
+    DEMAGE          -0.126      -0.116      -0.110      -0.082      -0.054      -0.048      -0.038
+
+ Means
+    DEMAGE          -0.196      -0.149      -0.125       0.000       0.125       0.149       0.196
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           5.226       5.479       5.609       6.284       6.960       7.090       7.343
+    DEMMAL           0.221       0.223       0.225       0.231       0.238       0.240       0.242
+    CANEVR           0.038       0.041       0.042       0.049       0.056       0.058       0.060
+
+ Residual Variances
+    WSISUM          98.294     102.806     105.114     117.166     129.219     131.527     136.038
+
+Between Level
+
+ WSISUM   ON
+    CANEVRBW        -8.590      -6.838      -5.942      -1.262       3.417       4.313       6.065
+
+ Intercepts
+    WSISUM          92.246      92.593      92.771      93.699      94.627      94.804      95.152
+
+ Residual Variances
+    WSISUM          89.881      96.427      99.776     117.263     134.750     138.099     144.645
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WSISUM   ON
+    CANEVR          -0.093      -0.075      -0.066      -0.017       0.032       0.041       0.059
+    DEMMAL          -0.018       0.006       0.019       0.084       0.149       0.162       0.186
+    DEMAGE          -0.112      -0.087      -0.074      -0.007       0.060       0.073       0.098
+
+ CANEVR   WITH
+    DEMMAL           0.043       0.061       0.070       0.119       0.167       0.177       0.195
+    DEMAGE          -0.221      -0.203      -0.194      -0.148      -0.101      -0.092      -0.075
+
+ Means
+    DEMAGE          -0.078      -0.060      -0.050       0.000       0.050       0.059       0.078
+    DEMMAL          -0.081      -0.062      -0.052       0.000       0.052       0.062       0.081
+    CANEVR           0.000       0.000       0.000       0.000       0.001       0.001       0.001
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WSISUM           0.976       0.980       0.982       0.993       1.004       1.006       1.010
+
+Between Level
+
+ WSISUM   ON
+    CANEVRBW        -0.162      -0.129      -0.112      -0.024       0.064       0.081       0.114
+
+ Intercepts
+    WSISUM           7.614       7.862       7.988       8.650       9.312       9.439       9.687
+
+ Residual Variances
+    WSISUM           0.993       0.994       0.995       0.999       1.004       1.004       1.006
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANEVR             0            10            11            12
+ CANEVRBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM       118.455
+ DEMAGE         0.000         3.142
+ DEMMAL         0.000         0.000         0.116
+ CANEVR         0.000         0.000         0.000         0.025
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             93.620         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WSISUM        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WSISUM       118.455
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.022
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WSISUM
+              ________
+ 1             93.620
+
+
+           Covariances
+              B_WSISUM
+              ________
+ B_WSISUM      78.983
+
+
+           Correlations
+              B_WSISUM
+              ________
+ B_WSISUM       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:25:18
+        Ending Time:  14:25:19
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

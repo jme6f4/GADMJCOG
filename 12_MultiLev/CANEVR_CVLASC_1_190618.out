@@ -1,0 +1,753 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:24 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_CVLASC_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			CVLASC
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANEVR
+    		! between predictor
+    			CANEVRBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND CVLASCDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANEVRBW
+    		;
+    	WITHIN  		
+    			CANEVR
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANEVRBW = cluster_mean (CANEVR);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANEVR (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANEVRBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	CVLASC on CANEVR;
+  	CVLASC on  DEMMAL DEMAGE;	
+  	CVLASC*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+
+  %BETWEEN%
+  	CVLASC on CANEVRBW;
+  	CVLASC*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables except
+  x-variables.  These cases were not included in the analysis.
+  Number of cases with missing on all variables except x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANEVR_CVLASC_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         489
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CVLASC
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR      CANEVRBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANEVR
+
+  Between variables
+   CANEVRBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANEVRBW
+
+  Centering (GROUPMEAN)
+   CANEVR
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        244
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.998
+ DEMAGE         0.996         0.998
+ DEMMAL         0.998         0.998         1.000
+ CANEVR         0.998         0.998         1.000         1.000
+ CANEVRBW       0.998         0.998         1.000         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             -0.437         0.001         0.000         0.000         0.000
+
+
+           Covariances
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.917
+ DEMAGE        -0.042         6.010
+ DEMMAL        -0.076        -0.132         0.247
+ CANEVR        -0.015        -0.125         0.011         0.058
+ CANEVRBW      -0.002        -0.004         0.013         0.000         0.054
+
+
+           Correlations
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         1.000
+ DEMAGE        -0.018         1.000
+ DEMMAL        -0.159        -0.108         1.000
+ CANEVR        -0.064        -0.212         0.094         1.000
+ CANEVRBW      -0.008        -0.006         0.113         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -2106.283
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CVLASC               -0.437      -0.868      -5.000    0.61%      -1.000     -0.500     -0.500
+             488.000       0.917       2.843       1.500    2.25%       0.000      0.500
+     DEMAGE                0.000       1.646      -3.804    0.20%      -1.924     -0.974     -0.534
+             488.000       6.010       4.211      15.296    0.20%      -0.094      1.316
+     DEMMAL                0.000      -0.218      -0.554   44.58%      -0.554     -0.554      0.446
+             489.000       0.247      -1.952       0.446   55.42%       0.446      0.446
+     CANEVR                0.000      -0.098      -0.667    0.82%       0.000      0.000      0.000
+             489.000       0.058       1.484       0.667    0.20%       0.000      0.000
+     CANEVRBW              0.004      -1.636      -0.871    1.64%      -0.371      0.129      0.129
+             244.000       0.055       1.744       0.129   76.23%       0.129      0.129
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.137D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 3, %WITHIN%: [ CANEVR ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -2129.041
+          H0 Scaling Correction Factor      1.3088
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    4288.082
+          Bayesian (BIC)                  4350.967
+          Sample-Size Adjusted BIC        4303.357
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLASC     ON
+    CANEVR            -0.228      0.147     -1.551      0.121
+    DEMMAL            -0.296      0.091     -3.260      0.001
+    DEMAGE            -0.015      0.017     -0.874      0.382
+
+ CANEVR   WITH
+    DEMMAL             0.009      0.005      1.679      0.093
+    DEMAGE            -0.120      0.031     -3.842      0.000
+
+ Means
+    DEMAGE             0.000      0.109      0.000      1.000
+    DEMMAL             0.000      0.025      0.000      1.000
+    CANEVR             0.000      0.000      0.000      1.000
+
+ Variances
+    DEMAGE             6.009      0.654      9.183      0.000
+    DEMMAL             0.247      0.003     90.990      0.000
+    CANEVR             0.058      0.007      8.403      0.000
+
+ Residual Variances
+    CVLASC             0.778      0.109      7.110      0.000
+
+Between Level
+
+ CVLASC     ON
+    CANEVRBW           0.035      0.216      0.164      0.870
+
+ Intercepts
+    CVLASC            -0.438      0.045     -9.705      0.000
+
+ Residual Variances
+    CVLASC             0.114      0.062      1.828      0.068
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLASC     ON
+    CANEVR            -0.061      0.040     -1.540      0.124
+    DEMMAL            -0.164      0.047     -3.484      0.000
+    DEMAGE            -0.042      0.048     -0.871      0.384
+
+ CANEVR   WITH
+    DEMMAL             0.072      0.042      1.701      0.089
+    DEMAGE            -0.204      0.048     -4.297      0.000
+
+ Means
+    DEMAGE             0.000      0.044      0.000      1.000
+    DEMMAL             0.000      0.050      0.000      1.000
+    CANEVR             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLASC             0.967      0.016     58.852      0.000
+
+Between Level
+
+ CVLASC     ON
+    CANEVRBW           0.024      0.150      0.163      0.870
+
+ Intercepts
+    CVLASC            -1.298      0.391     -3.319      0.001
+
+ Residual Variances
+    CVLASC             0.999      0.007    135.884      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLASC             0.033      0.016      1.999      0.046
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLASC             0.001      0.007      0.082      0.935
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.137E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLASC   ON
+    CANEVR          -0.607      -0.516      -0.470      -0.228       0.014       0.060       0.151
+    DEMMAL          -0.531      -0.475      -0.446      -0.296      -0.147      -0.118      -0.062
+    DEMAGE          -0.060      -0.049      -0.044      -0.015       0.013       0.019       0.030
+
+ CANEVR   WITH
+    DEMMAL          -0.005      -0.001       0.000       0.009       0.017       0.019       0.022
+    DEMAGE          -0.201      -0.182      -0.172      -0.120      -0.069      -0.059      -0.040
+
+ Means
+    DEMAGE          -0.280      -0.213      -0.179       0.000       0.179       0.213       0.280
+    DEMMAL          -0.065      -0.049      -0.041       0.000       0.041       0.049       0.065
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           4.324       4.727       4.933       6.009       7.086       7.292       7.695
+    DEMMAL           0.240       0.242       0.243       0.247       0.252       0.252       0.254
+    CANEVR           0.040       0.044       0.046       0.058       0.069       0.071       0.075
+
+ Residual Variances
+    CVLASC           0.496       0.563       0.598       0.778       0.958       0.992       1.060
+
+Between Level
+
+ CVLASC   ON
+    CANEVRBW        -0.521      -0.388      -0.320       0.035       0.390       0.458       0.591
+
+ Intercepts
+    CVLASC          -0.554      -0.527      -0.512      -0.438      -0.364      -0.350      -0.322
+
+ Residual Variances
+    CVLASC          -0.047      -0.008       0.011       0.114       0.216       0.236       0.274
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLASC   ON
+    CANEVR          -0.163      -0.139      -0.126      -0.061       0.004       0.017       0.041
+    DEMMAL          -0.286      -0.257      -0.242      -0.164      -0.087      -0.072      -0.043
+    DEMAGE          -0.164      -0.135      -0.120      -0.042       0.037       0.052       0.081
+
+ CANEVR   WITH
+    DEMMAL          -0.037      -0.011       0.002       0.072       0.142       0.155       0.181
+    DEMAGE          -0.327      -0.298      -0.283      -0.204      -0.126      -0.111      -0.082
+
+ Means
+    DEMAGE          -0.114      -0.087      -0.073       0.000       0.073       0.087       0.114
+    DEMMAL          -0.130      -0.099      -0.083       0.000       0.083       0.099       0.130
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLASC           0.925       0.935       0.940       0.967       0.994       0.999       1.009
+
+Between Level
+
+ CVLASC   ON
+    CANEVRBW        -0.362      -0.270      -0.223       0.024       0.272       0.319       0.411
+
+ Intercepts
+    CVLASC          -2.306      -2.065      -1.942      -1.298      -0.655      -0.532      -0.291
+
+ Residual Variances
+    CVLASC           0.980       0.985       0.987       0.999       1.011       1.014       1.018
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANEVR             0            10            11            12
+ CANEVRBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.458
+ DEMAGE         0.000         3.005
+ DEMMAL         0.000         0.000         0.124
+ CANEVR         0.000         0.000         0.000         0.029
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             -0.437         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLASC        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ CVLASC         0.458
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.027
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_CVLASC
+              ________
+ 1             -0.437
+
+
+           Covariances
+              B_CVLASC
+              ________
+ B_CVLASC       0.026
+
+
+           Correlations
+              B_CVLASC
+              ________
+ B_CVLASC       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:24:44
+        Ending Time:  14:24:45
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

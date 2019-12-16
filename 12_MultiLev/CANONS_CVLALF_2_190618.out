@@ -1,0 +1,746 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:26 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_CVLALF_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			CVLALF
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    		! between predictor
+    			CANONSBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND CVLALFDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    		;
+    	WITHIN  		
+    			CANONS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	CVLALF on CANONS;
+  	CVLALF on  DEMMAL DEMAGE;	
+  	CVLALF*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+  %BETWEEN%
+  	CVLALF on CANONSBW;
+  	CVLALF*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  29
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_CVLALF_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         395
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CVLALF
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      CANONSBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS
+
+  Between variables
+   CANONSBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+
+  Centering (GROUPMEAN)
+   CANONS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        209
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.848
+ DEMAGE         0.848         0.997
+ DEMMAL         0.848         0.997         0.997
+ CANONS         0.724         0.848         0.848         0.851
+ CANONSBW       0.848         0.997         0.997         0.851         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             -0.510         0.001         0.000         0.022         0.000
+
+
+           Covariances
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         1.221
+ DEMAGE        -0.315         8.149
+ DEMMAL         0.015        -0.187         0.246
+ CANONS         0.192         0.588        -0.037         1.780
+ CANONSBW       0.063         1.265        -0.109        -0.033         3.868
+
+
+           Correlations
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         1.000
+ DEMAGE        -0.100         1.000
+ DEMMAL         0.028        -0.132         1.000
+ CANONS         0.130         0.154        -0.055         1.000
+ CANONSBW       0.029         0.225        -0.112        -0.013         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -3139.454
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CVLALF               -0.501      -0.336      -4.500    0.30%      -1.500     -1.000      0.000
+             335.000       1.223      -0.345       1.500    3.58%       0.000      0.500
+     DEMAGE                0.000       1.001      -5.525    0.25%      -2.455     -0.975     -0.305
+             394.000       8.150       2.431      15.645    0.25%       0.285      2.105
+     DEMMAL                0.000      -0.266      -0.566   43.40%      -0.566     -0.566      0.434
+             394.000       0.246      -1.929       0.434   56.60%       0.434      0.434
+     CANONS                0.000      -0.007      -4.500    0.89%      -1.000      0.000      0.000
+             336.000       1.769       2.263       4.500    0.89%       0.000      1.000
+     CANONSBW             -0.035       1.413      -4.984    0.48%      -1.484     -0.484      0.016
+             209.000       3.884       5.634      11.016    0.48%       0.016      1.016
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -2326.025
+          H0 Scaling Correction Factor      1.1251
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    4682.049
+          Bayesian (BIC)                  4741.732
+          Sample-Size Adjusted BIC        4694.137
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLALF     ON
+    CANONS             0.126      0.034      3.759      0.000
+    DEMMAL             0.052      0.114      0.460      0.645
+    DEMAGE            -0.046      0.023     -2.021      0.043
+
+ CANONS   WITH
+    DEMMAL            -0.025      0.028     -0.871      0.384
+    DEMAGE             0.556      0.203      2.745      0.006
+
+ Means
+    DEMAGE             0.001      0.157      0.005      0.996
+    DEMMAL             0.000      0.027     -0.001      0.999
+    CANONS             0.022      0.011      2.009      0.045
+
+ Variances
+    DEMAGE             8.150      0.862      9.457      0.000
+    DEMMAL             0.246      0.004     69.847      0.000
+    CANONS             1.775      0.278      6.384      0.000
+
+ Residual Variances
+    CVLALF             1.001      0.138      7.262      0.000
+
+Between Level
+
+ CVLALF     ON
+    CANONSBW           0.034      0.035      0.989      0.322
+
+ Intercepts
+    CVLALF            -0.513      0.063     -8.099      0.000
+
+ Residual Variances
+    CVLALF             0.181      0.109      1.654      0.098
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLALF     ON
+    CANONS             0.165      0.048      3.432      0.001
+    DEMMAL             0.025      0.055      0.459      0.646
+    DEMAGE            -0.129      0.062     -2.071      0.038
+
+ CANONS   WITH
+    DEMMAL            -0.037      0.042     -0.886      0.376
+    DEMAGE             0.146      0.050      2.897      0.004
+
+ Means
+    DEMAGE             0.000      0.055      0.005      0.996
+    DEMMAL             0.000      0.054     -0.001      0.999
+    CANONS             0.016      0.008      2.084      0.037
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLALF             0.962      0.021     46.731      0.000
+
+Between Level
+
+ CVLALF     ON
+    CANONSBW           0.157      0.165      0.952      0.341
+
+ Intercepts
+    CVLALF            -1.191      0.380     -3.136      0.002
+
+ Residual Variances
+    CVLALF             0.975      0.052     18.913      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLALF             0.038      0.021      1.842      0.065
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLALF             0.025      0.052      0.476      0.634
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.289E-08
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLALF   ON
+    CANONS           0.040       0.060       0.071       0.126       0.181       0.192       0.213
+    DEMMAL          -0.241      -0.171      -0.135       0.052       0.239       0.275       0.345
+    DEMAGE          -0.105      -0.091      -0.084      -0.046      -0.009      -0.001       0.013
+
+ CANONS   WITH
+    DEMMAL          -0.097      -0.080      -0.071      -0.025       0.022       0.031       0.048
+    DEMAGE           0.034       0.159       0.223       0.556       0.889       0.953       1.078
+
+ Means
+    DEMAGE          -0.404      -0.307      -0.257       0.001       0.259       0.308       0.405
+    DEMMAL          -0.069      -0.052      -0.044       0.000       0.044       0.052       0.069
+    CANONS          -0.006       0.001       0.004       0.022       0.040       0.043       0.050
+
+ Variances
+    DEMAGE           5.930       6.461       6.732       8.150       9.568       9.839      10.370
+    DEMMAL           0.237       0.239       0.240       0.246       0.251       0.253       0.255
+    CANONS           1.059       1.230       1.317       1.775       2.232       2.319       2.491
+
+ Residual Variances
+    CVLALF           0.646       0.731       0.774       1.001       1.228       1.271       1.356
+
+Between Level
+
+ CVLALF   ON
+    CANONSBW        -0.055      -0.034      -0.023       0.034       0.091       0.102       0.123
+
+ Intercepts
+    CVLALF          -0.676      -0.637      -0.617      -0.513      -0.409      -0.389      -0.350
+
+ Residual Variances
+    CVLALF          -0.101      -0.033       0.001       0.181       0.361       0.395       0.463
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLALF   ON
+    CANONS           0.041       0.071       0.086       0.165       0.244       0.259       0.288
+    DEMMAL          -0.117      -0.083      -0.066       0.025       0.116       0.134       0.168
+    DEMAGE          -0.290      -0.251      -0.232      -0.129      -0.027      -0.007       0.031
+
+ CANONS   WITH
+    DEMMAL          -0.145      -0.119      -0.106      -0.037       0.032       0.045       0.071
+    DEMAGE           0.016       0.047       0.063       0.146       0.229       0.245       0.276
+
+ Means
+    DEMAGE          -0.141      -0.107      -0.090       0.000       0.091       0.108       0.142
+    DEMMAL          -0.139      -0.105      -0.089       0.000       0.088       0.105       0.138
+    CANONS          -0.004       0.001       0.003       0.016       0.029       0.032       0.037
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLALF           0.909       0.922       0.928       0.962       0.996       1.002       1.015
+
+Between Level
+
+ CVLALF   ON
+    CANONSBW        -0.267      -0.166      -0.114       0.157       0.427       0.479       0.581
+
+ Intercepts
+    CVLALF          -2.169      -1.935      -1.815      -1.191      -0.566      -0.447      -0.213
+
+ Residual Variances
+    CVLALF           0.843       0.874       0.891       0.975       1.060       1.077       1.108
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANONS             0            10            11            12
+ CANONSBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.612
+ DEMAGE         0.000         4.075
+ DEMMAL         0.000         0.000         0.123
+ CANONS         0.000         0.000         0.000         0.884
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             -0.501         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLALF        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ CVLALF         0.612
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.934
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_CVLALF
+              ________
+ 1             -0.514
+
+
+           Covariances
+              B_CVLALF
+              ________
+ B_CVLALF       0.044
+
+
+           Correlations
+              B_CVLALF
+              ________
+ B_CVLALF       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:26:37
+        Ending Time:  14:26:37
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,746 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:27 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_WASBLK_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASBLK
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    		! between predictor
+    			CANONSBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND WASBLKDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    		;
+    	WITHIN  		
+    			CANONS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WASBLK on CANONS;
+  	WASBLK on  DEMMAL DEMAGE;	
+  	WASBLK*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+  %BETWEEN%
+  	WASBLK on CANONSBW;
+  	WASBLK*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  41
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_WASBLK_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         766
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASBLK
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      CANONSBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS
+
+  Between variables
+   CANONSBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+
+  Centering (GROUPMEAN)
+   CANONS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        429
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         0.440
+ DEMAGE         0.440         0.999
+ DEMMAL         0.440         0.999         0.999
+ CANONS         0.375         0.850         0.850         0.851
+ CANONSBW       0.440         0.999         0.999         0.851         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             54.810         0.001         0.000         0.034         0.000
+
+
+           Covariances
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK        70.219
+ DEMAGE        -2.617         7.665
+ DEMMAL         0.883        -0.209         0.232
+ CANONS         0.448         0.697        -0.071         1.755
+ CANONSBW      -0.578         1.007        -0.121        -0.026         3.854
+
+
+           Correlations
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         1.000
+ DEMAGE        -0.113         1.000
+ DEMMAL         0.219        -0.157         1.000
+ CANONS         0.040         0.190        -0.111         1.000
+ CANONSBW      -0.035         0.185        -0.128        -0.010         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -6246.024
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASBLK               54.709      -0.750      26.000    0.59%      49.000     53.000     55.000
+             337.000      70.438       0.705      71.000    0.30%      58.000     63.000
+     DEMAGE                0.000       0.967      -5.482    0.13%      -2.362     -1.012     -0.432
+             765.000       7.666       1.822      15.688    0.13%       0.298      2.088
+     DEMMAL                0.000      -0.550      -0.633   36.73%      -0.633      0.367      0.367
+             765.000       0.232      -1.697       0.367   63.27%       0.367      0.367
+     CANONS                0.000      -0.030      -5.500    0.15%      -1.000      0.000      0.000
+             652.000       1.742       2.475       5.500    0.15%       0.000      1.000
+     CANONSBW             -0.090       0.939      -5.418    0.70%      -1.418     -0.418     -0.418
+             429.000       3.851       4.324      11.582    0.23%       0.582      1.082
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -4651.799
+          H0 Scaling Correction Factor      1.2076
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    9333.598
+          Bayesian (BIC)                  9403.216
+          Sample-Size Adjusted BIC        9355.584
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASBLK     ON
+    CANONS             0.464      0.277      1.675      0.094
+    DEMMAL             3.044      0.912      3.337      0.001
+    DEMAGE            -0.263      0.157     -1.676      0.094
+
+ CANONS   WITH
+    DEMMAL            -0.053      0.020     -2.655      0.008
+    DEMAGE             0.633      0.157      4.044      0.000
+
+ Means
+    DEMAGE             0.000      0.108      0.004      0.997
+    DEMMAL             0.000      0.018     -0.002      0.998
+    CANONS             0.032      0.009      3.638      0.000
+
+ Variances
+    DEMAGE             7.665      0.540     14.207      0.000
+    DEMMAL             0.232      0.005     47.807      0.000
+    CANONS             1.743      0.198      8.792      0.000
+
+ Residual Variances
+    WASBLK            34.680      4.076      8.509      0.000
+
+Between Level
+
+ WASBLK     ON
+    CANONSBW           0.000      0.299     -0.001      0.999
+
+ Intercepts
+    WASBLK            54.843      0.514    106.757      0.000
+
+ Residual Variances
+    WASBLK            31.905      6.767      4.715      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASBLK     ON
+    CANONS             0.100      0.059      1.708      0.088
+    DEMMAL             0.240      0.068      3.544      0.000
+    DEMAGE            -0.119      0.071     -1.673      0.094
+
+ CANONS   WITH
+    DEMMAL            -0.084      0.031     -2.714      0.007
+    DEMAGE             0.173      0.039      4.450      0.000
+
+ Means
+    DEMAGE             0.000      0.039      0.004      0.997
+    DEMMAL             0.000      0.038     -0.002      0.998
+    CANONS             0.024      0.006      3.789      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASBLK             0.926      0.032     28.588      0.000
+
+Between Level
+
+ WASBLK     ON
+    CANONSBW           0.000      0.104     -0.001      0.999
+
+ Intercepts
+    WASBLK             9.709      1.055      9.201      0.000
+
+ Residual Variances
+    WASBLK             1.000      0.000  67329.633      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASBLK             0.074      0.032      2.270      0.023
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASBLK             0.000      0.000      0.000      1.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.176E-07
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASBLK   ON
+    CANONS          -0.250      -0.079       0.008       0.464       0.920       1.007       1.177
+    DEMMAL           0.694       1.256       1.543       3.044       4.544       4.832       5.393
+    DEMAGE          -0.667      -0.571      -0.521      -0.263      -0.005       0.045       0.141
+
+ CANONS   WITH
+    DEMMAL          -0.105      -0.092      -0.086      -0.053      -0.020      -0.014      -0.002
+    DEMAGE           0.230       0.326       0.376       0.633       0.891       0.940       1.037
+
+ Means
+    DEMAGE          -0.277      -0.211      -0.177       0.000       0.178       0.212       0.278
+    DEMMAL          -0.047      -0.036      -0.030       0.000       0.030       0.036       0.047
+    CANONS           0.009       0.015       0.018       0.032       0.047       0.049       0.055
+
+ Variances
+    DEMAGE           6.276       6.608       6.778       7.665       8.553       8.723       9.055
+    DEMMAL           0.220       0.223       0.224       0.232       0.240       0.242       0.245
+    CANONS           1.233       1.355       1.417       1.743       2.070       2.132       2.254
+
+ Residual Variances
+    WASBLK          24.182      26.691      27.975      34.680      41.384      42.668      45.178
+
+Between Level
+
+ WASBLK   ON
+    CANONSBW        -0.770      -0.586      -0.492       0.000       0.492       0.586       0.770
+
+ Intercepts
+    WASBLK          53.520      53.836      53.998      54.843      55.688      55.850      56.166
+
+ Residual Variances
+    WASBLK          14.474      18.641      20.773      31.905      43.037      45.169      49.336
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASBLK   ON
+    CANONS          -0.051      -0.015       0.004       0.100       0.197       0.215       0.251
+    DEMMAL           0.066       0.107       0.129       0.240       0.351       0.372       0.414
+    DEMAGE          -0.302      -0.258      -0.236      -0.119      -0.002       0.020       0.064
+
+ CANONS   WITH
+    DEMMAL          -0.163      -0.144      -0.134      -0.084      -0.033      -0.023      -0.004
+    DEMAGE           0.073       0.097       0.109       0.173       0.237       0.250       0.274
+
+ Means
+    DEMAGE          -0.100      -0.076      -0.064       0.000       0.064       0.076       0.100
+    DEMMAL          -0.098      -0.075      -0.063       0.000       0.062       0.074       0.098
+    CANONS           0.008       0.012       0.014       0.024       0.035       0.037       0.041
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASBLK           0.843       0.863       0.873       0.926       0.980       0.990       1.010
+
+Between Level
+
+ WASBLK   ON
+    CANONSBW        -0.268      -0.204      -0.171       0.000       0.171       0.203       0.267
+
+ Intercepts
+    WASBLK           6.991       7.641       7.973       9.709      11.445      11.778      12.428
+
+ Residual Variances
+    WASBLK           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANONS             0            10            11            12
+ CANONSBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK        35.219
+ DEMAGE         0.000         3.833
+ DEMMAL         0.000         0.000         0.116
+ CANONS         0.000         0.000         0.000         0.871
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             54.709         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASBLK        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ WASBLK        35.219
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.927
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WASBLK
+              ________
+ 1             54.824
+
+
+           Covariances
+              B_WASBLK
+              ________
+ B_WASBLK       9.058
+
+
+           Correlations
+              B_WASBLK
+              ________
+ B_WASBLK       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:27:00
+        Ending Time:  14:27:00
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

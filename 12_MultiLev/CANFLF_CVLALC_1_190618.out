@@ -1,0 +1,757 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:25 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANFLF_CVLALC_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			CVLALC
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANFLF
+    		! between predictor
+    			CANFLFBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND CVLALCDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANFLFBW
+    		;
+    	WITHIN  		
+    			CANFLF
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANFLFBW = cluster_mean (CANFLF);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANFLF (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANFLFBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	CVLALC on CANFLF;
+  	CVLALC on  DEMMAL DEMAGE;	
+  	CVLALC*;
+  	CANFLF WITH DEMMAL*;
+  	CANFLF WITH DEMAGE*;
+
+  %BETWEEN%
+  	CVLALC on CANFLFBW;
+  	CVLALC*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  35
+*** WARNING
+  Data set contains cases with missing on all variables except
+  x-variables.  These cases were not included in the analysis.
+  Number of cases with missing on all variables except x-variables:  1
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANFLF_CVLALC_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         454
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CVLALC
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANFLF      CANFLFBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANFLF
+
+  Between variables
+   CANFLFBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANFLFBW
+
+  Centering (GROUPMEAN)
+   CANFLF
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        225
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         1.000
+ DEMAGE         0.998         0.998
+ DEMMAL         1.000         0.998         1.000
+ CANFLF         0.969         0.967         0.969         0.969
+ CANFLFBW       1.000         0.998         1.000         0.969         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1             -0.308         0.001         0.000         0.042         0.000
+
+
+           Covariances
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.952
+ DEMAGE         0.008         5.742
+ DEMMAL        -0.078        -0.138         0.247
+ CANFLF        -2.115       -10.310         1.575       289.792
+ CANFLFBW      -1.628         1.998         1.655        -1.059       420.474
+
+
+           Correlations
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         1.000
+ DEMAGE         0.003         1.000
+ DEMMAL        -0.160        -0.116         1.000
+ CANFLF        -0.127        -0.253         0.186         1.000
+ CANFLFBW      -0.081         0.041         0.162        -0.003         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -5845.879
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CVLALC               -0.308      -1.272      -5.000    0.88%      -1.000     -0.500     -0.500
+             454.000       0.952       4.100       1.500    2.86%       0.000      0.500
+     DEMAGE                0.000       1.331      -3.781    0.22%      -1.911     -0.981     -0.571
+             453.000       5.743       1.808      10.009    0.22%      -0.091      1.379
+     DEMMAL                0.000      -0.222      -0.555   44.49%      -0.555     -0.555      0.445
+             454.000       0.247      -1.951       0.445   55.51%       0.445      0.445
+     CANFLF                0.000      -0.019     -40.000    0.23%     -15.000      0.000      0.000
+             440.000     290.185      -0.364      37.500    0.23%       0.000     15.000
+     CANFLFBW              0.308      -0.464     -38.132    5.33%     -15.632     -6.132     -0.632
+             225.000     415.141      -0.941      21.868   37.78%       6.868     21.868
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.593D-17.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 12, %WITHIN%: CANFLF
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -3837.339
+          H0 Scaling Correction Factor      1.2902
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    7704.677
+          Bayesian (BIC)                  7766.449
+          Sample-Size Adjusted BIC        7718.844
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLALC     ON
+    CANFLF            -0.006      0.002     -2.611      0.009
+    DEMMAL            -0.256      0.090     -2.857      0.004
+    DEMAGE            -0.010      0.018     -0.562      0.574
+
+ CANFLF   WITH
+    DEMMAL             1.346      0.381      3.536      0.000
+    DEMAGE            -9.559      2.106     -4.540      0.000
+
+ Means
+    DEMAGE             0.000      0.109     -0.002      0.999
+    DEMMAL             0.000      0.026      0.000      1.000
+    CANFLF             0.032      0.034      0.961      0.337
+
+ Variances
+    DEMAGE             5.742      0.497     11.556      0.000
+    DEMMAL             0.247      0.003     86.659      0.000
+    CANFLF           287.281     24.231     11.856      0.000
+
+ Residual Variances
+    CVLALC             0.754      0.109      6.925      0.000
+
+Between Level
+
+ CVLALC     ON
+    CANFLFBW          -0.003      0.002     -1.246      0.213
+
+ Intercepts
+    CVLALC            -0.311      0.049     -6.315      0.000
+
+ Residual Variances
+    CVLALC             0.164      0.129      1.266      0.206
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLALC     ON
+    CANFLF            -0.121      0.047     -2.556      0.011
+    DEMMAL            -0.144      0.047     -3.071      0.002
+    DEMAGE            -0.027      0.049     -0.562      0.574
+
+ CANFLF   WITH
+    DEMMAL             0.160      0.043      3.699      0.000
+    DEMAGE            -0.235      0.046     -5.163      0.000
+
+ Means
+    DEMAGE             0.000      0.045     -0.002      0.999
+    DEMMAL             0.000      0.052      0.000      1.000
+    CANFLF             0.002      0.002      0.963      0.336
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANFLF             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLALC             0.960      0.018     52.371      0.000
+
+Between Level
+
+ CVLALC     ON
+    CANFLFBW          -0.150      0.105     -1.421      0.155
+
+ Intercepts
+    CVLALC            -0.761      0.273     -2.790      0.005
+
+ Residual Variances
+    CVLALC             0.978      0.032     30.903      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLALC             0.040      0.018      2.175      0.030
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLALC             0.022      0.032      0.711      0.477
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.593E-17
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLALC   ON
+    CANFLF          -0.013      -0.011      -0.010      -0.006      -0.002      -0.002       0.000
+    DEMMAL          -0.487      -0.432      -0.404      -0.256      -0.109      -0.080      -0.025
+    DEMAGE          -0.057      -0.046      -0.040      -0.010       0.020       0.025       0.036
+
+ CANFLF   WITH
+    DEMMAL           0.366       0.600       0.720       1.346       1.972       2.092       2.326
+    DEMAGE         -14.982     -13.685     -13.022      -9.559      -6.095      -5.432      -4.135
+
+ Means
+    DEMAGE          -0.281      -0.214      -0.179       0.000       0.179       0.213       0.280
+    DEMMAL          -0.067      -0.051      -0.043       0.000       0.043       0.051       0.067
+    CANFLF          -0.055      -0.034      -0.023       0.032       0.088       0.099       0.120
+
+ Variances
+    DEMAGE           4.462       4.768       4.925       5.742       6.560       6.716       7.022
+    DEMMAL           0.240       0.241       0.242       0.247       0.252       0.253       0.254
+    CANFLF         224.868     239.789     247.422     287.281     327.141     334.774     349.695
+
+ Residual Variances
+    CVLALC           0.474       0.541       0.575       0.754       0.934       0.968       1.035
+
+Between Level
+
+ CVLALC   ON
+    CANFLFBW        -0.009      -0.008      -0.007      -0.003       0.001       0.002       0.003
+
+ Intercepts
+    CVLALC          -0.438      -0.408      -0.392      -0.311      -0.230      -0.215      -0.184
+
+ Residual Variances
+    CVLALC          -0.170      -0.090      -0.049       0.164       0.377       0.418       0.497
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLALC   ON
+    CANFLF          -0.242      -0.213      -0.198      -0.121      -0.043      -0.028       0.001
+    DEMMAL          -0.264      -0.235      -0.221      -0.144      -0.067      -0.052      -0.023
+    DEMAGE          -0.153      -0.123      -0.108      -0.027       0.053       0.068       0.098
+
+ CANFLF   WITH
+    DEMMAL           0.049       0.075       0.089       0.160       0.231       0.244       0.271
+    DEMAGE          -0.353      -0.325      -0.310      -0.235      -0.160      -0.146      -0.118
+
+ Means
+    DEMAGE          -0.117      -0.089      -0.075       0.000       0.075       0.089       0.117
+    DEMMAL          -0.134      -0.102      -0.086       0.000       0.086       0.102       0.134
+    CANFLF          -0.003      -0.002      -0.001       0.002       0.005       0.006       0.007
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLALC           0.913       0.924       0.930       0.960       0.990       0.996       1.007
+
+Between Level
+
+ CVLALC   ON
+    CANFLFBW        -0.422      -0.357      -0.323      -0.150       0.024       0.057       0.122
+
+ Intercepts
+    CVLALC          -1.463      -1.295      -1.209      -0.761      -0.312      -0.226      -0.058
+
+ Residual Variances
+    CVLALC           0.896       0.916       0.925       0.978       1.030       1.040       1.059
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANFLF             0            10            11            12
+ CANFLFBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.476
+ DEMAGE         0.000         2.872
+ DEMMAL         0.000         0.000         0.123
+ CANFLF         0.000         0.000         0.000       145.092
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1             -0.308         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ CVLALC         0.476
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000       210.237
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_CVLALC
+              ________
+ 1             -0.308
+
+
+           Covariances
+              B_CVLALC
+              ________
+ B_CVLALC       0.051
+
+
+           Correlations
+              B_CVLALC
+              ________
+ B_CVLALC       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:25:59
+        Ending Time:  14:25:59
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

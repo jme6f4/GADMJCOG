@@ -1,0 +1,746 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:26 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_COGCOM_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			COGCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    		! between predictor
+    			CANONSBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND COGCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    		;
+    	WITHIN  		
+    			CANONS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	COGCOM on CANONS;
+  	COGCOM on  DEMMAL DEMAGE;	
+  	COGCOM*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+  %BETWEEN%
+  	COGCOM on CANONSBW;
+  	COGCOM*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  41
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_COGCOM_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         761
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   COGCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      CANONSBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS
+
+  Between variables
+   CANONSBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+
+  Centering (GROUPMEAN)
+   CANONS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        429
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.442
+ DEMAGE         0.442         0.999
+ DEMMAL         0.442         0.999         0.999
+ CANONS         0.376         0.853         0.853         0.854
+ CANONSBW       0.442         0.999         0.999         0.854         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.045         0.001         0.000         0.033         0.000
+
+
+           Covariances
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.369
+ DEMAGE        -0.131         7.620
+ DEMMAL         0.031        -0.215         0.233
+ CANONS        -0.012         0.688        -0.071         1.753
+ CANONSBW      -0.071         1.036        -0.124        -0.022         3.802
+
+
+           Correlations
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000
+ DEMAGE        -0.078         1.000
+ DEMMAL         0.106        -0.162         1.000
+ CANONS        -0.015         0.188        -0.112         1.000
+ CANONSBW      -0.060         0.193        -0.132        -0.008         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -5329.929
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     COGCOM                0.036      -0.126      -2.038    0.30%      -0.455     -0.135      0.052
+             336.000       0.369       0.064       1.781    0.30%       0.222      0.551
+     DEMAGE                0.000       0.968      -5.469    0.13%      -2.389     -0.999     -0.429
+             760.000       7.620       1.862      15.701    0.13%       0.311      2.101
+     DEMMAL                0.000      -0.546      -0.632   36.84%      -0.632      0.368      0.368
+             760.000       0.233      -1.702       0.368   63.16%       0.368      0.368
+     CANONS                0.000      -0.032      -5.500    0.15%      -1.000      0.000      0.000
+             650.000       1.740       2.498       5.500    0.15%       0.000      1.000
+     CANONSBW             -0.086       0.939      -5.411    0.70%      -1.411     -0.411     -0.411
+             429.000       3.859       4.302      11.589    0.23%       0.589      1.089
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -3759.969
+          H0 Scaling Correction Factor      1.1869
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    7549.939
+          Bayesian (BIC)                  7619.458
+          Sample-Size Adjusted BIC        7571.827
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANONS             0.002      0.024      0.091      0.927
+    DEMMAL             0.063      0.068      0.925      0.355
+    DEMAGE            -0.013      0.013     -1.048      0.295
+
+ CANONS   WITH
+    DEMMAL            -0.054      0.020     -2.677      0.007
+    DEMAGE             0.623      0.157      3.980      0.000
+
+ Means
+    DEMAGE             0.000      0.108      0.004      0.997
+    DEMMAL             0.000      0.018     -0.002      0.998
+    CANONS             0.031      0.009      3.583      0.000
+
+ Variances
+    DEMAGE             7.620      0.542     14.069      0.000
+    DEMMAL             0.233      0.005     47.912      0.000
+    CANONS             1.742      0.199      8.753      0.000
+
+ Residual Variances
+    COGCOM             0.219      0.025      8.754      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANONSBW          -0.014      0.021     -0.659      0.510
+
+ Intercepts
+    COGCOM             0.054      0.039      1.373      0.170
+
+ Residual Variances
+    COGCOM             0.149      0.033      4.490      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANONS             0.006      0.066      0.091      0.927
+    DEMMAL             0.064      0.070      0.924      0.355
+    DEMAGE            -0.078      0.073     -1.062      0.288
+
+ CANONS   WITH
+    DEMMAL            -0.085      0.031     -2.737      0.006
+    DEMAGE             0.171      0.039      4.385      0.000
+
+ Means
+    DEMAGE             0.000      0.039      0.004      0.997
+    DEMMAL             0.000      0.038     -0.002      0.998
+    CANONS             0.023      0.006      3.734      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    COGCOM             0.990      0.013     74.909      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANONSBW          -0.070      0.105     -0.666      0.506
+
+ Intercepts
+    COGCOM             0.139      0.101      1.367      0.172
+
+ Residual Variances
+    COGCOM             0.995      0.015     67.882      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.010      0.013      0.755      0.450
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.005      0.015      0.333      0.739
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.401E-08
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANONS          -0.059      -0.044      -0.037       0.002       0.041       0.048       0.063
+    DEMMAL          -0.112      -0.070      -0.049       0.063       0.175       0.196       0.238
+    DEMAGE          -0.046      -0.038      -0.034      -0.013       0.008       0.011       0.019
+
+ CANONS   WITH
+    DEMMAL          -0.106      -0.093      -0.087      -0.054      -0.021      -0.014      -0.002
+    DEMAGE           0.220       0.316       0.366       0.623       0.881       0.930       1.027
+
+ Means
+    DEMAGE          -0.278      -0.212      -0.177       0.000       0.178       0.212       0.279
+    DEMMAL          -0.048      -0.036      -0.030       0.000       0.030       0.036       0.047
+    CANONS           0.009       0.014       0.017       0.031       0.045       0.048       0.053
+
+ Variances
+    DEMAGE           6.225       6.559       6.729       7.620       8.511       8.682       9.015
+    DEMMAL           0.220       0.223       0.225       0.233       0.241       0.242       0.245
+    CANONS           1.229       1.352       1.414       1.742       2.069       2.132       2.254
+
+ Residual Variances
+    COGCOM           0.154       0.170       0.178       0.219       0.260       0.268       0.283
+
+Between Level
+
+ COGCOM   ON
+    CANONSBW        -0.068      -0.055      -0.048      -0.014       0.021       0.027       0.040
+
+ Intercepts
+    COGCOM          -0.047      -0.023      -0.011       0.054       0.118       0.130       0.154
+
+ Residual Variances
+    COGCOM           0.063       0.084       0.094       0.149       0.203       0.214       0.234
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANONS          -0.165      -0.124      -0.103       0.006       0.115       0.136       0.177
+    DEMMAL          -0.115      -0.072      -0.050       0.064       0.179       0.201       0.244
+    DEMAGE          -0.266      -0.221      -0.198      -0.078       0.043       0.066       0.110
+
+ CANONS   WITH
+    DEMMAL          -0.165      -0.145      -0.136      -0.085      -0.034      -0.024      -0.005
+    DEMAGE           0.071       0.095       0.107       0.171       0.235       0.248       0.272
+
+ Means
+    DEMAGE          -0.101      -0.077      -0.064       0.000       0.065       0.077       0.101
+    DEMMAL          -0.099      -0.075      -0.063       0.000       0.063       0.075       0.098
+    CANONS           0.007       0.011       0.013       0.023       0.034       0.036       0.040
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    COGCOM           0.956       0.964       0.968       0.990       1.012       1.016       1.024
+
+Between Level
+
+ COGCOM   ON
+    CANONSBW        -0.340      -0.276      -0.242      -0.070       0.103       0.136       0.200
+
+ Intercepts
+    COGCOM          -0.123      -0.060      -0.028       0.139       0.306       0.338       0.400
+
+ Residual Variances
+    COGCOM           0.957       0.966       0.971       0.995       1.019       1.024       1.033
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANONS             0            10            11            12
+ CANONSBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.184
+ DEMAGE         0.000         3.810
+ DEMMAL         0.000         0.000         0.116
+ CANONS         0.000         0.000         0.000         0.870
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.036         0.000         0.000         0.000         0.000
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.184
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.901
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_COGCOM
+              ________
+ 1              0.049
+
+
+           Covariances
+              B_COGCOM
+              ________
+ B_COGCOM       0.038
+
+
+           Correlations
+              B_COGCOM
+              ________
+ B_COGCOM       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:26:31
+        Ending Time:  14:26:32
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

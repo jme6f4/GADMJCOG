@@ -1,0 +1,749 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:25 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANFLF_COGCOM_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			COGCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANFLF
+    		! between predictor
+    			CANFLFBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND COGCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANFLFBW
+    		;
+    	WITHIN  		
+    			CANFLF
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANFLFBW = cluster_mean (CANFLF);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANFLF (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANFLFBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	COGCOM on CANFLF;
+  	COGCOM on  DEMMAL DEMAGE;	
+  	COGCOM*;
+  	CANFLF WITH DEMMAL*;
+  	CANFLF WITH DEMAGE*;
+
+  %BETWEEN%
+  	COGCOM on CANFLFBW;
+  	COGCOM*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+CANFLF_COGCOM_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         802
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   COGCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANFLF      CANFLFBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANFLF
+
+  Between variables
+   CANFLFBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANFLFBW
+
+  Centering (GROUPMEAN)
+   CANFLF
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        459
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.445
+ DEMAGE         0.445         0.999
+ DEMMAL         0.445         0.999         0.999
+ CANFLF         0.445         0.999         0.999         1.000
+ CANFLFBW       0.445         0.999         0.999         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.036         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.360
+ DEMAGE        -0.136         7.992
+ DEMMAL         0.031        -0.205         0.237
+ CANFLF         0.271        -8.425         1.418       187.135
+ CANFLFBW       1.125        -3.914         1.552         0.000       243.863
+
+
+           Correlations
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000
+ DEMAGE        -0.080         1.000
+ DEMMAL         0.106        -0.149         1.000
+ CANFLF         0.033        -0.218         0.213         1.000
+ CANFLFBW       0.120        -0.089         0.204         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -9363.547
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     COGCOM                0.028      -0.112      -2.038    0.28%      -0.461     -0.141      0.041
+             357.000       0.360       0.070       1.781    0.28%       0.210      0.539
+     DEMAGE                0.000       0.974      -5.530    0.12%      -2.410     -1.040     -0.420
+             801.000       7.993       1.710      15.640    0.12%       0.280      2.150
+     DEMMAL                0.000      -0.475      -0.615   38.45%      -0.615      0.385      0.385
+             801.000       0.237      -1.775       0.385   61.55%       0.385      0.385
+     CANFLF                0.000      -0.083     -40.000    0.37%       0.000      0.000      0.000
+             802.000     187.135       1.368      44.625    0.12%       0.000      0.000
+     CANFLFBW              0.808      -1.584     -49.720    1.74%     -15.970     10.280     10.280
+             459.000     254.810       1.566      10.280   69.06%      10.280     10.280
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.399D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 3, %WITHIN%: [ CANFLF ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -6038.215
+          H0 Scaling Correction Factor      1.1119
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   12106.430
+          Bayesian (BIC)                 12176.737
+          Sample-Size Adjusted BIC       12129.103
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANFLF             0.001      0.002      0.276      0.783
+    DEMMAL             0.047      0.070      0.668      0.504
+    DEMAGE            -0.012      0.012     -1.000      0.317
+
+ CANFLF   WITH
+    DEMMAL             1.230      0.239      5.143      0.000
+    DEMAGE            -7.362      1.369     -5.378      0.000
+
+ Means
+    DEMAGE             0.000      0.107      0.000      1.000
+    DEMMAL             0.000      0.018      0.000      1.000
+    CANFLF             0.000      0.000      0.000      1.000
+
+ Variances
+    DEMAGE             7.992      0.542     14.736      0.000
+    DEMMAL             0.237      0.004     55.968      0.000
+    CANFLF           185.177     16.007     11.568      0.000
+
+ Residual Variances
+    COGCOM             0.213      0.024      9.028      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANFLFBW           0.005      0.002      2.177      0.029
+
+ Intercepts
+    COGCOM             0.041      0.037      1.105      0.269
+
+ Residual Variances
+    COGCOM             0.142      0.031      4.535      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ COGCOM     ON
+    CANFLF             0.015      0.054      0.276      0.782
+    DEMMAL             0.049      0.074      0.667      0.505
+    DEMAGE            -0.073      0.072     -1.013      0.311
+
+ CANFLF   WITH
+    DEMMAL             0.186      0.034      5.432      0.000
+    DEMAGE            -0.191      0.031     -6.083      0.000
+
+ Means
+    DEMAGE             0.000      0.038      0.000      1.000
+    DEMMAL             0.000      0.038      0.000      1.000
+    CANFLF             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANFLF             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    COGCOM             0.991      0.012     81.680      0.000
+
+Between Level
+
+ COGCOM     ON
+    CANFLFBW           0.204      0.090      2.272      0.023
+
+ Intercepts
+    COGCOM             0.106      0.097      1.098      0.272
+
+ Residual Variances
+    COGCOM             0.958      0.037     26.174      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.009      0.012      0.711      0.477
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    COGCOM             0.042      0.037      1.136      0.256
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.399E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANFLF          -0.004      -0.003      -0.003       0.001       0.004       0.004       0.005
+    DEMMAL          -0.134      -0.091      -0.069       0.047       0.163       0.185       0.228
+    DEMAGE          -0.043      -0.035      -0.031      -0.012       0.008       0.011       0.019
+
+ CANFLF   WITH
+    DEMMAL           0.614       0.761       0.836       1.230       1.623       1.699       1.846
+    DEMAGE         -10.888     -10.045      -9.614      -7.362      -5.110      -4.679      -3.836
+
+ Means
+    DEMAGE          -0.275      -0.209      -0.176       0.000       0.176       0.209       0.275
+    DEMMAL          -0.047      -0.036      -0.030       0.000       0.030       0.036       0.047
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           6.595       6.929       7.100       7.992       8.885       9.056       9.390
+    DEMMAL           0.226       0.228       0.230       0.237       0.244       0.245       0.248
+    CANFLF         143.946     153.803     158.845     185.177     211.509     216.551     226.408
+
+ Residual Variances
+    COGCOM           0.152       0.167       0.174       0.213       0.252       0.259       0.274
+
+Between Level
+
+ COGCOM   ON
+    CANFLFBW        -0.001       0.000       0.001       0.005       0.009       0.009       0.011
+
+ Intercepts
+    COGCOM          -0.054      -0.032      -0.020       0.041       0.102       0.113       0.136
+
+ Residual Variances
+    COGCOM           0.061       0.081       0.091       0.142       0.194       0.204       0.223
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ COGCOM   ON
+    CANFLF          -0.124      -0.091      -0.074       0.015       0.104       0.121       0.154
+    DEMMAL          -0.141      -0.096      -0.072       0.049       0.171       0.194       0.240
+    DEMAGE          -0.257      -0.213      -0.191      -0.073       0.045       0.068       0.112
+
+ CANFLF   WITH
+    DEMMAL           0.098       0.119       0.130       0.186       0.242       0.253       0.274
+    DEMAGE          -0.272      -0.253      -0.243      -0.191      -0.140      -0.130      -0.110
+
+ Means
+    DEMAGE          -0.097      -0.074      -0.062       0.000       0.062       0.074       0.097
+    DEMMAL          -0.097      -0.074      -0.062       0.000       0.062       0.074       0.097
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    COGCOM           0.960       0.968       0.971       0.991       1.011       1.015       1.023
+
+Between Level
+
+ COGCOM   ON
+    CANFLFBW        -0.027       0.028       0.056       0.204       0.352       0.380       0.435
+
+ Intercepts
+    COGCOM          -0.143      -0.083      -0.053       0.106       0.265       0.296       0.355
+
+ Residual Variances
+    COGCOM           0.864       0.887       0.898       0.958       1.019       1.030       1.053
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANFLF             0            10            11            12
+ CANFLFBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.180
+ DEMAGE         0.000         3.996
+ DEMMAL         0.000         0.000         0.118
+ CANFLF         0.000         0.000         0.000        93.568
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.028         0.000         0.000         0.000         0.000
+
+
+           BETA
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              COGCOM        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ COGCOM         0.180
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000       121.931
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_COGCOM
+              ________
+ 1              0.039
+
+
+           Covariances
+              B_COGCOM
+              ________
+ B_COGCOM       0.041
+
+
+           Correlations
+              B_COGCOM
+              ________
+ B_COGCOM       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:25:57
+        Ending Time:  14:25:58
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

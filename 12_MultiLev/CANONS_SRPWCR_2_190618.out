@@ -1,0 +1,746 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:26 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_SRPWCR_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			SRPWCR
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    		! between predictor
+    			CANONSBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND SRPWCRDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    		;
+    	WITHIN  		
+    			CANONS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	SRPWCR on CANONS;
+  	SRPWCR on  DEMMAL DEMAGE;	
+  	SRPWCR*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+  %BETWEEN%
+  	SRPWCR on CANONSBW;
+  	SRPWCR*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  46
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_SRPWCR_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         845
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   SRPWCR
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      CANONSBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS
+
+  Between variables
+   CANONSBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+
+  Centering (GROUPMEAN)
+   CANONS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        445
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         0.903
+ DEMAGE         0.903         0.999
+ DEMMAL         0.903         0.999         0.999
+ CANONS         0.769         0.850         0.850         0.851
+ CANONSBW       0.903         0.999         0.999         0.851         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              5.540         0.001         0.000         0.037         0.000
+
+
+           Covariances
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR        78.401
+ DEMAGE        -2.026         8.249
+ DEMMAL         0.267        -0.158         0.233
+ CANONS        -1.423         0.741        -0.097         2.181
+ CANONSBW       0.338         0.926        -0.082        -0.031         3.816
+
+
+           Correlations
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         1.000
+ DEMAGE        -0.080         1.000
+ DEMMAL         0.063        -0.114         1.000
+ CANONS        -0.109         0.175        -0.136         1.000
+ CANONSBW       0.020         0.165        -0.087        -0.011         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -8440.083
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     SRPWCR                5.566       0.269     -24.000    0.13%      -1.000      4.000      6.000
+             763.000      78.390       3.132      64.000    0.13%       8.000     12.000
+     DEMAGE                0.000       0.956      -5.378    0.12%      -2.388     -1.038     -0.398
+             844.000       8.250       1.820      15.792    0.12%       0.362      2.192
+     DEMMAL                0.000      -0.540      -0.630   36.97%      -0.630      0.370      0.370
+             844.000       0.233      -1.708       0.370   63.03%       0.370      0.370
+     CANONS                0.000       0.322      -5.667    0.14%      -1.000      0.000      0.000
+             719.000       2.168       3.719       9.333    0.14%       0.000      1.000
+     CANONSBW             -0.060       0.949      -5.425    0.45%      -1.425     -0.425     -0.425
+             445.000       3.808       4.078      11.575    0.22%       0.575      1.075
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -6695.017
+          H0 Scaling Correction Factor      1.3853
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   13420.034
+          Bayesian (BIC)                 13491.124
+          Sample-Size Adjusted BIC       13443.489
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ SRPWCR     ON
+    CANONS            -0.550      0.238     -2.308      0.021
+    DEMMAL             0.804      0.692      1.163      0.245
+    DEMAGE            -0.198      0.111     -1.783      0.075
+
+ CANONS   WITH
+    DEMMAL            -0.084      0.025     -3.405      0.001
+    DEMAGE             0.667      0.168      3.962      0.000
+
+ Means
+    DEMAGE             0.000      0.110      0.003      0.997
+    DEMMAL             0.000      0.018     -0.003      0.998
+    CANONS             0.035      0.009      3.829      0.000
+
+ Variances
+    DEMAGE             8.250      0.553     14.927      0.000
+    DEMMAL             0.233      0.005     51.063      0.000
+    CANONS             2.169      0.264      8.223      0.000
+
+ Residual Variances
+    SRPWCR            73.304      8.593      8.531      0.000
+
+Between Level
+
+ SRPWCR     ON
+    CANONSBW           0.140      0.189      0.741      0.459
+
+ Intercepts
+    SRPWCR             5.527      0.328     16.832      0.000
+
+ Residual Variances
+    SRPWCR             3.769      4.423      0.852      0.394
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ SRPWCR     ON
+    CANONS            -0.094      0.039     -2.422      0.015
+    DEMMAL             0.045      0.038      1.181      0.238
+    DEMAGE            -0.066      0.037     -1.801      0.072
+
+ CANONS   WITH
+    DEMMAL            -0.118      0.032     -3.681      0.000
+    DEMAGE             0.158      0.035      4.486      0.000
+
+ Means
+    DEMAGE             0.000      0.038      0.003      0.997
+    DEMMAL             0.000      0.036     -0.003      0.998
+    CANONS             0.024      0.006      4.127      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    SRPWCR             0.982      0.010     96.287      0.000
+
+Between Level
+
+ SRPWCR     ON
+    CANONSBW           0.140      0.212      0.660      0.509
+
+ Intercepts
+    SRPWCR             2.819      1.656      1.702      0.089
+
+ Residual Variances
+    SRPWCR             0.980      0.059     16.583      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    SRPWCR             0.018      0.010      1.771      0.077
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    SRPWCR             0.020      0.059      0.330      0.741
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.527E-07
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ SRPWCR   ON
+    CANONS          -1.163      -1.017      -0.942      -0.550      -0.158      -0.083       0.064
+    DEMMAL          -0.977      -0.551      -0.333       0.804       1.942       2.160       2.586
+    DEMAGE          -0.484      -0.415      -0.380      -0.198      -0.015       0.020       0.088
+
+ CANONS   WITH
+    DEMMAL          -0.148      -0.132      -0.125      -0.084      -0.043      -0.036      -0.020
+    DEMAGE           0.233       0.337       0.390       0.667       0.944       0.997       1.101
+
+ Means
+    DEMAGE          -0.282      -0.215      -0.180       0.000       0.181       0.215       0.283
+    DEMMAL          -0.045      -0.034      -0.029       0.000       0.029       0.034       0.045
+    CANONS           0.012       0.017       0.020       0.035       0.051       0.053       0.059
+
+ Variances
+    DEMAGE           6.826       7.166       7.340       8.250       9.159       9.333       9.673
+    DEMMAL           0.221       0.224       0.226       0.233       0.241       0.242       0.245
+    CANONS           1.489       1.652       1.735       2.169       2.603       2.686       2.848
+
+ Residual Variances
+    SRPWCR          51.170      56.462      59.168      73.304      87.439      90.146      95.438
+
+Between Level
+
+ SRPWCR   ON
+    CANONSBW        -0.348      -0.231      -0.171       0.140       0.452       0.512       0.628
+
+ Intercepts
+    SRPWCR           4.681       4.883       4.987       5.527       6.067       6.171       6.373
+
+ Residual Variances
+    SRPWCR          -7.624      -4.901      -3.507       3.769      11.045      12.438      15.162
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ SRPWCR   ON
+    CANONS          -0.193      -0.170      -0.157      -0.094      -0.030      -0.018       0.006
+    DEMMAL          -0.053      -0.030      -0.018       0.045       0.108       0.120       0.143
+    DEMAGE          -0.160      -0.137      -0.126      -0.066      -0.006       0.006       0.028
+
+ CANONS   WITH
+    DEMMAL          -0.201      -0.181      -0.171      -0.118      -0.065      -0.055      -0.035
+    DEMAGE           0.067       0.089       0.100       0.158       0.216       0.227       0.248
+
+ Means
+    DEMAGE          -0.098      -0.075      -0.063       0.000       0.063       0.075       0.098
+    DEMMAL          -0.093      -0.071      -0.060       0.000       0.060       0.071       0.093
+    CANONS           0.009       0.013       0.014       0.024       0.034       0.035       0.039
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    SRPWCR           0.956       0.962       0.965       0.982       0.999       1.002       1.008
+
+Between Level
+
+ SRPWCR   ON
+    CANONSBW        -0.406      -0.275      -0.209       0.140       0.488       0.555       0.685
+
+ Intercepts
+    SRPWCR          -1.447      -0.427       0.095       2.819       5.544       6.065       7.085
+
+ Residual Variances
+    SRPWCR           0.828       0.865       0.883       0.980       1.078       1.096       1.133
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANONS             0            10            11            12
+ CANONSBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR        39.195
+ DEMAGE         0.000         4.125
+ DEMMAL         0.000         0.000         0.117
+ CANONS         0.000         0.000         0.000         1.084
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              5.566         0.000         0.000         0.000         0.000
+
+
+           BETA
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              SRPWCR        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ SRPWCR        39.195
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.908
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_SRPWCR
+              ________
+ 1              5.536
+
+
+           Covariances
+              B_SRPWCR
+              ________
+ B_SRPWCR       0.437
+
+
+           Correlations
+              B_SRPWCR
+              ________
+ B_SRPWCR       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:26:49
+        Ending Time:  14:26:49
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,749 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:25 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_WASDGT_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASDGT
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANEVR
+    		! between predictor
+    			CANEVRBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND WASDGTDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANEVRBW
+    		;
+    	WITHIN  		
+    			CANEVR
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANEVRBW = cluster_mean (CANEVR);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANEVR (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANEVRBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WASDGT on CANEVR;
+  	WASDGT on  DEMMAL DEMAGE;	
+  	WASDGT*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+
+  %BETWEEN%
+  	WASDGT on CANEVRBW;
+  	WASDGT*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+CANEVR_WASDGT_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         425
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASDGT
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR      CANEVRBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANEVR
+
+  Between variables
+   CANEVRBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANEVRBW
+
+  Centering (GROUPMEAN)
+   CANEVR
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        227
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         0.842
+ DEMAGE         0.842         0.998
+ DEMMAL         0.842         0.998         0.998
+ CANEVR         0.842         0.998         0.998         1.000
+ CANEVRBW       0.842         0.998         0.998         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             10.150         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         7.465
+ DEMAGE         0.221         8.685
+ DEMMAL         0.137        -0.174         0.248
+ CANEVR         0.012        -0.105         0.011         0.033
+ CANEVRBW       0.036        -0.084         0.012         0.000         0.036
+
+
+           Correlations
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         1.000
+ DEMAGE         0.027         1.000
+ DEMMAL         0.101        -0.119         1.000
+ CANEVR         0.025        -0.194         0.117         1.000
+ CANEVRBW       0.069        -0.149         0.124         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -1988.495
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASDGT               10.151       0.523       3.000    0.28%       8.000      9.000     10.000
+             358.000       7.463       0.289      19.000    0.56%      10.000     12.000
+     DEMAGE                0.000       1.017      -5.608    0.24%      -2.468     -0.978     -0.303
+             424.000       8.686       2.157      15.562    0.24%       0.262      2.102
+     DEMMAL                0.000      -0.190      -0.547   45.28%      -0.547     -0.547      0.453
+             424.000       0.248      -1.964       0.453   54.72%       0.453      0.453
+     CANEVR                0.000      -0.344      -0.667    0.94%       0.000      0.000      0.000
+             425.000       0.033       4.971       0.500    5.41%       0.000      0.000
+     CANEVRBW              0.001      -2.782      -0.925    1.76%       0.075      0.075      0.075
+             227.000       0.039       7.549       0.075   86.34%       0.075      0.075
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.382D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 3, %WITHIN%: [ CANEVR ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -2082.804
+          H0 Scaling Correction Factor      1.2917
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    4195.607
+          Bayesian (BIC)                  4256.388
+          Sample-Size Adjusted BIC        4208.788
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASDGT     ON
+    CANEVR             0.517      0.575      0.900      0.368
+    DEMMAL             0.312      0.263      1.186      0.236
+    DEMAGE             0.052      0.040      1.280      0.200
+
+ CANEVR   WITH
+    DEMMAL             0.009      0.005      1.853      0.064
+    DEMAGE            -0.099      0.026     -3.846      0.000
+
+ Means
+    DEMAGE             0.000      0.155      0.000      1.000
+    DEMMAL             0.000      0.026      0.000      1.000
+    CANEVR             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             8.685      0.860     10.099      0.000
+    DEMMAL             0.248      0.002    100.485      0.000
+    CANEVR             0.033      0.006      5.625      0.000
+
+ Residual Variances
+    WASDGT             3.942      0.408      9.654      0.000
+
+Between Level
+
+ WASDGT     ON
+    CANEVRBW           1.146      0.871      1.316      0.188
+
+ Intercepts
+    WASDGT            10.186      0.171     59.447      0.000
+
+ Residual Variances
+    WASDGT             3.486      0.662      5.267      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASDGT     ON
+    CANEVR             0.047      0.053      0.892      0.372
+    DEMMAL             0.078      0.065      1.197      0.231
+    DEMAGE             0.076      0.060      1.277      0.202
+
+ CANEVR   WITH
+    DEMMAL             0.095      0.049      1.926      0.054
+    DEMAGE            -0.183      0.038     -4.861      0.000
+
+ Means
+    DEMAGE             0.000      0.053      0.000      1.000
+    DEMMAL             0.000      0.052      0.000      1.000
+    CANEVR             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASDGT             0.987      0.015     65.733      0.000
+
+Between Level
+
+ WASDGT     ON
+    CANEVRBW           0.121      0.092      1.310      0.190
+
+ Intercepts
+    WASDGT             5.415      0.491     11.036      0.000
+
+ Residual Variances
+    WASDGT             0.985      0.022     44.154      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASDGT             0.013      0.015      0.897      0.370
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASDGT             0.015      0.022      0.655      0.512
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.382E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASDGT   ON
+    CANEVR          -0.964      -0.610      -0.428       0.517       1.463       1.644       1.998
+    DEMMAL          -0.366      -0.204      -0.121       0.312       0.744       0.827       0.989
+    DEMAGE          -0.052      -0.028      -0.015       0.052       0.118       0.131       0.156
+
+ CANEVR   WITH
+    DEMMAL          -0.003       0.000       0.001       0.009       0.016       0.018       0.021
+    DEMAGE          -0.164      -0.149      -0.141      -0.099      -0.056      -0.048      -0.033
+
+ Means
+    DEMAGE          -0.399      -0.304      -0.255       0.000       0.255       0.304       0.399
+    DEMMAL          -0.067      -0.051      -0.043       0.000       0.043       0.051       0.067
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           6.470       7.000       7.271       8.685      10.100      10.371      10.901
+    DEMMAL           0.241       0.243       0.244       0.248       0.252       0.253       0.254
+    CANEVR           0.018       0.022       0.023       0.033       0.043       0.045       0.048
+
+ Residual Variances
+    WASDGT           2.890       3.141       3.270       3.942       4.613       4.742       4.993
+
+Between Level
+
+ WASDGT   ON
+    CANEVRBW        -1.098      -0.561      -0.287       1.146       2.578       2.853       3.389
+
+ Intercepts
+    WASDGT           9.744       9.850       9.904      10.186      10.467      10.521      10.627
+
+ Residual Variances
+    WASDGT           1.781       2.189       2.397       3.486       4.575       4.783       5.191
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASDGT   ON
+    CANEVR          -0.089      -0.056      -0.040       0.047       0.134       0.151       0.183
+    DEMMAL          -0.089      -0.049      -0.029       0.078       0.184       0.205       0.245
+    DEMAGE          -0.078      -0.041      -0.022       0.076       0.175       0.194       0.231
+
+ CANEVR   WITH
+    DEMMAL          -0.032      -0.002       0.014       0.095       0.176       0.192       0.222
+    DEMAGE          -0.281      -0.257      -0.246      -0.183      -0.121      -0.109      -0.086
+
+ Means
+    DEMAGE          -0.136      -0.103      -0.087       0.000       0.087       0.103       0.136
+    DEMMAL          -0.135      -0.103      -0.086       0.000       0.086       0.103       0.135
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASDGT           0.948       0.957       0.962       0.987       1.011       1.016       1.025
+
+Between Level
+
+ WASDGT   ON
+    CANEVRBW        -0.117      -0.060      -0.031       0.121       0.273       0.302       0.359
+
+ Intercepts
+    WASDGT           4.151       4.453       4.608       5.415       6.222       6.377       6.679
+
+ Residual Variances
+    WASDGT           0.928       0.942       0.949       0.985       1.022       1.029       1.043
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANEVR             0            10            11            12
+ CANEVRBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           THETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           ALPHA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+           PSI
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+ CANEVRBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         3.732
+ DEMAGE         0.000         4.343
+ DEMMAL         0.000         0.000         0.124
+ CANEVR         0.000         0.000         0.000         0.017
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ 1             10.151         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASDGT        DEMAGE        DEMMAL        CANEVR        CANEVRBW
+              ________      ________      ________      ________      ________
+ WASDGT         3.732
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+ CANEVRBW       0.000         0.000         0.000         0.000         0.018
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WASDGT
+              ________
+ 1             10.158
+
+
+           Covariances
+              B_WASDGT
+              ________
+ B_WASDGT       1.898
+
+
+           Correlations
+              B_WASDGT
+              ________
+ B_WASDGT       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:25:17
+        Ending Time:  14:25:17
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,753 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:25 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANF6M_WASVCB_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASVCB
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANF6M
+    		! between predictor
+    			CANF6MBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASVCBDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANF6MBW
+    		;
+    	WITHIN  		
+    			CANF6M
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANF6MBW = cluster_mean (CANF6M);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANF6M (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANF6MBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WASVCB on CANF6M;
+  	WASVCB on  DEMMAL DEMAGE;	
+  	WASVCB*;
+  	CANF6M WITH DEMMAL*;
+  	CANF6M WITH DEMAGE*;
+  	
+  %BETWEEN%
+  	WASVCB on CANF6MBW;
+  	WASVCB*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANF6M_WASVCB_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1126
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASVCB
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANF6M      CANF6MBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANF6M
+
+  Between variables
+   CANF6MBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANF6MBW
+
+  Centering (GROUPMEAN)
+   CANF6M
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        582
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANF6M         0.996         0.996         0.996         0.996
+ CANF6MBW       1.000         0.999         1.000         0.996         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1             44.214         0.001         0.000         0.005         0.000
+
+
+           Covariances
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB        87.907
+ DEMAGE        -1.645         6.302
+ DEMMAL         0.038        -0.185         0.232
+ CANF6M         0.710        -3.885         0.582        48.020
+ CANF6MBW       4.907        -0.942         0.550         0.012        69.575
+
+
+           Correlations
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         1.000
+ DEMAGE        -0.070         1.000
+ DEMMAL         0.008        -0.153         1.000
+ CANF6M         0.011        -0.223         0.174         1.000
+ CANF6MBW       0.063        -0.045         0.137         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -15203.534
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASVCB               44.214      -0.050      20.000    0.89%      36.000     42.000     44.000
+            1126.000      87.907      -0.221      72.000    0.09%      47.000     52.000
+     DEMAGE                0.000       1.423      -4.038    0.09%      -1.948     -1.078     -0.538
+            1125.000       6.302       2.851      15.932    0.09%      -0.018      1.552
+     DEMMAL                0.000      -0.565      -0.636   36.41%      -0.636      0.364      0.364
+            1126.000       0.232      -1.681       0.364   63.59%       0.364      0.364
+     CANF6M                0.000       0.156     -18.113    0.09%      -5.000     -0.083      0.000
+            1122.000      48.024       0.353      22.330    0.09%       0.000      4.777
+     CANF6MBW              0.516       0.818      -8.445   12.37%      -8.195     -4.695     -1.277
+             582.000      77.760      -0.354      21.555    3.26%       1.555      7.055
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.112D-15.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 12, %WITHIN%: CANF6M
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                      -11161.255
+          H0 Scaling Correction Factor      1.0657
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   22352.510
+          Bayesian (BIC)                 22427.906
+          Sample-Size Adjusted BIC       22380.262
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASVCB     ON
+    CANF6M             0.009      0.031      0.294      0.769
+    DEMMAL            -0.652      0.584     -1.117      0.264
+    DEMAGE            -0.175      0.117     -1.497      0.134
+
+ CANF6M   WITH
+    DEMMAL             0.479      0.094      5.124      0.000
+    DEMAGE            -3.503      0.533     -6.574      0.000
+
+ Means
+    DEMAGE             0.000      0.076      0.004      0.997
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANF6M             0.005      0.003      1.777      0.076
+
+ Variances
+    DEMAGE             6.302      0.410     15.379      0.000
+    DEMMAL             0.232      0.004     55.947      0.000
+    CANF6M            47.596      2.923     16.281      0.000
+
+ Residual Variances
+    WASVCB            45.113      2.715     16.613      0.000
+
+Between Level
+
+ WASVCB     ON
+    CANF6MBW           0.059      0.036      1.628      0.104
+
+ Intercepts
+    WASVCB            44.309      0.341    130.032      0.000
+
+ Residual Variances
+    WASVCB            41.291      3.690     11.191      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASVCB     ON
+    CANF6M             0.009      0.032      0.294      0.769
+    DEMMAL            -0.047      0.042     -1.120      0.263
+    DEMAGE            -0.065      0.044     -1.474      0.141
+
+ CANF6M   WITH
+    DEMMAL             0.144      0.027      5.263      0.000
+    DEMAGE            -0.202      0.027     -7.514      0.000
+
+ Means
+    DEMAGE             0.000      0.030      0.004      0.997
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANF6M             0.001      0.000      1.780      0.075
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANF6M             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASVCB             0.993      0.008    130.788      0.000
+
+Between Level
+
+ WASVCB     ON
+    CANF6MBW           0.081      0.050      1.631      0.103
+
+ Intercepts
+    WASVCB             6.873      0.314     21.872      0.000
+
+ Residual Variances
+    WASVCB             0.993      0.008    123.060      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASVCB             0.007      0.008      0.871      0.384
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASVCB             0.007      0.008      0.815      0.415
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.112E-15
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASVCB   ON
+    CANF6M          -0.072      -0.052      -0.042       0.009       0.061       0.071       0.090
+    DEMMAL          -2.156      -1.796      -1.612      -0.652       0.308       0.492       0.851
+    DEMAGE          -0.475      -0.403      -0.367      -0.175       0.017       0.054       0.126
+
+ CANF6M   WITH
+    DEMMAL           0.238       0.296       0.325       0.479       0.633       0.663       0.720
+    DEMAGE          -4.876      -4.547      -4.380      -3.503      -2.626      -2.459      -2.130
+
+ Means
+    DEMAGE          -0.196      -0.149      -0.125       0.000       0.126       0.150       0.197
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANF6M          -0.002       0.000       0.000       0.005       0.009       0.010       0.012
+
+ Variances
+    DEMAGE           5.246       5.498       5.628       6.302       6.976       7.105       7.357
+    DEMMAL           0.221       0.223       0.225       0.232       0.238       0.240       0.242
+    CANF6M          40.065      41.866      42.787      47.596      52.405      53.325      55.126
+
+ Residual Variances
+    WASVCB          38.118      39.790      40.646      45.113      49.580      50.435      52.107
+
+Between Level
+
+ WASVCB   ON
+    CANF6MBW        -0.035      -0.012      -0.001       0.059       0.119       0.131       0.153
+
+ Intercepts
+    WASVCB          43.431      43.641      43.748      44.309      44.869      44.977      45.186
+
+ Residual Variances
+    WASVCB          31.787      34.059      35.222      41.291      47.360      48.523      50.795
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASVCB   ON
+    CANF6M          -0.073      -0.054      -0.044       0.009       0.062       0.073       0.092
+    DEMMAL          -0.154      -0.128      -0.115      -0.047       0.022       0.035       0.061
+    DEMAGE          -0.179      -0.152      -0.138      -0.065       0.008       0.021       0.049
+
+ CANF6M   WITH
+    DEMMAL           0.074       0.091       0.099       0.144       0.189       0.198       0.215
+    DEMAGE          -0.272      -0.255      -0.247      -0.202      -0.158      -0.150      -0.133
+
+ Means
+    DEMAGE          -0.078      -0.059      -0.050       0.000       0.050       0.060       0.078
+    DEMMAL          -0.082      -0.062      -0.052       0.000       0.052       0.062       0.082
+    CANF6M           0.000       0.000       0.000       0.001       0.001       0.001       0.002
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANF6M           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASVCB           0.974       0.978       0.981       0.993       1.006       1.008       1.013
+
+Between Level
+
+ WASVCB   ON
+    CANF6MBW        -0.047      -0.016      -0.001       0.081       0.163       0.179       0.209
+
+ Intercepts
+    WASVCB           6.063       6.257       6.356       6.873       7.390       7.489       7.682
+
+ Residual Variances
+    WASVCB           0.973       0.978       0.980       0.993       1.007       1.009       1.014
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANF6M             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANF6M             0            10            11            12
+ CANF6MBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANF6M             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANF6M             0             0             0             0
+ CANF6MBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         1.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB        43.954
+ DEMAGE         0.000         3.151
+ DEMMAL         0.000         0.000         0.116
+ CANF6M         0.000         0.000         0.000        24.012
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         1.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ 1             44.214         0.000         0.000         0.000         0.000
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M        CANF6MBW
+              ________      ________      ________      ________      ________
+ WASVCB        43.954
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000
+ CANF6MBW       0.000         0.000         0.000         0.000        34.787
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WASVCB
+              ________
+ 1             44.214
+
+
+           Covariances
+              B_WASVCB
+              ________
+ B_WASVCB      28.035
+
+
+           Correlations
+              B_WASVCB
+              ________
+ B_WASVCB       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:25:55
+        Ending Time:  14:25:55
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

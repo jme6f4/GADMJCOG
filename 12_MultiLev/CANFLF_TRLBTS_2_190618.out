@@ -1,0 +1,749 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:26 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANFLF_TRLBTS_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			TRLBTS
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANFLF
+    		! between predictor
+    			CANFLFBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND TRLBTSDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANFLFBW
+    		;
+    	WITHIN  		
+    			CANFLF
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANFLFBW = cluster_mean (CANFLF);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANFLF (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANFLFBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	TRLBTS on CANFLF;
+  	TRLBTS on  DEMMAL DEMAGE;	
+  	TRLBTS*;
+  	CANFLF WITH DEMMAL*;
+  	CANFLF WITH DEMAGE*;
+
+  %BETWEEN%
+  	TRLBTS on CANFLFBW;
+  	TRLBTS*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+CANFLF_TRLBTS_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         885
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   TRLBTS
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANFLF      CANFLFBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANFLF
+
+  Between variables
+   CANFLFBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANFLFBW
+
+  Centering (GROUPMEAN)
+   CANFLF
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters                        477
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.908
+ DEMAGE         0.908         0.999
+ DEMMAL         0.908         0.999         0.999
+ CANFLF         0.908         0.999         0.999         1.000
+ CANFLFBW       0.908         0.999         0.999         1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1             48.793         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS       111.259
+ DEMAGE        -0.126         8.731
+ DEMMAL        -0.135        -0.144         0.236
+ CANFLF        -5.364        -6.835         1.600       204.345
+ CANFLFBW       8.067        -4.700         1.232         0.000       241.597
+
+
+           Correlations
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000
+ DEMAGE        -0.004         1.000
+ DEMMAL        -0.026        -0.101         1.000
+ CANFLF        -0.036        -0.162         0.231         1.000
+ CANFLFBW       0.049        -0.102         0.163         0.000         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -13099.971
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     TRLBTS               48.784      -0.172       1.000    0.12%      40.000     46.000     48.000
+             804.000     111.267       0.622      78.000    0.25%      52.000     57.000
+     DEMAGE                0.000       0.960      -5.451    0.11%      -2.451     -1.061     -0.446
+             884.000       8.731       1.614      15.719    0.11%       0.329      2.239
+     DEMMAL                0.000      -0.494      -0.620   38.01%      -0.620      0.380      0.380
+             884.000       0.236      -1.756       0.380   61.99%       0.380      0.380
+     CANFLF                0.000      -0.207     -45.000    0.11%       0.000      0.000      0.000
+             885.000     204.345       1.222      44.625    0.11%       0.000      0.000
+     CANFLFBW              0.615      -1.475     -49.366    1.68%     -17.366     10.634     10.634
+             477.000     258.680       1.207      10.634   66.67%      10.634     10.634
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.586D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 3, %WITHIN%: [ CANFLF ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -9430.720
+          H0 Scaling Correction Factor      1.1388
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   18891.441
+          Bayesian (BIC)                 18963.224
+          Sample-Size Adjusted BIC       18915.588
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANFLF            -0.020      0.025     -0.825      0.409
+    DEMMAL            -0.766      0.802     -0.954      0.340
+    DEMAGE            -0.012      0.141     -0.083      0.934
+
+ CANFLF   WITH
+    DEMMAL             1.502      0.246      6.118      0.000
+    DEMAGE            -5.916      1.416     -4.178      0.000
+
+ Means
+    DEMAGE             0.000      0.109      0.000      1.000
+    DEMMAL             0.000      0.017      0.000      1.000
+    CANFLF             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             8.731      0.554     15.753      0.000
+    DEMMAL             0.236      0.004     57.263      0.000
+    CANFLF           203.099     16.033     12.668      0.000
+
+ Residual Variances
+    TRLBTS            91.208      7.794     11.702      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANFLFBW           0.039      0.028      1.428      0.153
+
+ Intercepts
+    TRLBTS            48.764      0.402    121.181      0.000
+
+ Residual Variances
+    TRLBTS            19.660      6.297      3.122      0.002
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANFLF            -0.030      0.037     -0.824      0.410
+    DEMMAL            -0.039      0.041     -0.957      0.339
+    DEMAGE            -0.004      0.044     -0.083      0.934
+
+ CANFLF   WITH
+    DEMMAL             0.217      0.033      6.603      0.000
+    DEMAGE            -0.140      0.032     -4.394      0.000
+
+ Means
+    DEMAGE             0.000      0.037      0.000      1.000
+    DEMMAL             0.000      0.035      0.000      1.000
+    CANFLF             0.000      0.000    999.000    999.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANFLF             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLBTS             0.997      0.004    251.865      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANFLFBW           0.141      0.097      1.460      0.144
+
+ Intercepts
+    TRLBTS            10.888      1.739      6.261      0.000
+
+ Residual Variances
+    TRLBTS             0.980      0.027     35.982      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.003      0.004      0.735      0.462
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.020      0.027      0.730      0.465
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.586E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANFLF          -0.083      -0.068      -0.061      -0.020       0.020       0.028       0.043
+    DEMMAL          -2.833      -2.338      -2.086      -0.766       0.554       0.807       1.301
+    DEMAGE          -0.376      -0.289      -0.244      -0.012       0.221       0.265       0.352
+
+ CANFLF   WITH
+    DEMMAL           0.870       1.021       1.098       1.502       1.906       1.983       2.134
+    DEMAGE          -9.563      -8.691      -8.245      -5.916      -3.586      -3.140      -2.268
+
+ Means
+    DEMAGE          -0.280      -0.213      -0.179       0.000       0.179       0.213       0.280
+    DEMMAL          -0.044      -0.034      -0.028       0.000       0.028       0.034       0.044
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           7.303       7.645       7.819       8.731       9.643       9.817      10.159
+    DEMMAL           0.225       0.228       0.229       0.236       0.242       0.244       0.246
+    CANFLF         161.802     171.675     176.725     203.099     229.473     234.523     244.396
+
+ Residual Variances
+    TRLBTS          71.131      75.931      78.387      91.208     104.030     106.486     111.286
+
+Between Level
+
+ TRLBTS   ON
+    CANFLFBW        -0.032      -0.015      -0.006       0.039       0.085       0.093       0.110
+
+ Intercepts
+    TRLBTS          47.728      47.975      48.102      48.764      49.426      49.553      49.801
+
+ Residual Variances
+    TRLBTS           3.440       7.318       9.301      19.660      30.019      32.003      35.880
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANFLF          -0.124      -0.102      -0.090      -0.030       0.030       0.042       0.064
+    DEMMAL          -0.143      -0.118      -0.106      -0.039       0.028       0.041       0.066
+    DEMAGE          -0.116      -0.089      -0.075      -0.004       0.068       0.082       0.109
+
+ CANFLF   WITH
+    DEMMAL           0.132       0.153       0.163       0.217       0.271       0.282       0.302
+    DEMAGE          -0.223      -0.203      -0.193      -0.140      -0.088      -0.078      -0.058
+
+ Means
+    DEMAGE          -0.095      -0.072      -0.060       0.000       0.060       0.072       0.095
+    DEMMAL          -0.091      -0.069      -0.058       0.000       0.058       0.069       0.091
+    CANFLF           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLBTS           0.987       0.989       0.991       0.997       1.004       1.005       1.007
+
+Between Level
+
+ TRLBTS   ON
+    CANFLFBW        -0.108      -0.048      -0.018       0.141       0.300       0.330       0.390
+
+ Intercepts
+    TRLBTS           6.409       7.480       8.027      10.888      13.749      14.296      15.367
+
+ Residual Variances
+    TRLBTS           0.910       0.927       0.935       0.980       1.025       1.034       1.050
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANFLF             0            10            11            12
+ CANFLFBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANFLF             0             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+ CANFLFBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS        55.633
+ DEMAGE         0.000         4.366
+ DEMMAL         0.000         0.000         0.118
+ CANFLF         0.000         0.000         0.000       102.173
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ 1             48.784         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANFLF        CANFLFBW
+              ________      ________      ________      ________      ________
+ TRLBTS        55.633
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+ CANFLFBW       0.000         0.000         0.000         0.000       120.799
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_TRLBTS
+              ________
+ 1             48.792
+
+
+           Covariances
+              B_TRLBTS
+              ________
+ B_TRLBTS       5.963
+
+
+           Correlations
+              B_TRLBTS
+              ________
+ B_TRLBTS       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:26:21
+        Ending Time:  14:26:21
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

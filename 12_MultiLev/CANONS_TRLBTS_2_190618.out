@@ -1,0 +1,746 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:26 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_TRLBTS_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			TRLBTS
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    		! between predictor
+    			CANONSBW
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND TRLBTSDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    		;
+    	WITHIN  		
+    			CANONS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	TRLBTS on CANONS;
+  	TRLBTS on  DEMMAL DEMAGE;	
+  	TRLBTS*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+  %BETWEEN%
+  	TRLBTS on CANONSBW;
+  	TRLBTS*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  45
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_TRLBTS_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         840
+
+Number of dependent variables                                    1
+Number of independent variables                                  4
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   TRLBTS
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      CANONSBW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS
+
+  Between variables
+   CANONSBW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW
+
+  Centering (GROUPMEAN)
+   CANONS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        445
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.912
+ DEMAGE         0.912         0.999
+ DEMMAL         0.912         0.999         0.999
+ CANONS         0.776         0.851         0.851         0.852
+ CANONSBW       0.912         0.999         0.999         0.852         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             48.803         0.001         0.000         0.041         0.000
+
+
+           Covariances
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS       111.253
+ DEMAGE        -0.109         8.308
+ DEMMAL        -0.114        -0.145         0.232
+ CANONS        -0.834         0.758        -0.098         2.164
+ CANONSBW       0.673         0.899        -0.081        -0.029         3.775
+
+
+           Correlations
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000
+ DEMAGE        -0.004         1.000
+ DEMMAL        -0.022        -0.104         1.000
+ CANONS        -0.054         0.179        -0.138         1.000
+ CANONSBW       0.033         0.160        -0.086        -0.010         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -8552.915
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     TRLBTS               48.799      -0.174       1.000    0.13%      40.000     46.000     48.000
+             766.000     111.242       0.664      78.000    0.26%      52.000     57.000
+     DEMAGE                0.000       0.966      -5.373    0.12%      -2.393     -1.033     -0.413
+             839.000       8.308       1.821      15.797    0.12%       0.347      2.197
+     DEMMAL                0.000      -0.557      -0.634   36.59%      -0.634      0.366      0.366
+             839.000       0.232      -1.690       0.366   63.41%       0.366      0.366
+     CANONS                0.000       0.328      -5.667    0.14%      -1.000      0.000      0.000
+             716.000       2.148       3.842       9.333    0.14%       0.000      1.000
+     CANONSBW             -0.033       1.026      -5.412    0.45%      -1.412     -0.412     -0.412
+             445.000       3.936       4.186      11.588    0.22%       0.588      1.088
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       15
+
+Loglikelihood
+
+          H0 Value                       -6814.753
+          H0 Scaling Correction Factor      1.2847
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   13659.507
+          Bayesian (BIC)                 13730.508
+          Sample-Size Adjusted BIC       13682.873
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANONS            -0.421      0.280     -1.502      0.133
+    DEMMAL            -0.843      0.806     -1.046      0.296
+    DEMAGE             0.022      0.149      0.150      0.881
+
+ CANONS   WITH
+    DEMMAL            -0.086      0.025     -3.438      0.001
+    DEMAGE             0.688      0.171      4.014      0.000
+
+ Means
+    DEMAGE             0.000      0.110      0.003      0.997
+    DEMMAL             0.000      0.017     -0.003      0.998
+    CANONS             0.039      0.010      3.897      0.000
+
+ Variances
+    DEMAGE             8.308      0.558     14.893      0.000
+    DEMMAL             0.232      0.005     49.894      0.000
+    CANONS             2.152      0.266      8.105      0.000
+
+ Residual Variances
+    TRLBTS            90.236      8.099     11.141      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANONSBW           0.125      0.211      0.592      0.554
+
+ Intercepts
+    TRLBTS            48.821      0.414    117.984      0.000
+
+ Residual Variances
+    TRLBTS            20.626      6.564      3.143      0.002
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANONS            -0.065      0.044     -1.488      0.137
+    DEMMAL            -0.043      0.041     -1.048      0.295
+    DEMAGE             0.007      0.045      0.150      0.881
+
+ CANONS   WITH
+    DEMMAL            -0.121      0.032     -3.731      0.000
+    DEMAGE             0.163      0.036      4.564      0.000
+
+ Means
+    DEMAGE             0.000      0.038      0.003      0.997
+    DEMMAL             0.000      0.036     -0.003      0.998
+    CANONS             0.026      0.006      4.248      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLBTS             0.995      0.006    157.480      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANONSBW           0.054      0.093      0.585      0.559
+
+ Intercepts
+    TRLBTS            10.734      1.699      6.317      0.000
+
+ Residual Variances
+    TRLBTS             0.997      0.010     98.608      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.005      0.006      0.831      0.406
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.003      0.010      0.292      0.770
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.275E-07
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANONS          -1.142      -0.969      -0.881      -0.421       0.040       0.128       0.301
+    DEMMAL          -2.920      -2.424      -2.170      -0.843       0.483       0.737       1.233
+    DEMAGE          -0.360      -0.269      -0.222       0.022       0.267       0.313       0.405
+
+ CANONS   WITH
+    DEMMAL          -0.150      -0.134      -0.127      -0.086      -0.045      -0.037      -0.021
+    DEMAGE           0.247       0.352       0.406       0.688       0.970       1.024       1.130
+
+ Means
+    DEMAGE          -0.282      -0.214      -0.180       0.000       0.181       0.215       0.283
+    DEMMAL          -0.045      -0.034      -0.029       0.000       0.028       0.034       0.045
+    CANONS           0.013       0.019       0.022       0.039       0.055       0.058       0.064
+
+ Variances
+    DEMAGE           6.871       7.214       7.390       8.308       9.226       9.401       9.745
+    DEMMAL           0.220       0.223       0.224       0.232       0.240       0.241       0.244
+    CANONS           1.468       1.632       1.715       2.152       2.589       2.673       2.836
+
+ Residual Variances
+    TRLBTS          69.374      74.361      76.913      90.236     103.560     106.111     111.099
+
+Between Level
+
+ TRLBTS   ON
+    CANONSBW        -0.418      -0.288      -0.222       0.125       0.471       0.537       0.667
+
+ Intercepts
+    TRLBTS          47.755      48.010      48.140      48.821      49.501      49.632      49.887
+
+ Residual Variances
+    TRLBTS           3.720       7.761       9.829      20.626      31.423      33.490      37.532
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANONS          -0.177      -0.150      -0.136      -0.065       0.007       0.021       0.047
+    DEMMAL          -0.147      -0.122      -0.110      -0.043       0.024       0.037       0.062
+    DEMAGE          -0.109      -0.081      -0.067       0.007       0.081       0.095       0.123
+
+ CANONS   WITH
+    DEMMAL          -0.205      -0.185      -0.175      -0.121      -0.068      -0.058      -0.038
+    DEMAGE           0.071       0.093       0.104       0.163       0.221       0.233       0.255
+
+ Means
+    DEMAGE          -0.098      -0.074      -0.062       0.000       0.063       0.075       0.098
+    DEMMAL          -0.093      -0.071      -0.059       0.000       0.059       0.070       0.093
+    CANONS           0.010       0.014       0.016       0.026       0.037       0.039       0.042
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLBTS           0.978       0.982       0.984       0.995       1.005       1.007       1.011
+
+Between Level
+
+ TRLBTS   ON
+    CANONSBW        -0.185      -0.128      -0.099       0.054       0.207       0.237       0.294
+
+ Intercepts
+    TRLBTS           6.357       7.403       7.939      10.734      13.529      14.064      15.111
+
+ Residual Variances
+    TRLBTS           0.971       0.977       0.980       0.997       1.014       1.017       1.023
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             1             2             3             0
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             4             5             6             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             7
+ DEMAGE             0             8
+ DEMMAL             0             0             9
+ CANONS             0            10            11            12
+ CANONSBW           0             0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1                 13             0             0             0             0
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS             0             0             0             0            14
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS            15
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+ CANONSBW           0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS        55.621
+ DEMAGE         0.000         4.154
+ DEMMAL         0.000         0.000         0.116
+ CANONS         0.000         0.000         0.000         1.074
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         1.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         1.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ 1             48.799         0.000         0.000         0.000         0.000
+
+
+           BETA
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TRLBTS        DEMAGE        DEMMAL        CANONS        CANONSBW
+              ________      ________      ________      ________      ________
+ TRLBTS        55.621
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+ CANONSBW       0.000         0.000         0.000         0.000         1.887
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_TRLBTS
+              ________
+ 1             48.821
+
+
+           Covariances
+              B_TRLBTS
+              ________
+ B_TRLBTS       6.266
+
+
+           Correlations
+              B_TRLBTS
+              ________
+ B_TRLBTS       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  14:26:56
+        Ending Time:  14:26:57
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen
