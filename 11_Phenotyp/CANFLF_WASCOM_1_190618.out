@@ -1,0 +1,541 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:19 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANFLF_WASCOM_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANFLF
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANFLF
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	WASCOM on CANFLF;
+  	WASCOM on  DEMMAL DEMAGE;	
+  	WASCOM*;
+  	CANFLF WITH DEMMAL*;
+  	CANFLF WITH DEMAGE*;
+
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANFLF_WASCOM_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1125
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANFLF
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANFLF      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters         583
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANFLF         0.880         0.879         0.880         0.880
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.170
+
+
+           Covariances
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         0.902
+ DEMAGE        -0.122         6.281
+ DEMMAL         0.025        -0.181         0.231
+ CANFLF         0.329        -9.025         3.260       637.935
+
+
+           Correlations
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE        -0.051         1.000
+ DEMMAL         0.054        -0.150         1.000
+ CANFLF         0.014        -0.143         0.268         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -9482.105
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASCOM                0.002      -0.115      -2.862    0.09%      -0.818     -0.220      0.042
+            1125.000       0.902      -0.212       2.816    0.09%       0.289      0.838
+     DEMAGE                0.000       1.429      -4.034    0.09%      -1.934     -1.074     -0.539
+            1124.000       6.281       2.887      15.936    0.09%      -0.014      1.556
+     DEMMAL                0.000      -0.567      -0.636   36.36%      -0.636      0.364      0.364
+            1125.000       0.231      -1.678       0.364   63.64%       0.364      0.364
+     CANFLF                0.000      -0.793     -41.947   11.72%     -37.947     18.053     18.053
+             990.000     638.427      -1.221      18.053   64.44%      18.053     18.053
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.207D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, CANFLF
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -9482.105
+          H0 Scaling Correction Factor      1.1676
+            for MLR
+          H1 Value                       -9482.105
+          H1 Scaling Correction Factor      1.1676
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   18992.211
+          Bayesian (BIC)                 19062.568
+          Sample-Size Adjusted BIC       19018.100
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              4.703
+          Degrees of Freedom                     3
+          P-Value                           0.1949
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANFLF             0.000      0.001     -0.166      0.868
+    DEMMAL             0.096      0.069      1.402      0.161
+    DEMAGE            -0.017      0.013     -1.351      0.177
+
+ CANFLF   WITH
+    DEMMAL             3.260      0.400      8.160      0.000
+    DEMAGE            -9.026      2.125     -4.247      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.181      0.038     -4.733      0.000
+
+ Means
+    DEMAGE             0.000      0.076      0.001      0.999
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANFLF             0.170      0.839      0.203      0.839
+
+ Intercepts
+    WASCOM             0.002      0.036      0.051      0.959
+
+ Variances
+    DEMAGE             6.281      0.411     15.285      0.000
+    DEMMAL             0.231      0.004     55.795      0.000
+    CANFLF           637.934     18.837     33.866      0.000
+
+ Residual Variances
+    WASCOM             0.898      0.040     22.417      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANFLF            -0.006      0.035     -0.166      0.868
+    DEMMAL             0.049      0.035      1.401      0.161
+    DEMAGE            -0.045      0.034     -1.337      0.181
+
+ CANFLF   WITH
+    DEMMAL             0.268      0.032      8.368      0.000
+    DEMAGE            -0.143      0.033     -4.274      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.150      0.031     -4.785      0.000
+
+ Means
+    DEMAGE             0.000      0.030      0.001      0.999
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANFLF             0.007      0.033      0.202      0.840
+
+ Intercepts
+    WASCOM             0.002      0.038      0.051      0.959
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANFLF             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASCOM             0.995      0.004    227.867      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASCOM             0.005      0.004      1.112      0.266
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.219E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANFLF          -0.004      -0.003      -0.002       0.000       0.002       0.002       0.003
+    DEMMAL          -0.081      -0.038      -0.017       0.096       0.209       0.231       0.273
+    DEMAGE          -0.049      -0.042      -0.038      -0.017       0.004       0.008       0.015
+
+ CANFLF   WITH
+    DEMMAL           2.231       2.477       2.603       3.260       3.918       4.044       4.290
+    DEMAGE         -14.500     -13.191     -12.522      -9.026      -5.529      -4.860      -3.551
+
+ DEMMAL   WITH
+    DEMAGE          -0.280      -0.257      -0.244      -0.181      -0.118      -0.106      -0.083
+
+ Means
+    DEMAGE          -0.196      -0.149      -0.125       0.000       0.125       0.149       0.196
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANFLF          -1.992      -1.475      -1.210       0.170       1.551       1.815       2.332
+
+ Intercepts
+    WASCOM          -0.091      -0.069      -0.057       0.002       0.061       0.072       0.094
+
+ Variances
+    DEMAGE           5.223       5.476       5.605       6.281       6.957       7.087       7.340
+    DEMMAL           0.221       0.223       0.225       0.231       0.238       0.240       0.242
+    CANFLF         589.413     601.013     606.947     637.934     668.921     674.855     686.455
+
+ Residual Variances
+    WASCOM           0.794       0.819       0.832       0.898       0.963       0.976       1.001
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANFLF          -0.096      -0.074      -0.063      -0.006       0.052       0.063       0.084
+    DEMMAL          -0.041      -0.019      -0.009       0.049       0.106       0.117       0.139
+    DEMAGE          -0.131      -0.111      -0.100      -0.045       0.010       0.021       0.042
+
+ CANFLF   WITH
+    DEMMAL           0.186       0.206       0.216       0.268       0.321       0.331       0.351
+    DEMAGE          -0.229      -0.208      -0.197      -0.143      -0.088      -0.077      -0.057
+
+ DEMMAL   WITH
+    DEMAGE          -0.231      -0.212      -0.202      -0.150      -0.099      -0.089      -0.069
+
+ Means
+    DEMAGE          -0.078      -0.059      -0.050       0.000       0.050       0.060       0.078
+    DEMMAL          -0.081      -0.062      -0.052       0.000       0.052       0.062       0.081
+    CANFLF          -0.079      -0.059      -0.048       0.007       0.062       0.072       0.093
+
+ Intercepts
+    WASCOM          -0.096      -0.072      -0.060       0.002       0.064       0.076       0.099
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANFLF           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASCOM           0.984       0.987       0.988       0.995       1.002       1.004       1.006
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANFLF             0             0             0             0
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANFLF             0             0             0             0
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANFLF             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANFLF         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.000
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANFLF         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANFLF
+              ________      ________      ________      ________
+ WASCOM         0.451
+ DEMAGE         0.000         3.141
+ DEMMAL         0.000         0.000         0.116
+ CANFLF         0.000         0.000         0.000       319.213
+
+
+     Beginning Time:  14:19:13
+        Ending Time:  14:19:13
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

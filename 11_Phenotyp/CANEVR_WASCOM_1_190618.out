@@ -1,0 +1,541 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:18 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_WASCOM_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANEVR
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANEVR
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	WASCOM on CANEVR;
+  	WASCOM on  DEMMAL DEMAGE;	
+  	WASCOM*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANEVR_WASCOM_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1125
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANEVR      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters         583
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANEVR         0.996         0.996         0.996         0.996
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.000
+
+
+           Covariances
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         0.902
+ DEMAGE        -0.122         6.281
+ DEMMAL         0.025        -0.181         0.231
+ CANEVR        -0.005        -0.092         0.023         0.093
+
+
+           Correlations
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE        -0.051         1.000
+ DEMMAL         0.054        -0.151         1.000
+ CANEVR        -0.016        -0.120         0.156         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -5161.395
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASCOM                0.002      -0.115      -2.862    0.09%      -0.818     -0.220      0.042
+            1125.000       0.902      -0.212       2.816    0.09%       0.289      0.838
+     DEMAGE                0.000       1.429      -4.034    0.09%      -1.934     -1.074     -0.539
+            1124.000       6.281       2.887      15.936    0.09%      -0.014      1.556
+     DEMMAL                0.000      -0.567      -0.636   36.36%      -0.636      0.364      0.364
+            1125.000       0.231      -1.678       0.364   63.64%       0.364      0.364
+     CANEVR                0.000      -2.604      -0.897   10.35%       0.103      0.103      0.103
+            1121.000       0.093       4.779       0.103   89.65%       0.103      0.103
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.925D-13.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, CANEVR
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -5161.395
+          H0 Scaling Correction Factor      1.3852
+            for MLR
+          H1 Value                       -5161.395
+          H1 Scaling Correction Factor      1.3852
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   10350.790
+          Bayesian (BIC)                 10421.148
+          Sample-Size Adjusted BIC       10376.680
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              5.306
+          Degrees of Freedom                     3
+          P-Value                           0.1507
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANEVR            -0.093      0.106     -0.879      0.380
+    DEMMAL             0.102      0.066      1.537      0.124
+    DEMAGE            -0.018      0.013     -1.416      0.157
+
+ CANEVR   WITH
+    DEMMAL             0.023      0.005      5.011      0.000
+    DEMAGE            -0.092      0.028     -3.297      0.001
+
+ DEMMAL   WITH
+    DEMAGE            -0.181      0.038     -4.736      0.000
+
+ Means
+    DEMAGE             0.000      0.076      0.003      0.998
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANEVR             0.000      0.009      0.020      0.984
+
+ Intercepts
+    WASCOM             0.002      0.036      0.051      0.960
+
+ Variances
+    DEMAGE             6.281      0.411     15.286      0.000
+    DEMMAL             0.231      0.004     55.796      0.000
+    CANEVR             0.093      0.007     12.709      0.000
+
+ Residual Variances
+    WASCOM             0.897      0.040     22.516      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANEVR            -0.030      0.034     -0.881      0.378
+    DEMMAL             0.052      0.034      1.536      0.124
+    DEMAGE            -0.047      0.034     -1.400      0.161
+
+ CANEVR   WITH
+    DEMMAL             0.156      0.029      5.297      0.000
+    DEMAGE            -0.120      0.036     -3.379      0.001
+
+ DEMMAL   WITH
+    DEMAGE            -0.151      0.031     -4.787      0.000
+
+ Means
+    DEMAGE             0.000      0.030      0.003      0.998
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANEVR             0.001      0.030      0.020      0.984
+
+ Intercepts
+    WASCOM             0.002      0.038      0.051      0.960
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASCOM             0.994      0.005    204.075      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASCOM             0.006      0.005      1.167      0.243
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.141E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANEVR          -0.367      -0.302      -0.268      -0.093       0.081       0.115       0.180
+    DEMMAL          -0.069      -0.028      -0.007       0.102       0.211       0.232       0.272
+    DEMAGE          -0.050      -0.043      -0.039      -0.018       0.003       0.007       0.015
+
+ CANEVR   WITH
+    DEMMAL           0.011       0.014       0.015       0.023       0.030       0.032       0.035
+    DEMAGE          -0.163      -0.146      -0.137      -0.092      -0.046      -0.037      -0.020
+
+ DEMMAL   WITH
+    DEMAGE          -0.280      -0.257      -0.245      -0.181      -0.118      -0.106      -0.083
+
+ Means
+    DEMAGE          -0.196      -0.149      -0.125       0.000       0.125       0.149       0.196
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANEVR          -0.023      -0.018      -0.015       0.000       0.015       0.018       0.024
+
+ Intercepts
+    WASCOM          -0.091      -0.069      -0.057       0.002       0.061       0.072       0.094
+
+ Variances
+    DEMAGE           5.223       5.476       5.605       6.281       6.957       7.087       7.340
+    DEMMAL           0.221       0.223       0.225       0.231       0.238       0.240       0.242
+    CANEVR           0.074       0.078       0.081       0.093       0.105       0.107       0.112
+
+ Residual Variances
+    WASCOM           0.794       0.819       0.831       0.897       0.962       0.975       0.999
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANEVR          -0.117      -0.097      -0.086      -0.030       0.026       0.037       0.058
+    DEMMAL          -0.035      -0.014      -0.004       0.052       0.107       0.117       0.138
+    DEMAGE          -0.134      -0.113      -0.102      -0.047       0.008       0.019       0.040
+
+ CANEVR   WITH
+    DEMMAL           0.080       0.098       0.108       0.156       0.205       0.214       0.232
+    DEMAGE          -0.211      -0.190      -0.178      -0.120      -0.062      -0.050      -0.029
+
+ DEMMAL   WITH
+    DEMAGE          -0.232      -0.212      -0.202      -0.151      -0.099      -0.089      -0.070
+
+ Means
+    DEMAGE          -0.078      -0.059      -0.050       0.000       0.050       0.060       0.078
+    DEMMAL          -0.081      -0.062      -0.052       0.000       0.052       0.062       0.081
+    CANEVR          -0.077      -0.059      -0.049       0.001       0.050       0.060       0.078
+
+ Intercepts
+    WASCOM          -0.095      -0.072      -0.060       0.002       0.064       0.076       0.099
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASCOM           0.982       0.985       0.986       0.994       1.002       1.004       1.007
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANEVR             0             0             0             0
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANEVR             0             0             0             0
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANEVR             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANEVR         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.000
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANEVR
+              ________      ________      ________      ________
+ WASCOM         0.451
+ DEMAGE         0.000         3.141
+ DEMMAL         0.000         0.000         0.116
+ CANEVR         0.000         0.000         0.000         0.046
+
+
+     Beginning Time:  14:18:27
+        Ending Time:  14:18:27
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

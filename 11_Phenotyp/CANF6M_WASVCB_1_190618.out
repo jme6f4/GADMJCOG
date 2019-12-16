@@ -1,0 +1,541 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:18 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANF6M_WASVCB_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASVCB
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANF6M
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASVCBDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANF6M
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	WASVCB on CANF6M;
+  	WASVCB on  DEMMAL DEMAGE;	
+  	WASVCB*;
+  	CANF6M WITH DEMMAL*;
+  	CANF6M WITH DEMAGE*;
+
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANF6M_WASVCB_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1127
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASVCB
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANF6M
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANF6M      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters         583
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANF6M         0.996         0.995         0.996         0.996
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+      1        44.226         0.001         0.000         0.009
+
+
+           Covariances
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB        87.998
+ DEMAGE        -1.665         6.299
+ DEMMAL         0.042        -0.185         0.231
+ CANF6M         5.455        -4.800         1.130       117.455
+
+
+           Correlations
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB         1.000
+ DEMAGE        -0.071         1.000
+ DEMMAL         0.009        -0.153         1.000
+ CANF6M         0.054        -0.176         0.217         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -11739.525
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASVCB               44.226      -0.051      20.000    0.89%      36.000     42.000     44.000
+            1127.000      87.998      -0.225      72.000    0.09%      47.000     52.000
+     DEMAGE                0.000       1.424      -4.037    0.09%      -1.947     -1.077     -0.542
+            1126.000       6.299       2.855      15.933    0.09%      -0.017      1.553
+     DEMMAL                0.000      -0.566      -0.636   36.38%      -0.636      0.364      0.364
+            1127.000       0.231      -1.679       0.364   63.62%       0.364      0.364
+     CANF6M                0.000       0.946      -8.440   33.51%      -8.440     -8.110     -7.270
+            1122.000     117.467      -0.688      21.560    7.84%      -3.440     11.560
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.337D-15.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, CANF6M
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                      -11739.525
+          H0 Scaling Correction Factor      1.1386
+            for MLR
+          H1 Value                      -11739.525
+          H1 Scaling Correction Factor      1.1386
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   23507.050
+          Bayesian (BIC)                 23577.433
+          Sample-Size Adjusted BIC       23532.965
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              6.772
+          Degrees of Freedom                     3
+          P-Value                           0.0795
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASVCB   ON
+    CANF6M             0.039      0.026      1.473      0.141
+    DEMMAL            -0.197      0.664     -0.297      0.766
+    DEMAGE            -0.241      0.128     -1.875      0.061
+
+ CANF6M   WITH
+    DEMMAL             1.130      0.152      7.414      0.000
+    DEMAGE            -4.800      0.723     -6.641      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.185      0.038     -4.825      0.000
+
+ Means
+    DEMAGE             0.001      0.076      0.007      0.994
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANF6M             0.009      0.348      0.027      0.979
+
+ Intercepts
+    WASVCB            44.226      0.352    125.486      0.000
+
+ Variances
+    DEMAGE             6.299      0.410     15.367      0.000
+    DEMMAL             0.231      0.004     55.780      0.000
+    CANF6M           117.455      4.305     27.281      0.000
+
+ Residual Variances
+    WASVCB            87.395      3.814     22.912      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASVCB   ON
+    CANF6M             0.044      0.030      1.471      0.141
+    DEMMAL            -0.010      0.034     -0.297      0.766
+    DEMAGE            -0.064      0.035     -1.841      0.066
+
+ CANF6M   WITH
+    DEMMAL             0.217      0.029      7.508      0.000
+    DEMAGE            -0.176      0.025     -7.060      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.153      0.031     -4.879      0.000
+
+ Means
+    DEMAGE             0.000      0.030      0.007      0.994
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANF6M             0.001      0.032      0.027      0.979
+
+ Intercepts
+    WASVCB             4.715      0.111     42.633      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANF6M             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASVCB             0.993      0.005    183.945      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASVCB             0.007      0.005      1.268      0.205
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.234E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASVCB   ON
+    CANF6M          -0.029      -0.013      -0.004       0.039       0.081       0.090       0.106
+    DEMMAL          -1.907      -1.498      -1.289      -0.197       0.895       1.104       1.513
+    DEMAGE          -0.571      -0.492      -0.452      -0.241      -0.030       0.011       0.090
+
+ CANF6M   WITH
+    DEMMAL           0.738       0.831       0.879       1.130       1.381       1.429       1.523
+    DEMAGE          -6.662      -6.217      -5.989      -4.800      -3.611      -3.383      -2.938
+
+ DEMMAL   WITH
+    DEMAGE          -0.284      -0.260      -0.248      -0.185      -0.122      -0.110      -0.086
+
+ Means
+    DEMAGE          -0.196      -0.149      -0.125       0.001       0.126       0.150       0.197
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANF6M          -0.887      -0.673      -0.563       0.009       0.582       0.692       0.906
+
+ Intercepts
+    WASVCB          43.318      43.535      43.646      44.226      44.806      44.917      45.134
+
+ Variances
+    DEMAGE           5.243       5.495       5.624       6.299       6.973       7.102       7.354
+    DEMMAL           0.221       0.223       0.225       0.231       0.238       0.240       0.242
+    CANF6M         106.365     109.016     110.372     117.455     124.537     125.893     128.545
+
+ Residual Variances
+    WASVCB          77.570      79.919      81.120      87.395      93.670      94.871      97.220
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASVCB   ON
+    CANF6M          -0.033      -0.015      -0.005       0.044       0.094       0.104       0.122
+    DEMMAL          -0.098      -0.077      -0.066      -0.010       0.046       0.057       0.078
+    DEMAGE          -0.155      -0.133      -0.122      -0.064      -0.007       0.004       0.026
+
+ CANF6M   WITH
+    DEMMAL           0.142       0.160       0.169       0.217       0.264       0.273       0.291
+    DEMAGE          -0.241      -0.225      -0.218      -0.176      -0.135      -0.127      -0.112
+
+ DEMMAL   WITH
+    DEMAGE          -0.234      -0.215      -0.205      -0.153      -0.102      -0.092      -0.072
+
+ Means
+    DEMAGE          -0.078      -0.059      -0.050       0.000       0.050       0.060       0.078
+    DEMMAL          -0.082      -0.062      -0.052       0.000       0.052       0.062       0.082
+    CANF6M          -0.082      -0.062      -0.052       0.001       0.054       0.064       0.084
+
+ Intercepts
+    WASVCB           4.430       4.498       4.533       4.715       4.896       4.931       4.999
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANF6M           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASVCB           0.979       0.983       0.984       0.993       1.002       1.004       1.007
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANF6M             0             0             0             0
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANF6M             0             0             0             0
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANF6M             0             0             0             0
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANF6M             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANF6M         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+      1        44.226         0.000         0.000         0.000
+
+
+           BETA
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASVCB        DEMAGE        DEMMAL        CANF6M
+              ________      ________      ________      ________
+ WASVCB        43.999
+ DEMAGE         0.000         3.149
+ DEMMAL         0.000         0.000         0.116
+ CANF6M         0.000         0.000         0.000        58.733
+
+
+     Beginning Time:  14:18:52
+        Ending Time:  14:18:52
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

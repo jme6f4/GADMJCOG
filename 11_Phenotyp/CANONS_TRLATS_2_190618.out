@@ -1,0 +1,532 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:19 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_TRLATS_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			TRLATS
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANONS
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND TRLATSDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANONS
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	TRLATS on CANONS;
+  	TRLATS on  DEMMAL DEMAGE;	
+  	TRLATS*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_TRLATS_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         893
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   TRLATS
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANONS      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters         477
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS         0.904
+ DEMAGE         0.904         0.999
+ DEMMAL         0.904         0.999         0.999
+ CANONS         0.733         0.805         0.805         0.806
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1        51.077         0.001         0.000         0.118
+
+
+           Covariances
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS       133.066
+ DEMAGE        -0.172         8.707
+ DEMMAL        -0.203        -0.152         0.236
+ CANONS        -0.628         2.209        -0.182         5.755
+
+
+           Correlations
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS         1.000
+ DEMAGE        -0.005         1.000
+ DEMMAL        -0.036        -0.106         1.000
+ CANONS        -0.023         0.312        -0.156         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -7574.728
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     TRLATS               51.073      -0.023       2.000    0.12%      42.000     49.000     51.000
+             807.000     133.062       0.286      84.000    0.12%      53.000     60.000
+     DEMAGE                0.000       0.947      -5.467    0.11%      -2.467     -1.067     -0.427
+             892.000       8.708       1.589      15.703    0.11%       0.313      2.243
+     DEMMAL                0.000      -0.480      -0.617   38.34%      -0.617      0.383      0.383
+             892.000       0.236      -1.770       0.383   61.66%       0.383      0.383
+     CANONS                0.000       0.651      -5.424    2.36%      -1.424     -0.424     -0.424
+             720.000       5.647       2.068      11.576    0.14%       0.576      1.576
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -7574.728
+          H0 Scaling Correction Factor      1.1328
+            for MLR
+          H1 Value                       -7574.728
+          H1 Scaling Correction Factor      1.1328
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   15177.455
+          Bayesian (BIC)                 15244.579
+          Sample-Size Adjusted BIC       15200.118
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                0.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              1.510
+          Degrees of Freedom                     3
+          P-Value                           0.6800
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ TRLATS   ON
+    CANONS            -0.139      0.202     -0.688      0.491
+    DEMMAL            -0.969      0.885     -1.095      0.274
+    DEMAGE            -0.001      0.149     -0.008      0.993
+
+ CANONS   WITH
+    DEMMAL            -0.182      0.045     -4.052      0.000
+    DEMAGE             2.209      0.327      6.764      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.152      0.051     -2.973      0.003
+
+ Means
+    DEMAGE             0.001      0.108      0.006      0.995
+    DEMMAL             0.000      0.017     -0.003      0.998
+    CANONS             0.118      0.094      1.256      0.209
+
+ Intercepts
+    TRLATS            51.093      0.432    118.158      0.000
+
+ Variances
+    DEMAGE             8.707      0.549     15.858      0.000
+    DEMMAL             0.236      0.004     58.689      0.000
+    CANONS             5.755      0.444     12.973      0.000
+
+ Residual Variances
+    TRLATS           132.782      7.043     18.854      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ TRLATS   ON
+    CANONS            -0.029      0.042     -0.686      0.493
+    DEMMAL            -0.041      0.037     -1.097      0.273
+    DEMAGE             0.000      0.038     -0.008      0.993
+
+ CANONS   WITH
+    DEMMAL            -0.156      0.037     -4.194      0.000
+    DEMAGE             0.312      0.037      8.338      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.106      0.035     -3.012      0.003
+
+ Means
+    DEMAGE             0.000      0.037      0.006      0.995
+    DEMMAL             0.000      0.036     -0.003      0.998
+    CANONS             0.049      0.038      1.276      0.202
+
+ Intercepts
+    TRLATS             4.429      0.122     36.369      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLATS             0.998      0.004    284.023      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLATS             0.002      0.004      0.609      0.542
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.163E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ TRLATS   ON
+    CANONS          -0.661      -0.536      -0.472      -0.139       0.194       0.257       0.382
+    DEMMAL          -3.248      -2.703      -2.424      -0.969       0.487       0.766       1.311
+    DEMAGE          -0.384      -0.293      -0.246      -0.001       0.243       0.290       0.382
+
+ CANONS   WITH
+    DEMMAL          -0.298      -0.270      -0.256      -0.182      -0.108      -0.094      -0.066
+    DEMAGE           1.368       1.569       1.672       2.209       2.746       2.849       3.050
+
+ DEMMAL   WITH
+    DEMAGE          -0.285      -0.253      -0.237      -0.152      -0.068      -0.052      -0.020
+
+ Means
+    DEMAGE          -0.279      -0.212      -0.178       0.001       0.179       0.213       0.280
+    DEMMAL          -0.045      -0.034      -0.028       0.000       0.028       0.034       0.044
+    CANONS          -0.124      -0.066      -0.036       0.118       0.271       0.301       0.359
+
+ Intercepts
+    TRLATS          49.980      50.246      50.382      51.093      51.805      51.941      52.207
+
+ Variances
+    DEMAGE           7.293       7.631       7.804       8.707       9.610       9.783      10.121
+    DEMMAL           0.226       0.229       0.230       0.236       0.243       0.244       0.247
+    CANONS           4.612       4.886       5.025       5.755       6.485       6.624       6.898
+
+ Residual Variances
+    TRLATS         114.641     118.978     121.196     132.782     144.367     146.585     150.922
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ TRLATS   ON
+    CANONS          -0.138      -0.112      -0.098      -0.029       0.041       0.054       0.080
+    DEMMAL          -0.137      -0.114      -0.102      -0.041       0.020       0.032       0.055
+    DEMAGE          -0.098      -0.075      -0.063       0.000       0.062       0.074       0.098
+
+ CANONS   WITH
+    DEMMAL          -0.252      -0.229      -0.217      -0.156      -0.095      -0.083      -0.060
+    DEMAGE           0.216       0.239       0.250       0.312       0.374       0.385       0.408
+
+ DEMMAL   WITH
+    DEMAGE          -0.197      -0.175      -0.164      -0.106      -0.048      -0.037      -0.015
+
+ Means
+    DEMAGE          -0.094      -0.072      -0.060       0.000       0.061       0.072       0.095
+    DEMMAL          -0.092      -0.070      -0.059       0.000       0.058       0.070       0.091
+    CANONS          -0.050      -0.026      -0.014       0.049       0.112       0.124       0.148
+
+ Intercepts
+    TRLATS           4.116       4.191       4.229       4.429       4.630       4.668       4.743
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLATS           0.989       0.991       0.992       0.998       1.004       1.005       1.007
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           THETA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+
+
+           ALPHA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           PSI
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANONS             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANONS         0.000         0.000         0.000         1.000
+
+
+           THETA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1        51.073         0.000         0.000         0.000
+
+
+           BETA
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           PSI
+              TRLATS        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ TRLATS        66.531
+ DEMAGE         0.000         4.354
+ DEMMAL         0.000         0.000         0.118
+ CANONS         0.000         0.000         0.000         2.823
+
+
+     Beginning Time:  14:19:30
+        Ending Time:  14:19:30
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

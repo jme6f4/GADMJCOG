@@ -1,0 +1,544 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:19 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_CVLALC_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			CVLALC
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANONS
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND CVLALCDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANONS
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	CVLALC on CANONS;
+  	CVLALC on  DEMMAL DEMAGE;	
+  	CVLALC*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  1
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_CVLALC_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         489
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CVLALC
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANONS      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             4
+     Number of clusters         244
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         0.998
+ DEMAGE         0.996         0.998
+ DEMMAL         0.998         0.998         1.000
+ CANONS         0.759         0.757         0.759         0.759
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1        -0.295        -0.001         0.000         0.121
+
+
+           Covariances
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         0.972
+ DEMAGE        -0.033         6.007
+ DEMMAL        -0.080        -0.131         0.247
+ CANONS         0.155         2.465        -0.080         3.795
+
+
+           Correlations
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         1.000
+ DEMAGE        -0.014         1.000
+ DEMMAL        -0.163        -0.107         1.000
+ CANONS         0.081         0.516        -0.082         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -2872.429
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CVLALC               -0.295      -1.220      -5.000    0.82%      -1.000     -0.500     -0.500
+             488.000       0.972       3.724       1.500    2.87%       0.000      0.500
+     DEMAGE                0.000       1.646      -3.804    0.20%      -1.924     -0.974     -0.534
+             488.000       6.010       4.211      15.296    0.20%      -0.094      1.316
+     DEMMAL                0.000      -0.218      -0.554   44.58%      -0.554     -0.554      0.446
+             489.000       0.247      -1.952       0.446   55.42%       0.446      0.446
+     CANONS                0.000       0.303      -5.235    0.81%      -1.235     -0.235     -0.235
+             371.000       3.527       0.838       7.765    0.27%       0.765      1.765
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.173D-12.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, CANONS
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -2872.429
+          H0 Scaling Correction Factor      1.3891
+            for MLR
+          H1 Value                       -2872.429
+          H1 Scaling Correction Factor      1.3891
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    5772.858
+          Bayesian (BIC)                  5831.551
+          Sample-Size Adjusted BIC        5787.116
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                             18.584
+          Degrees of Freedom                     3
+          P-Value                           0.0003
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ CVLALC   ON
+    CANONS             0.058      0.028      2.047      0.041
+    DEMMAL            -0.324      0.085     -3.793      0.000
+    DEMAGE            -0.036      0.022     -1.636      0.102
+
+ CANONS   WITH
+    DEMMAL            -0.080      0.052     -1.536      0.124
+    DEMAGE             2.465      0.420      5.872      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.131      0.058     -2.257      0.024
+
+ Means
+    DEMAGE            -0.001      0.109     -0.012      0.990
+    DEMMAL             0.000      0.025      0.000      1.000
+    CANONS             0.121      0.107      1.132      0.258
+
+ Intercepts
+    CVLALC            -0.302      0.047     -6.471      0.000
+
+ Variances
+    DEMAGE             6.007      0.655      9.166      0.000
+    DEMMAL             0.247      0.003     90.803      0.000
+    CANONS             3.795      0.362     10.481      0.000
+
+ Residual Variances
+    CVLALC             0.936      0.120      7.774      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ CVLALC   ON
+    CANONS             0.114      0.055      2.075      0.038
+    DEMMAL            -0.163      0.041     -3.938      0.000
+    DEMAGE            -0.090      0.055     -1.648      0.099
+
+ CANONS   WITH
+    DEMMAL            -0.082      0.053     -1.545      0.122
+    DEMAGE             0.516      0.057      9.068      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.107      0.046     -2.330      0.020
+
+ Means
+    DEMAGE            -0.001      0.044     -0.012      0.990
+    DEMMAL             0.000      0.051      0.000      1.000
+    CANONS             0.062      0.054      1.147      0.251
+
+ Intercepts
+    CVLALC            -0.306      0.040     -7.729      0.000
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLALC             0.963      0.016     61.972      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLALC             0.037      0.016      2.383      0.017
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.321E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ CVLALC   ON
+    CANONS          -0.015       0.002       0.011       0.058       0.104       0.113       0.130
+    DEMMAL          -0.543      -0.491      -0.464      -0.324      -0.183      -0.156      -0.104
+    DEMAGE          -0.093      -0.080      -0.073      -0.036       0.000       0.007       0.021
+
+ CANONS   WITH
+    DEMMAL          -0.213      -0.181      -0.165      -0.080       0.006       0.022       0.054
+    DEMAGE           1.383       1.642       1.774       2.465       3.155       3.287       3.546
+
+ DEMMAL   WITH
+    DEMAGE          -0.280      -0.244      -0.226      -0.131      -0.035      -0.017       0.018
+
+ Means
+    DEMAGE          -0.282      -0.215      -0.181      -0.001       0.178       0.212       0.279
+    DEMMAL          -0.065      -0.049      -0.041       0.000       0.041       0.049       0.065
+    CANONS          -0.154      -0.088      -0.055       0.121       0.296       0.329       0.395
+
+ Intercepts
+    CVLALC          -0.422      -0.394      -0.379      -0.302      -0.225      -0.211      -0.182
+
+ Variances
+    DEMAGE           4.319       4.723       4.929       6.007       7.086       7.292       7.696
+    DEMMAL           0.240       0.242       0.243       0.247       0.252       0.252       0.254
+    CANONS           2.863       3.086       3.200       3.795       4.391       4.505       4.728
+
+ Residual Variances
+    CVLALC           0.626       0.700       0.738       0.936       1.134       1.172       1.247
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ CVLALC   ON
+    CANONS          -0.028       0.006       0.024       0.114       0.204       0.222       0.256
+    DEMMAL          -0.270      -0.244      -0.231      -0.163      -0.095      -0.082      -0.056
+    DEMAGE          -0.231      -0.197      -0.180      -0.090       0.000       0.017       0.051
+
+ CANONS   WITH
+    DEMMAL          -0.219      -0.186      -0.170      -0.082       0.005       0.022       0.055
+    DEMAGE           0.370       0.405       0.423       0.516       0.610       0.628       0.663
+
+ DEMMAL   WITH
+    DEMAGE          -0.226      -0.197      -0.183      -0.107      -0.032      -0.017       0.011
+
+ Means
+    DEMAGE          -0.115      -0.088      -0.074      -0.001       0.073       0.087       0.114
+    DEMMAL          -0.130      -0.099      -0.083       0.000       0.083       0.099       0.130
+    CANONS          -0.077      -0.044      -0.027       0.062       0.151       0.168       0.201
+
+ Intercepts
+    CVLALC          -0.408      -0.384      -0.372      -0.306      -0.241      -0.229      -0.204
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLALC           0.923       0.933       0.937       0.963       0.989       0.993       1.003
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANONS             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANONS         0.000         0.000         0.000         1.000
+
+
+           THETA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1        -0.295         0.000         0.000         0.000
+
+
+           BETA
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CVLALC        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ CVLALC         0.486
+ DEMAGE         0.000         3.005
+ DEMMAL         0.000         0.000         0.124
+ CANONS         0.000         0.000         0.000         1.764
+
+
+     Beginning Time:  14:19:18
+        Ending Time:  14:19:18
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

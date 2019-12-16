@@ -1,0 +1,541 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019   2:19 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_WASCOM_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+    			WASCOM
+    		! covariates
+    			DEMAGE
+    			DEMMAL  		
+    		! predictor
+    			CANONS
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND WASCOMDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+
+  DEFINE:
+  	CENTER	CANONS
+  			DEMMAL
+  			DEMAGE (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = COMPLEX;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  	WASCOM on CANONS;
+  	WASCOM on  DEMMAL DEMAGE;	
+  	WASCOM*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+
+
+
+
+*** WARNING in VARIABLE command
+  When a subpopulation is analyzed with TYPE=COMPLEX, standard errors
+  may be incorrect.  Use the SUBPOPULATION option instead of the
+  USEOBSERVATIONS option to obtain correct standard errors.
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_WASCOM_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1125
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASCOM
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Centering (GRANDMEAN)
+   CANONS      DEMMAL      DEMAGE
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                               1000000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+
+Input data file(s)
+  GD190618.csv
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             3
+     Number of clusters         583
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE         0.999         0.999
+ DEMMAL         1.000         0.999         1.000
+ CANONS         0.787         0.786         0.787         0.787
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.110
+
+
+           Covariances
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         0.902
+ DEMAGE        -0.123         6.280
+ DEMMAL         0.025        -0.181         0.231
+ CANONS         0.034         2.658        -0.183         4.330
+
+
+           Correlations
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         1.000
+ DEMAGE        -0.051         1.000
+ DEMMAL         0.054        -0.150         1.000
+ CANONS         0.017         0.510        -0.182         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -6686.075
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WASCOM                0.002      -0.115      -2.862    0.09%      -0.818     -0.220      0.042
+            1125.000       0.902      -0.212       2.816    0.09%       0.289      0.838
+     DEMAGE                0.000       1.429      -4.034    0.09%      -1.934     -1.074     -0.539
+            1124.000       6.281       2.887      15.936    0.09%      -0.014      1.556
+     DEMMAL                0.000      -0.567      -0.636   36.36%      -0.636      0.364      0.364
+            1125.000       0.231      -1.678       0.364   63.64%       0.364      0.364
+     CANONS                0.000       0.192      -4.727    3.50%      -1.727     -0.727      0.273
+             885.000       4.203       0.818       9.273    0.11%       0.273      1.273
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.157D-11.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, CANONS
+
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       14
+
+Loglikelihood
+
+          H0 Value                       -6686.075
+          H0 Scaling Correction Factor      1.2275
+            for MLR
+          H1 Value                       -6686.075
+          H1 Scaling Correction Factor      1.2275
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   13400.150
+          Bayesian (BIC)                 13470.508
+          Sample-Size Adjusted BIC       13426.040
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                              0.000*
+          Degrees of Freedom                     0
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0000
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.000
+          90 Percent C.I.                    0.000  0.000
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                1.000
+          TLI                                1.000
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                              6.871
+          Degrees of Freedom                     3
+          P-Value                           0.0761
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.000
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANONS             0.031      0.020      1.511      0.131
+    DEMMAL             0.108      0.066      1.621      0.105
+    DEMAGE            -0.029      0.015     -1.972      0.049
+
+ CANONS   WITH
+    DEMMAL            -0.183      0.034     -5.303      0.000
+    DEMAGE             2.658      0.250     10.634      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.181      0.038     -4.725      0.000
+
+ Means
+    DEMAGE             0.000      0.076     -0.005      0.996
+    DEMMAL             0.000      0.015      0.000      1.000
+    CANONS             0.110      0.070      1.560      0.119
+
+ Intercepts
+    WASCOM            -0.002      0.036     -0.044      0.965
+
+ Variances
+    DEMAGE             6.280      0.411     15.286      0.000
+    DEMMAL             0.231      0.004     55.795      0.000
+    CANONS             4.330      0.249     17.378      0.000
+
+ Residual Variances
+    WASCOM             0.895      0.040     22.313      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ WASCOM   ON
+    CANONS             0.067      0.044      1.509      0.131
+    DEMMAL             0.055      0.034      1.619      0.105
+    DEMAGE            -0.077      0.040     -1.945      0.052
+
+ CANONS   WITH
+    DEMMAL            -0.182      0.033     -5.515      0.000
+    DEMAGE             0.510      0.030     16.938      0.000
+
+ DEMMAL   WITH
+    DEMAGE            -0.150      0.031     -4.776      0.000
+
+ Means
+    DEMAGE             0.000      0.030     -0.005      0.996
+    DEMMAL             0.000      0.032      0.000      1.000
+    CANONS             0.053      0.034      1.570      0.116
+
+ Intercepts
+    WASCOM            -0.002      0.037     -0.044      0.965
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASCOM             0.992      0.006    156.175      0.000
+
+
+R-SQUARE
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASCOM             0.008      0.006      1.275      0.202
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.307E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANONS          -0.022      -0.009      -0.003       0.031       0.064       0.070       0.083
+    DEMMAL          -0.063      -0.023      -0.002       0.108       0.217       0.238       0.279
+    DEMAGE          -0.068      -0.058      -0.054      -0.029      -0.005       0.000       0.009
+
+ CANONS   WITH
+    DEMMAL          -0.271      -0.250      -0.239      -0.183      -0.126      -0.115      -0.094
+    DEMAGE           2.014       2.168       2.247       2.658       3.069       3.148       3.302
+
+ DEMMAL   WITH
+    DEMAGE          -0.280      -0.256      -0.244      -0.181      -0.118      -0.106      -0.082
+
+ Means
+    DEMAGE          -0.196      -0.150      -0.126       0.000       0.125       0.149       0.196
+    DEMMAL          -0.039      -0.030      -0.025       0.000       0.025       0.030       0.039
+    CANONS          -0.071      -0.028      -0.006       0.110       0.225       0.247       0.291
+
+ Intercepts
+    WASCOM          -0.093      -0.071      -0.060      -0.002       0.057       0.068       0.090
+
+ Variances
+    DEMAGE           5.222       5.475       5.604       6.280       6.956       7.085       7.338
+    DEMMAL           0.221       0.223       0.225       0.231       0.238       0.240       0.242
+    CANONS           3.688       3.841       3.920       4.330       4.740       4.818       4.972
+
+ Residual Variances
+    WASCOM           0.791       0.816       0.829       0.895       0.961       0.973       0.998
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+ WASCOM   ON
+    CANONS          -0.047      -0.020      -0.006       0.067       0.140       0.154       0.181
+    DEMMAL          -0.032      -0.011      -0.001       0.055       0.110       0.121       0.141
+    DEMAGE          -0.180      -0.155      -0.143      -0.077      -0.012       0.001       0.025
+
+ CANONS   WITH
+    DEMMAL          -0.268      -0.247      -0.237      -0.182      -0.128      -0.118      -0.097
+    DEMAGE           0.432       0.451       0.460       0.510       0.559       0.569       0.587
+
+ DEMMAL   WITH
+    DEMAGE          -0.231      -0.212      -0.202      -0.150      -0.098      -0.089      -0.069
+
+ Means
+    DEMAGE          -0.078      -0.060      -0.050       0.000       0.050       0.059       0.078
+    DEMMAL          -0.081      -0.062      -0.052       0.000       0.052       0.062       0.081
+    CANONS          -0.034      -0.013      -0.003       0.053       0.108       0.118       0.139
+
+ Intercepts
+    WASCOM          -0.098      -0.075      -0.063      -0.002       0.060       0.072       0.095
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASCOM           0.976       0.979       0.981       0.992       1.002       1.004       1.008
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           0             0             0             0
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM             0             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM             0
+ DEMAGE             0             0
+ DEMMAL             0             0             0
+ CANONS             0             0             0             0
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1           1             2             3             4
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM             0             5             6             7
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0
+ CANONS             0             0             0             0
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM             8
+ DEMAGE             0             9
+ DEMMAL             0            10            11
+ CANONS             0            12            13            14
+
+
+     STARTING VALUES
+
+
+           NU
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         1.000         0.000         0.000         0.000
+ DEMAGE         0.000         1.000         0.000         0.000
+ DEMMAL         0.000         0.000         1.000         0.000
+ CANONS         0.000         0.000         0.000         1.000
+
+
+           THETA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+      1         0.002         0.000         0.000         0.000
+
+
+           BETA
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000
+
+
+           PSI
+              WASCOM        DEMAGE        DEMMAL        CANONS
+              ________      ________      ________      ________
+ WASCOM         0.451
+ DEMAGE         0.000         3.141
+ DEMMAL         0.000         0.000         0.116
+ CANONS         0.000         0.000         0.000         2.102
+
+
+     Beginning Time:  14:19:34
+        Ending Time:  14:19:35
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen
