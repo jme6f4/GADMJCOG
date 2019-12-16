@@ -1,0 +1,1608 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019  12:53 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANEVR_TRLBTS_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+  	  		TRLBTS
+    		! covariates
+  	  		DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANEVR
+    			COGPGS
+    		! between predictor
+    			CANEVRBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW	
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND TRLBTSDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANEVRBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW			
+    		;
+    	WITHIN  		
+    			CANEVR
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANEVRBW = cluster_mean (CANEVR);	
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANEVR (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANEVRBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	TRLBTS on CANEVR;
+  	TRLBTS on  DEMMAL DEMAGE COGPGS;	
+  	COGPGS*;
+  	TRLBTS*;
+  	CANEVR WITH DEMMAL*;
+  	CANEVR WITH DEMAGE*;
+  	CANEVR WITH COGPGS*;
+
+  %BETWEEN%
+  	TRLBTS on CANEVRBW COGPGSBW
+  		 	    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	TRLBTS*;
+  	CANEVRBW WITH COGPGSBW*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  117
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANEVR_TRLBTS_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         768
+
+Number of dependent variables                                    1
+Number of independent variables                                 11
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   TRLBTS
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANEVR      COGPGS      CANEVRBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANEVR      COGPGS
+
+  Between variables
+   CANEVRBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANEVRBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+  Centering (GROUPMEAN)
+   CANEVR      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        394
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000
+ COGPGSBW       1.000         1.000
+ TRLBTS         0.915         0.915         0.915
+ DEMAGE         0.999         0.999         0.915         0.999
+ DEMMAL         0.999         0.999         0.915         0.999         0.999
+ CANEVR         1.000         1.000         0.915         0.999         0.999
+ COGPGS         0.763         0.763         0.702         0.763         0.763
+ PC1BW          1.000         1.000         0.915         0.999         0.999
+ PC2BW          1.000         1.000         0.915         0.999         0.999
+ PC3BW          1.000         1.000         0.915         0.999         0.999
+ PC4BW          1.000         1.000         0.915         0.999         0.999
+ PC5BW          1.000         1.000         0.915         0.999         0.999
+
+
+           Covariance Coverage
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         1.000
+ COGPGS         0.763         0.763
+ PC1BW          1.000         0.763         1.000
+ PC2BW          1.000         0.763         1.000         1.000
+ PC3BW          1.000         0.763         1.000         1.000         1.000
+ PC4BW          1.000         0.763         1.000         1.000         1.000
+ PC5BW          1.000         0.763         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000        48.862         0.000         0.000
+
+
+           Means
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           Means
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           Covariances
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.027
+ COGPGSBW      -0.001         0.110
+ TRLBTS         0.179         0.157       111.380
+ DEMAGE        -0.056         0.026         0.118         8.271
+ DEMMAL         0.008         0.011        -0.091        -0.143         0.236
+ CANEVR         0.000         0.000        -0.142        -0.090         0.010
+ COGPGS         0.000         0.000        -0.021        -0.003         0.003
+ PC1BW          0.000        -0.003        -0.017         0.004        -0.001
+ PC2BW         -0.001        -0.001        -0.038        -0.003        -0.002
+ PC3BW          0.000         0.000         0.002        -0.002         0.000
+ PC4BW          0.000         0.001        -0.002         0.002         0.001
+ PC5BW          0.000         0.000         0.006         0.003         0.000
+
+
+           Covariances
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         0.030
+ COGPGS         0.000         0.020
+ PC1BW          0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.001
+ PC3BW          0.000         0.000         0.000         0.000         0.001
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.001
+ PC5BW          0.000         0.001
+
+
+           Correlations
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000
+ COGPGSBW      -0.014         1.000
+ TRLBTS         0.103         0.045         1.000
+ DEMAGE        -0.118         0.028         0.004         1.000
+ DEMMAL         0.102         0.066        -0.018        -0.102         1.000
+ CANEVR         0.000         0.000        -0.077        -0.181         0.119
+ COGPGS        -0.003         0.000        -0.014        -0.007         0.043
+ PC1BW         -0.055        -0.245        -0.045         0.041        -0.037
+ PC2BW         -0.109        -0.050        -0.097        -0.029        -0.091
+ PC3BW          0.003         0.014         0.006        -0.022         0.025
+ PC4BW          0.071         0.101        -0.006         0.021         0.072
+ PC5BW          0.061        -0.034         0.017         0.032         0.024
+
+
+           Correlations
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         1.000
+ COGPGS        -0.011         1.000
+ PC1BW          0.000         0.001         1.000
+ PC2BW          0.000         0.001        -0.001         1.000
+ PC3BW          0.000         0.000         0.006         0.009         1.000
+ PC4BW          0.000         0.000        -0.005        -0.016         0.015
+ PC5BW          0.000         0.000        -0.014         0.005         0.001
+
+
+           Correlations
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          0.002         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS 2919.885
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANEVRBW              0.008      -2.846      -0.939    0.25%       0.061      0.061      0.061
+             394.000       0.024       7.269       0.061   89.09%       0.061      0.061
+     COGPGSBW              0.000       0.005      -1.028    0.25%      -0.289     -0.081     -0.011
+             394.000       0.115       0.381       1.215    0.25%       0.074      0.289
+     TRLBTS               48.844      -0.127       1.000    0.14%      40.000     46.000     49.000
+             703.000     111.475       0.390      78.000    0.28%      52.000     57.000
+     DEMAGE                0.000       1.006      -5.322    0.13%      -2.352     -1.042     -0.432
+             767.000       8.272       2.014      15.848    0.13%       0.308      2.218
+     DEMMAL                0.000      -0.486      -0.618   38.20%      -0.618      0.382      0.382
+             767.000       0.236      -1.764       0.382   61.80%       0.382      0.382
+     CANEVR                0.000      -0.367      -0.750    0.13%       0.000      0.000      0.000
+             768.000       0.030       6.168       0.667    0.26%       0.000      0.000
+     COGPGS                0.000      -0.018      -0.505    0.17%      -0.072      0.000      0.000
+             586.000       0.020       2.036       0.604    0.17%       0.000      0.073
+     PC1BW                 0.000       2.629      -0.020    0.25%      -0.018     -0.015     -0.012
+             394.000       0.001       5.542       0.136    0.25%      -0.008     -0.003
+     PC2BW                -0.001       0.962      -0.036    0.25%      -0.031     -0.027     -0.018
+             394.000       0.001      -0.151       0.131    0.25%      -0.003      0.035
+     PC3BW                -0.001      12.533      -0.119    0.25%      -0.006     -0.003     -0.001
+             394.000       0.001     225.600       0.457    0.25%       0.000      0.004
+     PC4BW                 0.000       5.571      -0.094    0.25%      -0.009     -0.006     -0.005
+             394.000       0.001      36.829       0.285    0.25%      -0.003      0.000
+     PC5BW                 0.001     -15.927      -0.544    0.25%      -0.002      0.000      0.001
+             394.000       0.001     295.350       0.111    0.25%       0.002      0.004
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.482D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 4, %WITHIN%: [ COGPGS ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       30
+
+Loglikelihood
+
+          H0 Value                       -4455.804
+          H0 Scaling Correction Factor      1.3992
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    8971.609
+          Bayesian (BIC)                  9110.922
+          Sample-Size Adjusted BIC        9015.659
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANEVR            -4.491      2.225     -2.018      0.044
+    DEMMAL            -0.679      0.797     -0.852      0.394
+    DEMAGE            -0.013      0.158     -0.082      0.935
+    COGPGS            -1.098      2.982     -0.368      0.713
+
+ CANEVR   WITH
+    DEMMAL             0.009      0.003      2.526      0.012
+    DEMAGE            -0.085      0.019     -4.503      0.000
+    COGPGS             0.000      0.002     -0.249      0.804
+
+ Means
+    DEMAGE             0.000      0.115      0.000      1.000
+    DEMMAL             0.000      0.019      0.000      1.000
+    CANEVR             0.000      0.000      0.000      1.000
+    COGPGS             0.000      0.000      0.318      0.750
+
+ Variances
+    DEMAGE             8.271      0.598     13.834      0.000
+    DEMMAL             0.236      0.004     53.844      0.000
+    CANEVR             0.030      0.004      6.900      0.000
+    COGPGS             0.020      0.002      9.180      0.000
+
+ Residual Variances
+    TRLBTS            92.413      8.221     11.241      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANEVRBW           6.086      2.668      2.281      0.023
+    COGPGSBW           1.145      1.488      0.770      0.441
+    PC1BW             -9.187     10.069     -0.912      0.362
+    PC2BW            -24.503     11.147     -2.198      0.028
+    PC3BW              1.967      3.915      0.502      0.615
+    PC4BW             -3.730      8.766     -0.425      0.670
+    PC5BW              3.581      3.186      1.124      0.261
+
+ CANEVRBW WITH
+    COGPGSBW           0.000      0.002     -0.231      0.817
+
+ Means
+    CANEVRBW           0.008      0.008      1.030      0.303
+    COGPGSBW           0.000      0.017      0.010      0.992
+
+ Intercepts
+    TRLBTS            48.855      0.421    115.911      0.000
+
+ Variances
+    CANEVRBW           0.024      0.004      6.520      0.000
+    COGPGSBW           0.115      0.009     12.863      0.000
+
+ Residual Variances
+    TRLBTS            15.949      6.498      2.454      0.014
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TRLBTS     ON
+    CANEVR            -0.081      0.040     -2.013      0.044
+    DEMMAL            -0.034      0.040     -0.855      0.393
+    DEMAGE            -0.004      0.047     -0.082      0.935
+    COGPGS            -0.016      0.044     -0.366      0.714
+
+ CANEVR   WITH
+    DEMMAL             0.103      0.039      2.638      0.008
+    DEMAGE            -0.171      0.031     -5.593      0.000
+    COGPGS            -0.017      0.067     -0.248      0.804
+
+ Means
+    DEMAGE             0.000      0.040      0.000      1.000
+    DEMMAL             0.000      0.038      0.000      1.000
+    CANEVR             0.000      0.000      0.000      1.000
+    COGPGS             0.001      0.003      0.318      0.751
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANEVR             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLBTS             0.992      0.007    133.024      0.000
+
+Between Level
+
+ TRLBTS     ON
+    CANEVRBW           0.225      0.094      2.388      0.017
+    COGPGSBW           0.092      0.124      0.743      0.458
+    PC1BW             -0.079      0.087     -0.908      0.364
+    PC2BW             -0.209      0.104     -2.019      0.043
+    PC3BW              0.012      0.025      0.502      0.616
+    PC4BW             -0.028      0.065     -0.425      0.671
+    PC5BW              0.025      0.023      1.085      0.278
+
+ CANEVRBW WITH
+    COGPGSBW          -0.009      0.041     -0.232      0.817
+
+ Means
+    CANEVRBW           0.052      0.054      0.959      0.338
+    COGPGSBW           0.001      0.050      0.010      0.992
+
+ Intercepts
+    TRLBTS            11.542      2.094      5.511      0.000
+
+ Variances
+    CANEVRBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    TRLBTS             0.890      0.073     12.259      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.008      0.007      1.126      0.260
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TRLBTS             0.110      0.073      1.512      0.130
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.482E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANEVR         -10.222      -8.852      -8.151      -4.491      -0.830      -0.129       1.241
+    DEMMAL          -2.732      -2.241      -1.990      -0.679       0.632       0.883       1.374
+    DEMAGE          -0.419      -0.322      -0.273      -0.013       0.247       0.296       0.394
+    COGPGS          -8.780      -6.944      -6.004      -1.098       3.808       4.747       6.584
+
+ CANEVR   WITH
+    DEMMAL           0.000       0.002       0.003       0.009       0.014       0.015       0.017
+    DEMAGE          -0.134      -0.122      -0.116      -0.085      -0.054      -0.048      -0.036
+    COGPGS          -0.005      -0.004      -0.003       0.000       0.002       0.003       0.004
+
+ Means
+    DEMAGE          -0.296      -0.225      -0.189       0.000       0.189       0.225       0.296
+    DEMMAL          -0.048      -0.036      -0.031       0.000       0.031       0.036       0.048
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.001      -0.001      -0.001       0.000       0.001       0.001       0.001
+
+ Variances
+    DEMAGE           6.731       7.099       7.288       8.271       9.255       9.443       9.811
+    DEMMAL           0.225       0.227       0.229       0.236       0.243       0.245       0.247
+    CANEVR           0.019       0.022       0.023       0.030       0.037       0.039       0.041
+    COGPGS           0.015       0.016       0.017       0.020       0.024       0.025       0.026
+
+ Residual Variances
+    TRLBTS          71.236      76.299      78.889      92.413     105.937     108.527     113.590
+
+Between Level
+
+ TRLBTS   ON
+    CANEVRBW        -0.787       0.856       1.696       6.086      10.475      11.316      12.959
+    COGPGSBW        -2.686      -1.770      -1.302       1.145       3.592       4.061       4.977
+    PC1BW          -35.123     -28.922     -25.751      -9.187       7.377      10.548      16.749
+    PC2BW          -53.216     -46.351     -42.840     -24.503      -6.166      -2.654       4.210
+    PC3BW           -8.118      -5.707      -4.474       1.967       8.407       9.641      12.052
+    PC4BW          -26.309     -20.911     -18.150      -3.730      10.690      13.451      18.849
+    PC5BW           -4.624      -2.663      -1.659       3.581       8.821       9.825      11.786
+
+ CANEVRBW WITH
+    COGPGSBW        -0.006      -0.005      -0.004       0.000       0.003       0.004       0.005
+
+ Means
+    CANEVRBW        -0.012      -0.007      -0.005       0.008       0.021       0.024       0.028
+    COGPGSBW        -0.044      -0.033      -0.028       0.000       0.028       0.034       0.044
+
+ Intercepts
+    TRLBTS          47.769      48.029      48.161      48.855      49.548      49.681      49.940
+
+ Variances
+    CANEVRBW         0.015       0.017       0.018       0.024       0.031       0.032       0.034
+    COGPGSBW         0.092       0.097       0.100       0.115       0.130       0.133       0.138
+
+ Residual Variances
+    TRLBTS          -0.788       3.213       5.260      15.949      26.638      28.685      32.686
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ TRLBTS   ON
+    CANEVR          -0.184      -0.159      -0.147      -0.081      -0.015      -0.002       0.023
+    DEMMAL          -0.137      -0.113      -0.100      -0.034       0.032       0.044       0.069
+    DEMAGE          -0.125      -0.096      -0.081      -0.004       0.073       0.088       0.117
+    COGPGS          -0.131      -0.103      -0.089      -0.016       0.057       0.071       0.098
+
+ CANEVR   WITH
+    DEMMAL           0.002       0.026       0.039       0.103       0.167       0.179       0.203
+    DEMAGE          -0.249      -0.230      -0.221      -0.171      -0.120      -0.111      -0.092
+    COGPGS          -0.189      -0.148      -0.127      -0.017       0.093       0.114       0.156
+
+ Means
+    DEMAGE          -0.103      -0.078      -0.066       0.000       0.066       0.078       0.103
+    DEMMAL          -0.098      -0.075      -0.063       0.000       0.063       0.075       0.098
+    CANEVR           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.007      -0.005      -0.004       0.001       0.006       0.007       0.009
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANEVR           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLBTS           0.972       0.977       0.979       0.992       1.004       1.006       1.011
+
+Between Level
+
+ TRLBTS   ON
+    CANEVRBW        -0.018       0.040       0.070       0.225       0.379       0.409       0.467
+    COGPGSBW        -0.226      -0.150      -0.111       0.092       0.295       0.334       0.410
+    PC1BW           -0.305      -0.251      -0.223      -0.079       0.064       0.092       0.146
+    PC2BW           -0.476      -0.413      -0.380      -0.209      -0.039      -0.006       0.058
+    PC3BW           -0.051      -0.036      -0.028       0.012       0.053       0.060       0.075
+    PC4BW           -0.195      -0.155      -0.134      -0.028       0.079       0.100       0.139
+    PC5BW           -0.034      -0.020      -0.013       0.025       0.063       0.070       0.084
+
+ CANEVRBW WITH
+    COGPGSBW        -0.114      -0.089      -0.076      -0.009       0.057       0.070       0.095
+
+ Means
+    CANEVRBW        -0.087      -0.054      -0.037       0.052       0.141       0.158       0.191
+    COGPGSBW        -0.129      -0.098      -0.082       0.001       0.083       0.099       0.130
+
+ Intercepts
+    TRLBTS           6.147       7.437       8.097      11.542      14.987      15.647      16.937
+
+ Variances
+    CANEVRBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    TRLBTS           0.703       0.748       0.771       0.890       1.010       1.033       1.077
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW           0             0
+ COGPGSBW           0             0
+ TRLBTS             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANEVR             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ COGPGSBW           0             0
+ TRLBTS             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             1             2
+
+
+           ALPHA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  3             4             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0             0             5             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             7             8             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW           0             0
+ COGPGSBW           0             0
+ TRLBTS             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANEVR             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ COGPGSBW           0             0
+ TRLBTS             0             0             9
+ DEMAGE             0             0             0            10
+ DEMMAL             0             0             0             0            11
+ CANEVR             0             0             0            12            13
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR            14
+ COGPGS            15            16
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW           0             0
+ COGPGSBW           0             0
+ TRLBTS             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANEVR             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0
+ COGPGSBW           0             0
+ TRLBTS             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                 17            18            19             0             0
+
+
+           ALPHA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS            20            21             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ TRLBTS             0             0            22            23            24
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW           0             0
+ COGPGSBW           0             0
+ TRLBTS            25            26
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANEVR             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW          27
+ COGPGSBW          28            29
+ TRLBTS             0             0            30
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANEVR             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANEVR         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANEVR         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000        55.737
+ DEMAGE         0.000         0.000         0.000         4.136
+ DEMMAL         0.000         0.000         0.000         0.000         0.118
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         0.015
+ COGPGS         0.000         0.010
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANEVR         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000        48.844         0.000         0.000
+
+
+           ALPHA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ TRLBTS         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANEVRBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ TRLBTS         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANEVR         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANEVRBW      COGPGSBW      TRLBTS        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANEVRBW       0.014
+ COGPGSBW       0.000         0.055
+ TRLBTS         0.000         0.000        55.737
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANEVR         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANEVR        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANEVR         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.001
+ PC3BW          0.000         0.000         0.000         0.000         0.001
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.001
+ PC5BW          0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_TRLBTS
+              ________
+ 1             48.865
+
+
+           Covariances
+              B_TRLBTS
+              ________
+ B_TRLBTS       6.520
+
+
+           Correlations
+              B_TRLBTS
+              ________
+ B_TRLBTS       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  12:53:33
+        Ending Time:  12:53:34
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

@@ -1,0 +1,1608 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019  12:56 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANONS_CVLASF_1;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+  	  		CVLASF
+    		! covariates
+  	  		DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANONS
+    			COGPGS
+    		! between predictor
+    			CANONSBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW	
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 1 AND CVLASFDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANONSBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW			
+    		;
+    	WITHIN  		
+    			CANONS
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANONSBW = cluster_mean (CANONS);	
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANONS (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANONSBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	CVLASF on CANONS;
+  	CVLASF on  DEMMAL DEMAGE COGPGS;	
+  	COGPGS*;
+  	CVLASF*;
+  	CANONS WITH DEMMAL*;
+  	CANONS WITH DEMAGE*;
+  	CANONS WITH COGPGS*;
+
+  %BETWEEN%
+  	CVLASF on CANONSBW COGPGSBW
+  		 	    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	CVLASF*;
+  	CANONSBW WITH COGPGSBW*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  46
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANONS_CVLASF_1;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         444
+
+Number of dependent variables                                    1
+Number of independent variables                                 11
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   CVLASF
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANONS      COGPGS      CANONSBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANONS      COGPGS
+
+  Between variables
+   CANONSBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANONSBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+  Centering (GROUPMEAN)
+   CANONS      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             9
+     Number of clusters                        220
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.928
+ COGPGSBW       0.928         1.000
+ CVLASF         0.926         0.995         0.995
+ DEMAGE         0.926         0.995         0.993         0.995
+ DEMMAL         0.928         0.998         0.995         0.995         0.998
+ CANONS         0.757         0.757         0.757         0.755         0.757
+ COGPGS         0.660         0.712         0.709         0.709         0.709
+ PC1BW          0.928         1.000         0.995         0.995         0.998
+ PC2BW          0.928         1.000         0.995         0.995         0.998
+ PC3BW          0.928         1.000         0.995         0.995         0.998
+ PC4BW          0.928         1.000         0.995         0.995         0.998
+ PC5BW          0.928         1.000         0.995         0.995         0.998
+
+
+           Covariance Coverage
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         0.757
+ COGPGS         0.572         0.712
+ PC1BW          0.757         0.712         1.000
+ PC2BW          0.757         0.712         1.000         1.000
+ PC3BW          0.757         0.712         1.000         1.000         1.000
+ PC4BW          0.757         0.712         1.000         1.000         1.000
+ PC5BW          0.757         0.712         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1             -0.005         0.000        -0.574        -0.003         0.000
+
+
+           Means
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.068        -0.002         0.000         0.000         0.000
+
+
+           Means
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           Covariances
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       2.184
+ COGPGSBW       0.039         0.116
+ CVLASF         0.075        -0.004         0.903
+ DEMAGE         0.664         0.036        -0.112         5.897
+ DEMMAL         0.025         0.008        -0.044        -0.140         0.248
+ CANONS        -0.063         0.006         0.079         1.383        -0.064
+ COGPGS        -0.001         0.000         0.004        -0.025         0.004
+ PC1BW          0.003        -0.005         0.000         0.007        -0.002
+ PC2BW         -0.011         0.000        -0.004         0.006         0.000
+ PC3BW         -0.004        -0.001         0.000        -0.001         0.000
+ PC4BW          0.008         0.002         0.000         0.005         0.001
+ PC5BW         -0.002        -0.001        -0.001         0.001         0.000
+
+
+           Covariances
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         1.577
+ COGPGS         0.006         0.017
+ PC1BW         -0.002         0.000         0.001
+ PC2BW          0.003         0.000         0.000         0.002
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.001         0.000         0.000         0.000        -0.001
+ PC5BW          0.008         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.002
+ PC5BW          0.000         0.002
+
+
+           Correlations
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000
+ COGPGSBW       0.078         1.000
+ CVLASF         0.054        -0.012         1.000
+ DEMAGE         0.185         0.044        -0.048         1.000
+ DEMMAL         0.034         0.050        -0.094        -0.116         1.000
+ CANONS        -0.034         0.014         0.066         0.453        -0.102
+ COGPGS        -0.003        -0.003         0.028        -0.078         0.059
+ PC1BW          0.056        -0.356         0.011         0.075        -0.085
+ PC2BW         -0.186         0.010        -0.103         0.060        -0.014
+ PC3BW         -0.151        -0.134         0.013        -0.019        -0.057
+ PC4BW          0.140         0.134        -0.011         0.047         0.046
+ PC5BW         -0.033        -0.033        -0.016         0.012         0.021
+
+
+           Correlations
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         1.000
+ COGPGS         0.038         1.000
+ PC1BW         -0.047        -0.002         1.000
+ PC2BW          0.051         0.000        -0.110         1.000
+ PC3BW         -0.004         0.004         0.053         0.158         1.000
+ PC4BW          0.020        -0.005         0.007        -0.012        -0.966
+ PC5BW          0.144         0.000        -0.100         0.041         0.005
+
+
+           Correlations
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          0.033         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS 2001.595
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANONSBW             -0.012      -0.123      -4.132    0.99%      -1.132     -0.132     -0.132
+             203.000       2.203       0.049       3.868    0.49%       0.368      0.868
+     COGPGSBW              0.002       0.102      -0.982    0.45%      -0.292     -0.078      0.000
+             220.000       0.115       0.217       1.035    0.45%       0.048      0.287
+     CVLASF               -0.574      -0.735      -4.500    0.68%      -1.500     -0.500     -0.500
+             442.000       0.904       1.469       1.500    1.58%      -0.500      0.000
+     DEMAGE                0.000       1.685      -3.760    0.23%      -1.890     -0.940     -0.530
+             442.000       5.899       4.644      15.340    0.23%      -0.070      1.350
+     DEMMAL                0.000      -0.186      -0.546   45.37%      -0.546     -0.546      0.454
+             443.000       0.248      -1.965       0.454   54.63%       0.454      0.454
+     CANONS                0.000       0.155      -4.000    0.30%      -1.000      0.000      0.000
+             336.000       1.417       1.868       5.000    0.30%       0.000      1.000
+     COGPGS                0.000       0.036      -0.482    0.32%      -0.068      0.000      0.000
+             316.000       0.017       2.334       0.482    0.32%       0.000      0.065
+     PC1BW                 0.000       2.328      -0.023    0.45%      -0.021     -0.016     -0.012
+             220.000       0.002       3.990       0.132    0.45%      -0.010     -0.005
+     PC2BW                -0.001       0.592      -0.045    0.45%      -0.041     -0.028     -0.014
+             220.000       0.002      -0.852       0.120    0.45%       0.006      0.040
+     PC3BW                 0.000      -4.401      -0.117    0.45%      -0.003      0.001      0.002
+             220.000       0.000      24.351       0.033    0.45%       0.004      0.007
+     PC4BW                -0.001       5.011      -0.096    0.45%      -0.013     -0.009     -0.007
+             220.000       0.001      28.847       0.283    0.45%      -0.006     -0.002
+     PC5BW                 0.001     -13.359      -0.542    0.45%       0.001      0.003      0.004
+             220.000       0.001     188.505       0.053    0.45%       0.004      0.006
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS       0.668D-16.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 14, %WITHIN%: CANONS
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       30
+
+Loglikelihood
+
+          H0 Value                       -2685.335
+          H0 Scaling Correction Factor      1.2395
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    5430.670
+          Bayesian (BIC)                  5553.545
+          Sample-Size Adjusted BIC        5458.338
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLASF     ON
+    CANONS             0.089      0.042      2.125      0.034
+    DEMMAL            -0.174      0.089     -1.964      0.050
+    DEMAGE            -0.041      0.022     -1.914      0.056
+    COGPGS             0.164      0.350      0.468      0.640
+
+ CANONS   WITH
+    DEMMAL            -0.034      0.026     -1.304      0.192
+    DEMAGE             1.300      0.262      4.962      0.000
+    COGPGS             0.010      0.013      0.721      0.471
+
+ Means
+    DEMAGE             0.000      0.113     -0.004      0.997
+    DEMMAL             0.000      0.026      0.000      1.000
+    CANONS             0.077      0.023      3.370      0.001
+    COGPGS             0.000      0.001      0.660      0.509
+
+ Variances
+    DEMAGE             5.896      0.701      8.407      0.000
+    DEMMAL             0.248      0.002    101.232      0.000
+    CANONS             1.505      0.230      6.540      0.000
+    COGPGS             0.017      0.003      6.220      0.000
+
+ Residual Variances
+    CVLASF             0.751      0.085      8.853      0.000
+
+Between Level
+
+ CVLASF     ON
+    CANONSBW           0.039      0.034      1.169      0.242
+    COGPGSBW          -0.055      0.157     -0.351      0.725
+    PC1BW             -1.275      1.371     -0.930      0.352
+    PC2BW             -4.096      1.523     -2.690      0.007
+    PC3BW             28.263     19.706      1.434      0.151
+    PC4BW             11.414      8.218      1.389      0.165
+    PC5BW             -0.605      0.445     -1.358      0.174
+
+ CANONSBW WITH
+    COGPGSBW           0.037      0.035      1.057      0.290
+
+ Means
+    CANONSBW          -0.008      0.104     -0.079      0.937
+    COGPGSBW           0.002      0.023      0.082      0.935
+
+ Intercepts
+    CVLASF            -0.583      0.047    -12.355      0.000
+
+ Variances
+    CANONSBW           2.202      0.221      9.962      0.000
+    COGPGSBW           0.115      0.012      9.963      0.000
+
+ Residual Variances
+    CVLASF             0.113      0.083      1.368      0.171
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ CVLASF     ON
+    CANONS             0.124      0.060      2.063      0.039
+    DEMMAL            -0.099      0.049     -2.020      0.043
+    DEMAGE            -0.115      0.060     -1.913      0.056
+    COGPGS             0.024      0.051      0.476      0.634
+
+ CANONS   WITH
+    DEMMAL            -0.056      0.042     -1.312      0.190
+    DEMAGE             0.436      0.052      8.343      0.000
+    COGPGS             0.061      0.082      0.741      0.459
+
+ Means
+    DEMAGE             0.000      0.046     -0.004      0.997
+    DEMMAL             0.000      0.053      0.000      1.000
+    CANONS             0.063      0.017      3.612      0.000
+    COGPGS             0.003      0.005      0.672      0.501
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANONS             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLASF             0.972      0.017     58.817      0.000
+
+Between Level
+
+ CVLASF     ON
+    CANONSBW           0.159      0.142      1.120      0.263
+    COGPGSBW          -0.051      0.142     -0.360      0.719
+    PC1BW             -0.136      0.138     -0.989      0.323
+    PC2BW             -0.443      0.163     -2.717      0.007
+    PC3BW              1.199      0.662      1.809      0.070
+    PC4BW              1.134      0.652      1.739      0.082
+    PC5BW             -0.063      0.040     -1.567      0.117
+
+ CANONSBW WITH
+    COGPGSBW           0.073      0.069      1.059      0.290
+
+ Means
+    CANONSBW          -0.006      0.070     -0.079      0.937
+    COGPGSBW           0.006      0.067      0.082      0.935
+
+ Intercepts
+    CVLASF            -1.595      0.519     -3.076      0.002
+
+ Variances
+    CANONSBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    CVLASF             0.848      0.098      8.651      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLASF             0.028      0.017      1.705      0.088
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    CVLASF             0.152      0.098      1.555      0.120
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.668E-16
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLASF   ON
+    CANONS          -0.019       0.007       0.020       0.089       0.158       0.171       0.197
+    DEMMAL          -0.402      -0.348      -0.320      -0.174      -0.028       0.000       0.054
+    DEMAGE          -0.097      -0.084      -0.077      -0.041      -0.006       0.001       0.014
+    COGPGS          -0.737      -0.522      -0.412       0.164       0.739       0.849       1.065
+
+ CANONS   WITH
+    DEMMAL          -0.101      -0.085      -0.077      -0.034       0.009       0.017       0.033
+    DEMAGE           0.625       0.787       0.869       1.300       1.731       1.814       1.975
+    COGPGS          -0.025      -0.017      -0.012       0.010       0.032       0.036       0.044
+
+ Means
+    DEMAGE          -0.291      -0.222      -0.186       0.000       0.185       0.221       0.290
+    DEMMAL          -0.068      -0.052      -0.044       0.000       0.044       0.052       0.068
+    CANONS           0.018       0.032       0.039       0.077       0.115       0.122       0.136
+    COGPGS          -0.001      -0.001      -0.001       0.000       0.002       0.002       0.002
+
+ Variances
+    DEMAGE           4.090       4.522       4.743       5.896       7.050       7.271       7.703
+    DEMMAL           0.242       0.243       0.244       0.248       0.252       0.253       0.254
+    CANONS           0.912       1.054       1.126       1.505       1.883       1.956       2.098
+    COGPGS           0.010       0.012       0.012       0.017       0.021       0.022       0.024
+
+ Residual Variances
+    CVLASF           0.532       0.584       0.611       0.751       0.890       0.917       0.969
+
+Between Level
+
+ CVLASF   ON
+    CANONSBW        -0.047      -0.027      -0.016       0.039       0.095       0.105       0.126
+    COGPGSBW        -0.458      -0.362      -0.313      -0.055       0.203       0.252       0.348
+    PC1BW           -4.808      -3.963      -3.531      -1.275       0.981       1.412       2.257
+    PC2BW           -8.018      -7.081      -6.601      -4.096      -1.591      -1.112      -0.174
+    PC3BW          -22.495     -10.360      -4.153      28.263      60.679      66.887      79.022
+    PC4BW           -9.754      -4.693      -2.105      11.414      24.933      27.521      32.582
+    PC5BW           -1.751      -1.477      -1.337      -0.605       0.128       0.268       0.542
+
+ CANONSBW WITH
+    COGPGSBW        -0.053      -0.031      -0.020       0.037       0.094       0.105       0.126
+
+ Means
+    CANONSBW        -0.276      -0.212      -0.179      -0.008       0.163       0.196       0.260
+    COGPGSBW        -0.057      -0.043      -0.036       0.002       0.039       0.047       0.061
+
+ Intercepts
+    CVLASF          -0.705      -0.676      -0.661      -0.583      -0.505      -0.491      -0.462
+
+ Variances
+    CANONSBW         1.633       1.769       1.839       2.202       2.566       2.636       2.772
+    COGPGSBW         0.085       0.092       0.096       0.115       0.134       0.137       0.144
+
+ Residual Variances
+    CVLASF          -0.100      -0.049      -0.023       0.113       0.249       0.276       0.327
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ CVLASF   ON
+    CANONS          -0.031       0.006       0.025       0.124       0.223       0.242       0.279
+    DEMMAL          -0.224      -0.194      -0.179      -0.099      -0.018      -0.003       0.027
+    DEMAGE          -0.269      -0.232      -0.213      -0.115      -0.016       0.003       0.040
+    COGPGS          -0.106      -0.075      -0.059       0.024       0.107       0.123       0.155
+
+ CANONS   WITH
+    DEMMAL          -0.165      -0.139      -0.125      -0.056       0.014       0.027       0.054
+    DEMAGE           0.302       0.334       0.350       0.436       0.523       0.539       0.571
+    COGPGS          -0.151      -0.101      -0.075       0.061       0.197       0.223       0.274
+
+ Means
+    DEMAGE          -0.120      -0.091      -0.077       0.000       0.076       0.091       0.119
+    DEMMAL          -0.137      -0.104      -0.087       0.000       0.087       0.104       0.137
+    CANONS           0.018       0.029       0.034       0.063       0.091       0.097       0.108
+    COGPGS          -0.009      -0.006      -0.005       0.003       0.011       0.013       0.016
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANONS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLASF           0.929       0.939       0.945       0.972       0.999       1.004       1.014
+
+Between Level
+
+ CVLASF   ON
+    CANONSBW        -0.207      -0.120      -0.075       0.159       0.394       0.439       0.526
+    COGPGSBW        -0.415      -0.328      -0.284      -0.051       0.182       0.226       0.314
+    PC1BW           -0.491      -0.406      -0.363      -0.136       0.090       0.134       0.219
+    PC2BW           -0.863      -0.763      -0.712      -0.443      -0.175      -0.123      -0.023
+    PC3BW           -0.508      -0.100       0.109       1.199       2.288       2.497       2.905
+    PC4BW           -0.546      -0.144       0.061       1.134       2.207       2.413       2.814
+    PC5BW           -0.166      -0.141      -0.129      -0.063       0.003       0.016       0.040
+
+ CANONSBW WITH
+    COGPGSBW        -0.104      -0.062      -0.040       0.073       0.186       0.208       0.250
+
+ Means
+    CANONSBW        -0.186      -0.143      -0.121      -0.006       0.110       0.132       0.175
+    COGPGSBW        -0.168      -0.127      -0.105       0.006       0.116       0.138       0.179
+
+ Intercepts
+    CVLASF          -2.931      -2.611      -2.448      -1.595      -0.742      -0.579      -0.259
+
+ Variances
+    CANONSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    CVLASF           0.595       0.656       0.686       0.848       1.009       1.040       1.100
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW           0             0
+ COGPGSBW           0             0
+ CVLASF             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANONS             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ COGPGSBW           0             0
+ CVLASF             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             1             2
+
+
+           ALPHA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  3             4             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0             0             5             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             7             8             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW           0             0
+ COGPGSBW           0             0
+ CVLASF             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANONS             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ COGPGSBW           0             0
+ CVLASF             0             0             9
+ DEMAGE             0             0             0            10
+ DEMMAL             0             0             0             0            11
+ CANONS             0             0             0            12            13
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS            14
+ COGPGS            15            16
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW           0             0
+ COGPGSBW           0             0
+ CVLASF             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANONS             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0
+ COGPGSBW           0             0
+ CVLASF             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                 17            18            19             0             0
+
+
+           ALPHA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF            20            21             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ CVLASF             0             0            22            23            24
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW           0             0
+ COGPGSBW           0             0
+ CVLASF            25            26
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANONS             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW          27
+ COGPGSBW          28            29
+ CVLASF             0             0            30
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANONS             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANONS         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANONS         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000         0.452
+ DEMAGE         0.000         0.000         0.000         2.950
+ DEMMAL         0.000         0.000         0.000         0.000         0.124
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         0.709
+ COGPGS         0.000         0.008
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANONS         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000        -0.574         0.000         0.000
+
+
+           ALPHA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONSBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ CVLASF         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANONSBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ CVLASF         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANONS         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANONSBW      COGPGSBW      CVLASF        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANONSBW       1.096
+ COGPGSBW       0.000         0.058
+ CVLASF         0.000         0.000         0.452
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANONS         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANONS        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANONS         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.001
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.001
+ PC5BW          0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_CVLASF
+              ________
+ 1             -0.581
+
+
+           Covariances
+              B_CVLASF
+              ________
+ B_CVLASF       0.047
+
+
+           Correlations
+              B_CVLASF
+              ________
+ B_CVLASF       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  12:56:39
+        Ending Time:  12:56:39
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen

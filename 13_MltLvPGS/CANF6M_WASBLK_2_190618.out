@@ -1,0 +1,1608 @@
+Mplus VERSION 7.4 (Mac)
+MUTHEN & MUTHEN
+07/30/2019  12:54 PM
+
+INPUT INSTRUCTIONS
+
+
+  TITLE: CANF6M_WASBLK_2;
+
+  DATA:
+  	FILE = GD190618.csv;
+
+  VARIABLE:
+  	NAMES =
+  			ID_Fam   Wave     ID_MPL
+  			DEMMAL   DEMAGE   DEMHSP   DEMRAC
+  			SRPWCR
+  			WASVCB   WASBLK   WASDGT   WSISUM
+  			TRLATS   TRLBTS
+  			CVLASF   CVLASC   CVLALF   CVLALC
+  			WASCOM   COGCOM   CVLCOM
+  			CANEVR   CANONS   CANFLF
+  			CANFTY   CANF6M   CANAC6
+  			CANYRS
+  			ALCEVR   ALCONS   ALCFLF
+  			ALCFTY   ALCF6M   ALCAC6
+  			ALCYRS
+  			SRPWCRDt WASVCBDt WASBLKDt
+  			WASDGTDt WSISUMDt TRLATSDt
+  			TRLBTSDt CVLASFDt CVLASCDt
+  			CVLALFDt CVLALCDt WASCOMDt
+  			COGCOMDt CVLCOMDt
+  			COGPGS
+  			PC1 PC2 PC3 PC4 PC5 PC6
+  		;
+  	USEVARIABLES =
+  		! outcome
+  	  		WASBLK
+    		! covariates
+  	  		DEMAGE
+    			DEMMAL  		
+    		! within predictor
+    			CANF6M
+    			COGPGS
+    		! between predictor
+    			CANF6MBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW	
+    		;
+    	USEOBSERVATION =
+    			(Wave EQ 2 AND WASBLKDt EQ 1)
+    		;
+    	CLUSTER =
+    			ID_Fam
+    		;
+    	MISSING = .;
+    	BETWEEN =   		
+    			CANF6MBW
+    			COGPGSBW
+    			PC1BW
+    			PC2BW
+    			PC3BW
+    			PC4BW
+    			PC5BW			
+    		;
+    	WITHIN  		
+    			CANF6M
+    			COGPGS
+    			DEMAGE
+    			DEMMAL
+    		;  		
+
+  DEFINE:
+  	! CREATE BW FAM PREDICTOR
+  		CANF6MBW = cluster_mean (CANF6M);	
+  		COGPGSBW = cluster_mean (COGPGS);
+  		PC1BW = cluster_mean (PC1);
+  		PC2BW = cluster_mean (PC2);
+  		PC3BW = cluster_mean (PC3);
+  		PC4BW = cluster_mean (PC4);
+  		PC5BW = cluster_mean (PC5);
+  	! CENTER WI FAM VARIABLES
+  		CENTER CANF6M (GROUPMEAN);
+  		CENTER COGPGS (GROUPMEAN);
+  		CENTER DEMMAL (GRANDMEAN);
+  		CENTER DEMAGE (GRANDMEAN);
+  	! CENTER BW FAM VARIABLES
+  		CENTER CANF6MBW (GRANDMEAN);
+  		CENTER COGPGSBW (GRANDMEAN);
+  		CENTER PC1BW (GRANDMEAN);
+  		CENTER PC2BW (GRANDMEAN);
+  		CENTER PC3BW (GRANDMEAN);
+  		CENTER PC4BW (GRANDMEAN);
+  		CENTER PC5BW (GRANDMEAN);
+
+  ANALYSIS:
+          ITERATIONS = 1000000;
+          TYPE = TWOLEVEL RANDOM;
+          ALGORITHM = INTEGRATION;
+
+  OUTPUT:
+  	SAMPSTAT STDYX TECH1 CINT;
+
+  MODEL:
+  %WITHIN%
+  	WASBLK on CANF6M;
+  	WASBLK on  DEMMAL DEMAGE COGPGS;	
+  	COGPGS*;
+  	WASBLK*;
+  	CANF6M WITH DEMMAL*;
+  	CANF6M WITH DEMAGE*;
+  	CANF6M WITH COGPGS*;
+
+  %BETWEEN%
+  	WASBLK on CANF6MBW COGPGSBW
+  		 	    PC1BW PC2BW PC3BW PC4BW PC5BW;
+  	COGPGSBW*;
+  	WASBLK*;
+  	CANF6MBW WITH COGPGSBW*;
+
+  PLOT:
+  	TYPE = plot3;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  109
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+CANF6M_WASBLK_2;
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         698
+
+Number of dependent variables                                    1
+Number of independent variables                                 11
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   WASBLK
+
+Observed independent variables
+   DEMAGE      DEMMAL      CANF6M      COGPGS      CANF6MBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+Variables with special functions
+
+  Cluster variable      ID_FAM
+
+  Within variables
+   DEMAGE      DEMMAL      CANF6M      COGPGS
+
+  Between variables
+   CANF6MBW    COGPGSBW    PC1BW       PC2BW       PC3BW       PC4BW
+   PC5BW
+
+  Centering (GRANDMEAN)
+   DEMMAL      DEMAGE      CANF6MBW    COGPGSBW
+   PC1BW       PC2BW       PC3BW       PC4BW       PC5BW
+
+  Centering (GROUPMEAN)
+   CANF6M      COGPGS
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                             1000000
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                    STANDARD
+  Number of integration points                                  15
+  Dimensions of numerical integration                            0
+  Adaptive quadrature                                           ON
+Cholesky                                                       OFF
+
+Input data file(s)
+  GD190618.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             5
+     Number of clusters                        378
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       1.000
+ COGPGSBW       1.000         1.000
+ WASBLK         0.461         0.461         0.461
+ DEMAGE         0.999         0.999         0.461         0.999
+ DEMMAL         0.999         0.999         0.461         0.999         0.999
+ CANF6M         1.000         1.000         0.461         0.999         0.999
+ COGPGS         0.772         0.772         0.352         0.772         0.772
+ PC1BW          1.000         1.000         0.461         0.999         0.999
+ PC2BW          1.000         1.000         0.461         0.999         0.999
+ PC3BW          1.000         1.000         0.461         0.999         0.999
+ PC4BW          1.000         1.000         0.461         0.999         0.999
+ PC5BW          1.000         1.000         0.461         0.999         0.999
+
+
+           Covariance Coverage
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M         1.000
+ COGPGS         0.772         0.772
+ PC1BW          1.000         0.772         1.000
+ PC2BW          1.000         0.772         1.000         1.000
+ PC3BW          1.000         0.772         1.000         1.000         1.000
+ PC4BW          1.000         0.772         1.000         1.000         1.000
+ PC5BW          1.000         0.772         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          1.000         1.000
+
+
+SAMPLE STATISTICS
+
+
+     ESTIMATED SAMPLE STATISTICS
+
+
+           Means
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000        55.448         0.000         0.000
+
+
+           Means
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000        -0.001         0.000         0.000         0.000
+
+
+           Means
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           Covariances
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW      88.800
+ COGPGSBW       0.085         0.111
+ WASBLK         8.187         0.550       104.159
+ DEMAGE        -2.490         0.005        -1.604         7.658
+ DEMMAL         0.783         0.009         0.885        -0.210         0.238
+ CANF6M         0.000         0.000        -0.215        -1.922         0.510
+ COGPGS        -0.003         0.000        -0.023        -0.017         0.003
+ PC1BW         -0.015        -0.003        -0.165         0.007        -0.001
+ PC2BW         -0.054         0.000        -0.046        -0.003        -0.002
+ PC3BW         -0.006         0.000         0.166         0.000         0.000
+ PC4BW          0.004         0.001         0.082         0.004         0.001
+ PC5BW          0.006         0.000        -0.008         0.004         0.000
+
+
+           Covariances
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M        49.926
+ COGPGS         0.124         0.021
+ PC1BW          0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.001
+ PC3BW          0.000         0.000         0.000         0.000         0.001
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.001
+ PC5BW          0.000         0.001
+
+
+           Correlations
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       1.000
+ COGPGSBW       0.027         1.000
+ WASBLK         0.085         0.161         1.000
+ DEMAGE        -0.095         0.005        -0.057         1.000
+ DEMMAL         0.170         0.054         0.178        -0.156         1.000
+ CANF6M         0.000         0.000        -0.003        -0.098         0.148
+ COGPGS        -0.002        -0.001        -0.016        -0.042         0.049
+ PC1BW         -0.043        -0.253        -0.435         0.064        -0.037
+ PC2BW         -0.154        -0.033        -0.122        -0.027        -0.109
+ PC3BW         -0.018         0.002         0.489         0.001         0.014
+ PC4BW          0.012         0.109         0.219         0.039         0.070
+ PC5BW          0.017        -0.039        -0.021         0.039         0.024
+
+
+           Correlations
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M         1.000
+ COGPGS         0.122         1.000
+ PC1BW          0.000         0.001         1.000
+ PC2BW          0.000        -0.003        -0.022         1.000
+ PC3BW          0.000         0.000         0.009         0.020         1.000
+ PC4BW          0.000         0.001        -0.004        -0.013        -0.094
+ PC5BW          0.000         0.000        -0.016         0.009         0.005
+
+
+           Correlations
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          1.000
+ PC5BW          0.004         1.000
+
+
+     MAXIMUM LOG-LIKELIHOOD VALUE FOR THE UNRESTRICTED (H1) MODEL IS -1414.683
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     CANF6MBW              0.588       0.937      -8.070   26.46%      -8.070     -7.235     -4.070
+             378.000     103.257      -0.410      21.930    8.73%       0.265      7.487
+     COGPGSBW              0.003       0.027      -1.023    0.26%      -0.284     -0.088     -0.013
+             378.000       0.115       0.387       1.221    0.26%       0.070      0.294
+     WASBLK               54.649      -0.782      26.000    0.62%      49.000     53.000     55.000
+             322.000      68.470       0.840      69.000    0.31%      58.000     63.000
+     DEMAGE                0.000       1.004      -5.412    0.14%      -2.342     -1.022     -0.442
+             697.000       7.658       2.006      15.758    0.14%       0.268      2.138
+     DEMMAL                0.000      -0.450      -0.610   39.02%      -0.610      0.390      0.390
+             697.000       0.238      -1.797       0.390   60.98%       0.390      0.390
+     CANF6M                0.000       0.146     -20.000    0.14%      -2.223      0.000      0.000
+             698.000      49.926       0.913      20.000    0.43%       0.000      1.665
+     COGPGS                0.000       0.037      -0.505    0.19%      -0.065      0.000      0.000
+             539.000       0.021       2.228       0.604    0.19%       0.000      0.065
+     PC1BW                 0.000       2.563      -0.021    0.26%      -0.019     -0.016     -0.013
+             378.000       0.001       5.176       0.135    0.26%      -0.009     -0.004
+     PC2BW                -0.002       0.946      -0.038    0.26%      -0.033     -0.028     -0.018
+             378.000       0.001      -0.162       0.129    0.26%      -0.003      0.034
+     PC3BW                -0.001      12.214      -0.119    0.26%      -0.005     -0.002      0.000
+             378.000       0.001     215.300       0.453    0.26%       0.001      0.005
+     PC4BW                -0.001       5.445      -0.094    0.26%      -0.010     -0.006     -0.005
+             378.000       0.001      35.177       0.284    0.26%      -0.004     -0.001
+     PC5BW                 0.001     -15.606      -0.544    0.26%      -0.001      0.001      0.001
+             378.000       0.001     283.386       0.111    0.26%       0.002      0.005
+
+     THE STANDARD ERRORS OF THE MODEL PARAMETER ESTIMATES MAY NOT BE
+     TRUSTWORTHY FOR SOME PARAMETERS DUE TO A NON-POSITIVE DEFINITE
+     FIRST-ORDER DERIVATIVE PRODUCT MATRIX.  THIS MAY BE DUE TO THE STARTING
+     VALUES BUT MAY ALSO BE AN INDICATION OF MODEL NONIDENTIFICATION.  THE
+     CONDITION NUMBER IS      -0.716D-18.  PROBLEM INVOLVING THE FOLLOWING PARAMETER:
+     Parameter 4, %WITHIN%: [ COGPGS ]
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       30
+
+Loglikelihood
+
+          H0 Value                       -6862.802
+          H0 Scaling Correction Factor      1.0987
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   13785.605
+          Bayesian (BIC)                 13922.051
+          Sample-Size Adjusted BIC       13826.795
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASBLK     ON
+    CANF6M            -0.035      0.041     -0.868      0.385
+    DEMMAL             2.439      0.825      2.957      0.003
+    DEMAGE            -0.074      0.144     -0.513      0.608
+    COGPGS            -0.905      2.745     -0.330      0.741
+
+ CANF6M   WITH
+    DEMMAL             0.456      0.126      3.604      0.000
+    DEMAGE            -1.461      0.709     -2.061      0.039
+    COGPGS             0.114      0.065      1.757      0.079
+
+ Means
+    DEMAGE             0.000      0.113      0.003      0.998
+    DEMMAL             0.000      0.020     -0.006      0.996
+    CANF6M             0.000      0.000      0.000      1.000
+    COGPGS            -0.001      0.000     -1.111      0.267
+
+ Variances
+    DEMAGE             7.658      0.580     13.203      0.000
+    DEMMAL             0.238      0.004     54.508      0.000
+    CANF6M            49.698      4.357     11.407      0.000
+    COGPGS             0.021      0.002      8.514      0.000
+
+ Residual Variances
+    WASBLK            36.737      4.320      8.503      0.000
+
+Between Level
+
+ WASBLK     ON
+    CANF6MBW           0.039      0.050      0.785      0.433
+    COGPGSBW           0.666      1.391      0.479      0.632
+    PC1BW           -112.891     15.515     -7.276      0.000
+    PC2BW            -29.081     13.980     -2.080      0.038
+    PC3BW             79.132    129.955      0.609      0.543
+    PC4BW             37.255     54.251      0.687      0.492
+    PC5BW             -6.398      4.269     -1.499      0.134
+
+ CANF6MBW WITH
+    COGPGSBW           0.061      0.191      0.320      0.749
+
+ Means
+    CANF6MBW           0.588      0.523      1.125      0.261
+    COGPGSBW           0.003      0.017      0.186      0.853
+
+ Intercepts
+    WASBLK            55.368      0.500    110.723      0.000
+
+ Variances
+    CANF6MBW         103.257      6.696     15.420      0.000
+    COGPGSBW           0.115      0.009     12.585      0.000
+
+ Residual Variances
+    WASBLK            11.309      4.465      2.533      0.011
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ WASBLK     ON
+    CANF6M            -0.040      0.046     -0.875      0.381
+    DEMMAL             0.193      0.063      3.035      0.002
+    DEMAGE            -0.033      0.065     -0.513      0.608
+    COGPGS            -0.021      0.064     -0.330      0.742
+
+ CANF6M   WITH
+    DEMMAL             0.133      0.035      3.737      0.000
+    DEMAGE            -0.075      0.036     -2.081      0.037
+    COGPGS             0.113      0.064      1.778      0.075
+
+ Means
+    DEMAGE             0.000      0.041      0.003      0.998
+    DEMMAL             0.000      0.041     -0.006      0.996
+    CANF6M             0.000      0.000      0.000      1.000
+    COGPGS            -0.004      0.003     -1.111      0.267
+
+ Variances
+    DEMAGE             1.000      0.000    999.000    999.000
+    DEMMAL             1.000      0.000    999.000    999.000
+    CANF6M             1.000      0.000    999.000    999.000
+    COGPGS             1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASBLK             0.962      0.024     40.206      0.000
+
+Between Level
+
+ WASBLK     ON
+    CANF6MBW           0.068      0.085      0.799      0.425
+    COGPGSBW           0.038      0.081      0.475      0.635
+    PC1BW             -0.714      0.157     -4.537      0.000
+    PC2BW             -0.179      0.071     -2.534      0.011
+    PC3BW              0.361      0.507      0.711      0.477
+    PC4BW              0.202      0.247      0.818      0.413
+    PC5BW             -0.033      0.018     -1.765      0.078
+
+ CANF6MBW WITH
+    COGPGSBW           0.018      0.056      0.320      0.749
+
+ Means
+    CANF6MBW           0.058      0.050      1.156      0.248
+    COGPGSBW           0.010      0.051      0.186      0.853
+
+ Intercepts
+    WASBLK             9.399      2.377      3.954      0.000
+
+ Variances
+    CANF6MBW           1.000      0.000    999.000    999.000
+    COGPGSBW           1.000      0.000    999.000    999.000
+
+ Residual Variances
+    WASBLK             0.326      0.201      1.623      0.105
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASBLK             0.038      0.024      1.595      0.111
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    WASBLK             0.674      0.201      3.357      0.001
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.716E-18
+       (ratio of smallest to largest eigenvalue)
+
+
+CONFIDENCE INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASBLK   ON
+    CANF6M          -0.140      -0.115      -0.102      -0.035       0.032       0.044       0.069
+    DEMMAL           0.315       0.822       1.082       2.439       3.796       4.055       4.563
+    DEMAGE          -0.445      -0.357      -0.311      -0.074       0.163       0.209       0.297
+    COGPGS          -7.975      -6.285      -5.420      -0.905       3.610       4.474       6.164
+
+ CANF6M   WITH
+    DEMMAL           0.130       0.208       0.248       0.456       0.664       0.704       0.782
+    DEMAGE          -3.288      -2.851      -2.628      -1.461      -0.295      -0.071       0.365
+    COGPGS          -0.053      -0.013       0.007       0.114       0.221       0.242       0.282
+
+ Means
+    DEMAGE          -0.290      -0.221      -0.185       0.000       0.186       0.221       0.291
+    DEMMAL          -0.051      -0.039      -0.033       0.000       0.033       0.039       0.051
+    CANF6M           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.002      -0.001      -0.001      -0.001       0.000       0.000       0.001
+
+ Variances
+    DEMAGE           6.164       6.521       6.704       7.658       8.612       8.795       9.152
+    DEMMAL           0.227       0.229       0.231       0.238       0.245       0.247       0.249
+    CANF6M          38.476      41.159      42.531      49.698      56.865      58.237      60.920
+    COGPGS           0.014       0.016       0.017       0.021       0.025       0.025       0.027
+
+ Residual Variances
+    WASBLK          25.608      28.269      29.630      36.737      43.844      45.205      47.865
+
+Between Level
+
+ WASBLK   ON
+    CANF6MBW        -0.090      -0.059      -0.043       0.039       0.122       0.138       0.169
+    COGPGSBW        -2.917      -2.060      -1.622       0.666       2.954       3.392       4.249
+    PC1BW         -152.854    -143.300    -138.413    -112.891     -87.369     -82.482     -72.928
+    PC2BW          -65.090     -56.481     -52.077     -29.081      -6.085      -1.681       6.927
+    PC3BW         -255.605    -175.579    -134.643      79.132     292.907     333.843     413.869
+    PC4BW         -102.485     -69.078     -51.988      37.255     126.498     143.587     176.995
+    PC5BW          -17.393     -14.765     -13.420      -6.398       0.624       1.968       4.597
+
+ CANF6MBW WITH
+    COGPGSBW        -0.431      -0.313      -0.253       0.061       0.375       0.435       0.553
+
+ Means
+    CANF6MBW        -0.758      -0.436      -0.272       0.588       1.448       1.612       1.934
+    COGPGSBW        -0.042      -0.031      -0.025       0.003       0.032       0.037       0.048
+
+ Intercepts
+    WASBLK          54.080      54.388      54.545      55.368      56.191      56.348      56.656
+
+ Variances
+    CANF6MBW        86.008      90.132      92.241     103.257     114.273     116.382     120.506
+    COGPGSBW         0.091       0.097       0.100       0.115       0.130       0.132       0.138
+
+ Residual Variances
+    WASBLK          -0.191       2.559       3.965      11.309      18.654      20.060      22.809
+
+
+CONFIDENCE INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+ WASBLK   ON
+    CANF6M          -0.158      -0.130      -0.116      -0.040       0.035       0.050       0.078
+    DEMMAL           0.029       0.068       0.088       0.193       0.297       0.317       0.356
+    DEMAGE          -0.200      -0.160      -0.139      -0.033       0.073       0.093       0.133
+    COGPGS          -0.185      -0.146      -0.126      -0.021       0.084       0.104       0.143
+
+ CANF6M   WITH
+    DEMMAL           0.041       0.063       0.074       0.133       0.191       0.202       0.224
+    DEMAGE          -0.168      -0.145      -0.134      -0.075      -0.016      -0.004       0.018
+    COGPGS          -0.051      -0.012       0.008       0.113       0.217       0.237       0.277
+
+ Means
+    DEMAGE          -0.105      -0.080      -0.067       0.000       0.067       0.080       0.105
+    DEMMAL          -0.105      -0.080      -0.067       0.000       0.067       0.080       0.105
+    CANF6M           0.000       0.000       0.000       0.000       0.000       0.000       0.000
+    COGPGS          -0.012      -0.010      -0.009      -0.004       0.002       0.003       0.005
+
+ Variances
+    DEMAGE           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    DEMMAL           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    CANF6M           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGS           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASBLK           0.900       0.915       0.922       0.962       1.001       1.009       1.023
+
+Between Level
+
+ WASBLK   ON
+    CANF6MBW        -0.151      -0.099      -0.072       0.068       0.208       0.235       0.287
+    COGPGSBW        -0.169      -0.120      -0.094       0.038       0.171       0.196       0.246
+    PC1BW           -1.119      -1.022      -0.973      -0.714      -0.455      -0.405      -0.309
+    PC2BW           -0.360      -0.317      -0.295      -0.179      -0.063      -0.040       0.003
+    PC3BW           -0.946      -0.634      -0.474       0.361       1.196       1.355       1.668
+    PC4BW           -0.433      -0.281      -0.204       0.202       0.607       0.685       0.837
+    PC5BW           -0.080      -0.069      -0.063      -0.033      -0.002       0.004       0.015
+
+ CANF6MBW WITH
+    COGPGSBW        -0.125      -0.091      -0.074       0.018       0.109       0.127       0.161
+
+ Means
+    CANF6MBW        -0.071      -0.040      -0.024       0.058       0.140       0.156       0.187
+    COGPGSBW        -0.123      -0.091      -0.075       0.010       0.094       0.110       0.142
+
+ Intercepts
+    WASBLK           3.276       4.740       5.489       9.399      13.309      14.057      15.521
+
+ Variances
+    CANF6MBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    COGPGSBW         1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+ Residual Variances
+    WASBLK          -0.191      -0.068      -0.004       0.326       0.656       0.719       0.843
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW           0             0
+ COGPGSBW           0             0
+ WASBLK             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANF6M             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0
+ COGPGSBW           0             0
+ WASBLK             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             1             2
+
+
+           ALPHA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  3             4             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0             0             5             6
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             7             8             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW           0             0
+ COGPGSBW           0             0
+ WASBLK             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANF6M             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0
+ COGPGSBW           0             0
+ WASBLK             0             0             9
+ DEMAGE             0             0             0            10
+ DEMMAL             0             0             0             0            11
+ CANF6M             0             0             0            12            13
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M            14
+ COGPGS            15            16
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           LAMBDA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW           0             0
+ COGPGSBW           0             0
+ WASBLK             0             0
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANF6M             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           THETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0
+ COGPGSBW           0             0
+ WASBLK             0             0             0
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+           ALPHA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1                 17            18            19             0             0
+
+
+           ALPHA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1                  0             0             0             0             0
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1                  0             0
+
+
+           BETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK            20            21             0             0             0
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW           0             0             0             0             0
+ COGPGSBW           0             0             0             0             0
+ WASBLK             0             0            22            23            24
+ DEMAGE             0             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW           0             0
+ COGPGSBW           0             0
+ WASBLK            25            26
+ DEMAGE             0             0
+ DEMMAL             0             0
+ CANF6M             0             0
+ COGPGS             0             0
+ PC1BW              0             0
+ PC2BW              0             0
+ PC3BW              0             0
+ PC4BW              0             0
+ PC5BW              0             0
+
+
+           PSI
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW          27
+ COGPGSBW          28            29
+ WASBLK             0             0            30
+ DEMAGE             0             0             0             0
+ DEMMAL             0             0             0             0             0
+ CANF6M             0             0             0             0             0
+ COGPGS             0             0             0             0             0
+ PC1BW              0             0             0             0             0
+ PC2BW              0             0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M             0
+ COGPGS             0             0
+ PC1BW              0             0             0
+ PC2BW              0             0             0             0
+ PC3BW              0             0             0             0             0
+ PC4BW              0             0             0             0             0
+ PC5BW              0             0             0             0             0
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW              0
+ PC5BW              0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANF6M         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANF6M         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000        34.235
+ DEMAGE         0.000         0.000         0.000         3.829
+ DEMMAL         0.000         0.000         0.000         0.000         0.119
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M        24.963
+ COGPGS         0.000         0.010
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           LAMBDA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       1.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         1.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         1.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         1.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         1.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         1.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         1.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         1.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         1.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         1.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANF6M         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          1.000         0.000
+ PC5BW          0.000         1.000
+
+
+           THETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.000
+ PC5BW          0.000         0.000
+
+
+           ALPHA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000        54.649         0.000         0.000
+
+
+           ALPHA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ 1              0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PC4BW         PC5BW
+              ________      ________
+ 1              0.000         0.000
+
+
+           BETA
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6MBW       0.000         0.000         0.000         0.000         0.000
+ COGPGSBW       0.000         0.000         0.000         0.000         0.000
+ WASBLK         0.000         0.000         0.000         0.000         0.000
+ DEMAGE         0.000         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              PC4BW         PC5BW
+              ________      ________
+ CANF6MBW       0.000         0.000
+ COGPGSBW       0.000         0.000
+ WASBLK         0.000         0.000
+ DEMAGE         0.000         0.000
+ DEMMAL         0.000         0.000
+ CANF6M         0.000         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000
+ PC2BW          0.000         0.000
+ PC3BW          0.000         0.000
+ PC4BW          0.000         0.000
+ PC5BW          0.000         0.000
+
+
+           PSI
+              CANF6MBW      COGPGSBW      WASBLK        DEMAGE        DEMMAL
+              ________      ________      ________      ________      ________
+ CANF6MBW      44.400
+ COGPGSBW       0.000         0.056
+ WASBLK         0.000         0.000        34.235
+ DEMAGE         0.000         0.000         0.000         0.000
+ DEMMAL         0.000         0.000         0.000         0.000         0.000
+ CANF6M         0.000         0.000         0.000         0.000         0.000
+ COGPGS         0.000         0.000         0.000         0.000         0.000
+ PC1BW          0.000         0.000         0.000         0.000         0.000
+ PC2BW          0.000         0.000         0.000         0.000         0.000
+ PC3BW          0.000         0.000         0.000         0.000         0.000
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              CANF6M        COGPGS        PC1BW         PC2BW         PC3BW
+              ________      ________      ________      ________      ________
+ CANF6M         0.000
+ COGPGS         0.000         0.000
+ PC1BW          0.000         0.000         0.001
+ PC2BW          0.000         0.000         0.000         0.001
+ PC3BW          0.000         0.000         0.000         0.000         0.001
+ PC4BW          0.000         0.000         0.000         0.000         0.000
+ PC5BW          0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PC4BW         PC5BW
+              ________      ________
+ PC4BW          0.001
+ PC5BW          0.000         0.001
+
+
+SAMPLE STATISTICS FOR ESTIMATED FACTOR SCORES
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              B_WASBLK
+              ________
+ 1             55.357
+
+
+           Covariances
+              B_WASBLK
+              ________
+ B_WASBLK      29.350
+
+
+           Correlations
+              B_WASBLK
+              ________
+ B_WASBLK       1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+
+     Beginning Time:  12:54:43
+        Ending Time:  12:54:46
+       Elapsed Time:  00:00:03
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2015 Muthen & Muthen
